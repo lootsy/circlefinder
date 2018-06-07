@@ -5,7 +5,7 @@ php:
 
 before_script:
   - cp .env.travis .env
-  - mysql -e 'create database leosnotes_test;'
+  - mysql -e 'create database circlefinder_testing;'
   - composer self-update
   - composer install --no-interaction
   - php artisan key:generate
