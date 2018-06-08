@@ -12,6 +12,7 @@
         @if(auth()->user()->id == $item->id)
             <div class="card-body">    
                 <a href="{{ route('profile.edit') }}" class="btn btn-primary">Edit profile</a>
+                <a href="{{ route('profile.avatar.edit') }}" class="btn btn-primary">Change avatar</a>
                 <a href="{{ route('profile.password.edit') }}" class="btn btn-primary">Change password</a>
             </div>
         @endif

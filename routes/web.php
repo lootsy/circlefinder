@@ -39,6 +39,13 @@ Route::group(['prefix' => 'profile', 'middleware' => 'auth',
         Route::put('/update', 'PasswordController@update')->name('update');
     });
 
+    Route::group(['prefix' => 'avatar', 'as' => 'avatar.'], function() {
+        Route::get('/', 'AvatarController@index')->name('index');
+        Route::get('/edit', 'AvatarController@edit')->name('edit');
+        Route::put('/update', 'AvatarController@update')->name('update');
+        Route::get('/download/{file}', 'AvatarController@download')->name('download');
+    });
+
     Route::get('/{uuid}', 'ProfileController@show')->name('show');
 });
 
