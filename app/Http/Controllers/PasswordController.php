@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Hash;
 
 class PasswordController extends Controller
 {
+    public function index()
+    {
+        return redirect(route('profile.password.edit'));
+    }
+
     public function edit(Request $request)
     {
         return view('profile.password.edit');

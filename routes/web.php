@@ -38,9 +38,10 @@ Route::group(['prefix' => 'profile', 'middleware' => 'auth',
 
     Route::get('/', 'ProfileController@index')->name('index');
     Route::get('/edit', 'ProfileController@edit')->name('edit');
-    Route::put('/edit', 'ProfileController@update')->name('update');
+    Route::put('/update', 'ProfileController@update')->name('update');
     
     Route::group(['prefix' => 'password', 'as' => 'password.'], function() {
+        Route::get('/', 'PasswordController@index')->name('index');
         Route::get('/edit', 'PasswordController@edit')->name('edit');
         Route::put('/update', 'PasswordController@update')->name('update');
     });
