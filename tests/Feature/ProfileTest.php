@@ -153,9 +153,12 @@ class ProfileTest extends TestCase
             'avatar' => UploadedFile::fake()->image('avatar.jpeg')
         ]);
 
+        $this->assertFalse(is_null($user->avatar));
+
         Storage::disk('fakedisk')->assertExists('avatars/' . $user->avatar);
 
         $response = $this->actingAs($user)->get(route('profile.avatar.download', ['file' => $user->avatar]));
+
         $response->assertStatus(200);
     }
 
@@ -169,6 +172,6 @@ class ProfileTest extends TestCase
             'avatar' => UploadedFile::fake()->image('avatar.png')
         ]);
 
-        Storage::disk('fakedisk')->assertExists('avatars/' . $user->uuid . '.jpeg');
+        Storage::disk('fakedisk')->assertExists('avatars/' . $user->avatar);
     }
 }

@@ -96,6 +96,6 @@ class User extends Authenticatable
 
     public function newAvatarFileName()
     {
-        return $this->newUuid() . '.jpeg';
+        return $this->newUuid() . '.jpg';
     }
 }

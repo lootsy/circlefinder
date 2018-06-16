@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Config;
+use Intervention\Image\Facades\Image;
 
 class AvatarController extends Controller
 {
@@ -29,13 +31,17 @@ class AvatarController extends Controller
 
         if($request->hasFile('avatar'))
         {
-            $file = $request->file('avatar');
+            $newFileName = $user->newAvatarFileName();
 
-            $new_fileName = $user->newAvatarFileName();
+            $image = Image::make($request->file('avatar'));
 
-            $request->avatar->storeAs('avatars', $new_fileName);
+            Storage::put('avatars_origin/'.$newFileName, (string) $image->encode('jpg'));
 
-            $user->avatar = $new_fileName;
+            $image->fit(Config::get('userprofile.avatar.size'));
+
+            Storage::put('avatars/'.$newFileName, (string) $image->encode('jpg'));
+            
+            $user->avatar = $newFileName;
 
             $user->save();
         }

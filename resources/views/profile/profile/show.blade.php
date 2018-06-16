@@ -18,13 +18,17 @@
         @endif
 
         <div class="card-body row">
-            
+
             <div class="col-8">
                 <h5 class="card-title">About</h5>
                 <p class="card-text">{{ $item->about }}</p>
             </div>
 
             <div class="col-4">
+                <div class="mb-4">
+                    <img src="{{ route('profile.avatar.download', ['file' => $item->avatar]) }}" alt="{{ $item->name }}" />
+                </div>
+
                 <h5 class="card-title">Social profiles</h5>
                 @if($item->facebook_profile_url)
                 <li><a href="{{ $item->facebook_profile_url }}">Facebook</a></li>
