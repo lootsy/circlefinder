@@ -94,8 +94,14 @@ class User extends Authenticatable
         return (count($role) > 0);
     }
 
+    public function memberships()
+    {
+        return $this->hasMany(\App\Membership::class);
+    }
+
     public function newAvatarFileName()
     {
         return $this->newUuid() . '.jpg';
     }
+
 }
