@@ -180,6 +180,9 @@ class ProfileTest extends TestCase
         ]);
 
         Storage::disk('fakedisk')->assertExists('avatars/' . $user->avatar);
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success');
     }
 
     public function test_user_uploads_too_big_avatar()
