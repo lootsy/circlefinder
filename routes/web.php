@@ -43,7 +43,7 @@ Route::group(['prefix' => 'profile', 'middleware' => 'auth',
         Route::get('/', 'AvatarController@index')->name('index');
         Route::get('/edit', 'AvatarController@edit')->name('edit');
         Route::put('/update', 'AvatarController@update')->name('update');
-        Route::get('/download/{file}', 'AvatarController@download')->name('download');
+        Route::get('/download/{uuid}.jpg', 'AvatarController@download')->name('download');
     });
 
     Route::get('/{uuid}', 'ProfileController@show')->name('show');

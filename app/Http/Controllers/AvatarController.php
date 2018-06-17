@@ -18,13 +18,18 @@ class AvatarController extends Controller
     public function edit(Request $request)
     {
         $user = auth()->user();
-        return view('profile.avatar.edit')->with(compact('user'));
+        return view('profile.avatar.edit')->with([
+            'user' => $user,
+            'min_upload_size' => Config::get('userprofile.avatar.min_upload_size')
+        ]);
     }
 
     public function update(Request $request)
     {
+        $min_upload_size = Config::get('userprofile.avatar.min_upload_size');
+
         $request->validate([
-            'avatar' => 'image'
+            'avatar' => sprintf('required|image|dimensions:width=%d,height=%d', $min_upload_size, $min_upload_size)
         ]);
 
         $user = auth()->user();
@@ -33,7 +38,16 @@ class AvatarController extends Controller
         {
             $newFileName = $user->newAvatarFileName();
 
-            $image = Image::make($request->file('avatar'));
+            $image = null;
+
+            try
+            {
+                $image = Image::make($request->file('avatar'));
+            }
+            catch(\Intervention\Image\Exception\NotReadableException $ex)
+            {
+                return redirect()->back()->withErrors("The provided file cannot be used as avatar");
+            }
 
             Storage::put('avatars_origin/'.$newFileName, (string) $image->encode('jpg'));
 
@@ -50,11 +64,12 @@ class AvatarController extends Controller
             return redirect()->back()->withErrors("You have to choose a file for upload");
         }
 
-        return redirect()->route('profile.index')->with("success", "Your avatar was changed!");
+        return redirect()->route('profile.show', $user->uuid)->with("success", "Your avatar was changed!");
     }
 
-    public function download($file)
+    public function download($uuid)
     {
-        return Storage::download('avatars/' . $file);
+        $user = \App\User::withUuid($uuid)->firstOrFail();
+        return Storage::download('avatars/' . $user->avatar);
     }
 }

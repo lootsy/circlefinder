@@ -13,10 +13,12 @@
             <h2>Current avatar</h2>
 
             <div class="mb-4 mt-4">
-                <img src="{{ route('profile.avatar.download', ['file' => $user->avatar]) }}" alt="{{ $user->name }}" />
+                <img src="{{ route('profile.avatar.download', ['uuid' => $user->uuid]) }}" alt="{{ $user->name }}" />
             </div>
 
             <h2>Upload new avatar</h2>
+
+            <p>Minimum image dimensions are {{ $min_upload_size }} x {{ $min_upload_size }} px</p>
         
             {!! Form::open(['route' => ['profile.avatar.update'], 'method' => 'put', 'files' => true]) !!}
 

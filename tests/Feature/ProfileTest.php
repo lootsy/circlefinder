@@ -10,6 +10,8 @@ use Tests\Traits\UsersAdmins;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Config;
+
 
 /**
  * @group profile
@@ -36,7 +38,8 @@ class ProfileTest extends TestCase
         $user = $this->fetchUser();
 
         $response = $this->actingAs($user)->get(route('profile.index'));
-        $response->assertStatus(200);
+        $response->assertStatus(302);
+        $response->assertRedirect(route('profile.show', [$user->uuid]));
 
         $response = $this->actingAs($user)->get(route('profile.edit'));
         $response->assertStatus(200);
@@ -149,15 +152,17 @@ class ProfileTest extends TestCase
 
         Storage::fake('fakedisk');
 
+        $min_upload_size = Config::get('userprofile.avatar.min_upload_size');
+
         $response = $this->actingAs($user)->put(route('profile.avatar.update'), [
-            'avatar' => UploadedFile::fake()->image('avatar.jpeg')
+            'avatar' => UploadedFile::fake()->image('avatar.jpeg', $min_upload_size, $min_upload_size)
         ]);
 
         $this->assertFalse(is_null($user->avatar));
 
         Storage::disk('fakedisk')->assertExists('avatars/' . $user->avatar);
 
-        $response = $this->actingAs($user)->get(route('profile.avatar.download', ['file' => $user->avatar]));
+        $response = $this->actingAs($user)->get(route('profile.avatar.download', ['uuid' => $user->uuid]));
 
         $response->assertStatus(200);
     }
@@ -168,10 +173,42 @@ class ProfileTest extends TestCase
 
         Storage::persistentFake('fakedisk');
 
+        $min_upload_size = Config::get('userprofile.avatar.min_upload_size');
+
         $response = $this->actingAs($user)->put(route('profile.avatar.update'), [
-            'avatar' => UploadedFile::fake()->image('avatar.png')
+            'avatar' => UploadedFile::fake()->image('avatar.jpeg', $min_upload_size, $min_upload_size)
         ]);
 
         Storage::disk('fakedisk')->assertExists('avatars/' . $user->avatar);
     }
+
+    public function test_user_uploads_too_big_avatar()
+    {
+        $user = $this->fetchUser();
+
+        Storage::persistentFake('fakedisk');
+
+        $min_upload_size = Config::get('userprofile.avatar.min_upload_size');
+
+        $response = $this->actingAs($user)->put(route('profile.avatar.update'), [
+            'avatar' => UploadedFile::fake()->image('avatar.jpeg', $min_upload_size, $min_upload_size)
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors();
+    }    
+
+    public function test_user_has_to_use_image_as_avatar()
+    {
+        $user = $this->fetchUser();
+
+        Storage::persistentFake('fakedisk');
+
+        $response = $this->actingAs($user)->put(route('profile.avatar.update'), [
+            'avatar' => UploadedFile::fake()->create('document.jpg', 256)
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors();
+    }    
 }

@@ -26,7 +26,7 @@
 
             <div class="col-4">
                 <div class="mb-4">
-                    <img src="{{ route('profile.avatar.download', ['file' => $item->avatar]) }}" alt="{{ $item->name }}" />
+                    <img src="{{ route('profile.avatar.download', ['uuid' => $item->uuid]) }}" alt="{{ $item->name }}" />
                 </div>
 
                 <h5 class="card-title">Social profiles</h5>
