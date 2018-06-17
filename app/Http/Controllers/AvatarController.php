@@ -27,9 +27,11 @@ class AvatarController extends Controller
     public function update(Request $request)
     {
         $min_upload_size = Config::get('userprofile.avatar.min_upload_size');
+        $max_upload_file = Config::get('userprofile.avatar.max_upload_file');
 
         $request->validate([
-            'avatar' => sprintf('required|image|dimensions:min_width=%d,min_height=%d', $min_upload_size, $min_upload_size)
+            'avatar' => sprintf('required|image|max:%d|dimensions:min_width=%d,min_height=%d', $max_upload_file, 
+                                            $min_upload_size, $min_upload_size)
         ]);
 
         $user = auth()->user();

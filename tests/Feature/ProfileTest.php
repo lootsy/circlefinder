@@ -185,22 +185,6 @@ class ProfileTest extends TestCase
         $response->assertSessionHas('success');
     }
 
-    public function test_user_uploads_too_big_avatar()
-    {
-        $user = $this->fetchUser();
-
-        Storage::persistentFake('fakedisk');
-
-        $min_upload_size = Config::get('userprofile.avatar.min_upload_size');
-
-        $response = $this->actingAs($user)->put(route('profile.avatar.update'), [
-            'avatar' => UploadedFile::fake()->image('avatar.jpeg', $min_upload_size, $min_upload_size)
-        ]);
-
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors();
-    }    
-
     public function test_user_has_to_use_image_as_avatar()
     {
         $user = $this->fetchUser();
