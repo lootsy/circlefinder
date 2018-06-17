@@ -75,6 +75,8 @@ class User extends Authenticatable
             {
                 $user->roles()->detach();
             }
+
+            $user->memberships()->delete();
         });
     }
 

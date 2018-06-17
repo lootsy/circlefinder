@@ -27,15 +27,40 @@ class MembershipsTest extends TestCase
         ];
 
         $membership = $user->memberships()->create($data);
-
+        $membership = $user->memberships()->create($data);
+        $membership = $user->memberships()->create($data);
+        
         $this->assertDatabaseHas('memberships', [
             'user_id' => $user->id
         ]);
+
+        $this->assertEquals(3, count($user->memberships));
 
         $this->assertEquals($user->id, $membership->user->id);
         $this->assertEquals($data['type'], $membership->type);
         $this->assertEquals($data['begin'], $membership->begin);
     }
 
-    
+    public function test_removing_user_removes_memberships()
+    {
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+
+        $data = [
+            'type' => 'both',
+            'begin' => $faker->date
+        ];
+
+        $membership = $user->memberships()->create($data);
+
+        $this->assertDatabaseHas('memberships', [
+            'user_id' => $user->id
+        ]);
+
+        $user->delete();
+
+        $this->assertDatabaseMissing('memberships', [
+            'user_id' => $user->id
+        ]);
+    }
 }
