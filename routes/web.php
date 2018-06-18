@@ -49,16 +49,24 @@ Route::group(['prefix' => 'profile', 'middleware' => 'auth',
     Route::get('/{uuid}', 'ProfileController@show')->name('show');
 });
 
-Route::group(['prefix' => 'circles/{circle_uuid}', 'as' => 'circles.', 'middleware' => 'auth'], function() {
+Route::group(['prefix' => '/circles', 'as' => 'circles.', 'middleware' => 'auth'], function() {
 
-    #Route::get('/', 'CircleController@index')->name('index');
 
-    Route::group(['prefix' => 'membership', 'as' => 'membership.'], function($circle_uuid) {
+
+    Route::group(['prefix' => '/{circle_uuid}/membership', 'as' => 'membership.'], function($circle_uuid) {
         Route::get('/create', 'MembershipController@create')->name('create');
         Route::put('/store', 'MembershipController@store')->name('store');
         Route::get('/edit', 'MembershipController@edit')->name('edit');
         Route::put('/update', 'MembershipController@update')->name('update');        
     });
+
+    Route::get('/', 'CirclesController@index')->name('index');
+    Route::get('/search', 'CirclesController@search')->name('search');
+    
+    Route::get('/create', 'CirclesController@create')->name('create');
+    Route::put('/store', 'CirclesController@store')->name('store');
+    Route::put('/{circle_uuid}/edit', 'CirclesController@edit')->name('edit');
+    Route::put('/{circle_uuid}/update', 'CirclesController@edit')->name('update');
 });
 
 
