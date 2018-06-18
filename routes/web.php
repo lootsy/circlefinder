@@ -70,6 +70,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin',
         Route::get('/trash', 'RolesController@trash')->name('trash');
     });
     Route::resource('roles', 'RolesController');
+
+    Route::group(['prefix' => 'languages', 'as' => 'languages.'], function() {
+        Route::post('/{role}/restore', 'LanguagesController@restore')->name('restore');
+        Route::delete('/{role}/forcedelete', 'LanguagesController@forceDelete')->name('forcedelete');
+        Route::get('/trash', 'LanguagesController@trash')->name('trash');
+    });
+    Route::resource('languages', 'LanguagesController');
 });
 
 # Admin Login URLs

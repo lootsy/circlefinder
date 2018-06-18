@@ -15,4 +15,22 @@ class Membership extends Model
     {
         return $this->belongsTo(\App\User::class);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function($membership)
+        {
+            if ($membership->isForceDeleting())
+            {
+                $membership->languages()->detach();
+            }
+        });
+    }
+
+    public function languages()
+    {
+        return $this->belongsToMany(\App\Language::class);
+    }
 }

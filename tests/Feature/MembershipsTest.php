@@ -63,4 +63,32 @@ class MembershipsTest extends TestCase
             'user_id' => $user->id
         ]);
     }
+
+    public function test_attach_detach_language_to_membership()
+    {
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+
+        $lang = factory(\App\Language::class)->create();
+
+        $data = [
+            'type' => 'both',
+            'begin' => $faker->date
+        ];
+
+        $membership = $user->memberships()->create($data);
+
+        $membership->languages()->attach($lang);
+
+        $this->assertDatabaseHas('language_membership', [
+            'membership_id' => $membership->id
+        ]);
+
+        $membership->languages()->detach();
+
+        $this->assertDatabaseMissing('language_membership', [
+            'membership_id' => $membership->id
+        ]);
+    }
+
 }
