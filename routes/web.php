@@ -49,7 +49,7 @@ Route::group(['prefix' => 'profile', 'middleware' => 'auth',
     Route::get('/{uuid}', 'ProfileController@show')->name('show');
 });
 
-Route::group(['prefix' => 'circles/{circle_uuid}', 'as' => 'circle.', 'middleware' => 'auth'], function() {
+Route::group(['prefix' => 'circles/{circle_uuid}', 'as' => 'circles.', 'middleware' => 'auth'], function() {
 
     #Route::get('/', 'CircleController@index')->name('index');
 
