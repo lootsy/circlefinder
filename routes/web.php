@@ -49,6 +49,18 @@ Route::group(['prefix' => 'profile', 'middleware' => 'auth',
     Route::get('/{uuid}', 'ProfileController@show')->name('show');
 });
 
+Route::group(['prefix' => 'circles/{circle_uuid}', 'as' => 'circle.', 'middleware' => 'auth'], function() {
+
+    #Route::get('/', 'CircleController@index')->name('index');
+
+    Route::group(['prefix' => 'membership', 'as' => 'membership.'], function($circle_uuid) {
+        Route::get('/create', 'MembershipController@create')->name('create');
+        Route::put('/store', 'MembershipController@store')->name('store');
+        Route::get('/edit', 'MembershipController@edit')->name('edit');
+        Route::put('/update', 'MembershipController@update')->name('update');        
+    });
+});
+
 
 
 # Restricted Admin URLs
