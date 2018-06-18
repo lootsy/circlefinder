@@ -22,10 +22,7 @@ class Membership extends Model
 
         static::deleting(function($membership)
         {
-            if ($membership->isForceDeleting())
-            {
-                $membership->languages()->detach();
-            }
+            $membership->languages()->detach();
         });
     }
 

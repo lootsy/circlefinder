@@ -70,6 +70,7 @@ class MembershipsTest extends TestCase
         $faker = $this->fetchFaker();
 
         $lang = factory(\App\Language::class)->create();
+        $lang2 = factory(\App\Language::class)->create();
 
         $data = [
             'type' => 'both',
@@ -79,9 +80,18 @@ class MembershipsTest extends TestCase
         $membership = $user->memberships()->create($data);
 
         $membership->languages()->attach($lang);
+        $membership->languages()->attach($lang2);
 
         $this->assertDatabaseHas('language_membership', [
             'membership_id' => $membership->id
+        ]);
+
+        $this->assertDatabaseHas('language_membership', [
+            'language_id' => $lang->id
+        ]);
+
+        $this->assertDatabaseHas('language_membership', [
+            'language_id' => $lang2->id
         ]);
 
         $membership->languages()->detach();
@@ -91,4 +101,5 @@ class MembershipsTest extends TestCase
         ]);
     }
 
+    
 }

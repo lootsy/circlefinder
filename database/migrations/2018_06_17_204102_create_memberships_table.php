@@ -31,13 +31,13 @@ class CreateMembershipsTable extends Migration
 
         Schema::create('language_membership', function (Blueprint $table) {
             $table->increments('id');
+
+            $table->integer('language_id')->unsigned();
+            $table->foreign('language_id')->references('id')->on('languages');
             
             $table->integer('membership_id')->unsigned();
-            $table->foreign('membership_id')->references('id')->on('languages');
+            $table->foreign('membership_id')->references('id')->on('memberships');
             
-            $table->integer('language_id')->unsigned();
-            $table->foreign('language_id')->references('id')->on('memberships');
-
             $table->timestamps();
         });
     }
