@@ -9,7 +9,7 @@
 @section('content')
     @include('admin.inc.index-nav', ['route_prefix' => 'admin.users.'])
 
-    @if(count($items) > 0)
+    @if($items->count() > 0)
 
     @include('admin.inc.pagination')
 

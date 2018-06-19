@@ -52,15 +52,15 @@ trait UsersAdmins
         }
     }
 
-    private function fetchCircle($id = null)
+    private function fetchCircle($owner)
     {
-        if($id == null)
-        {
-            return factory(\App\Circle::class)->create();
-        }
-        else
-        {
-            return \App\Circle::find($id);
-        }
+        $faker = $this->fetchFaker();
+
+        $data = [
+            'type' => $faker->randomElement(['f2f', 'virtual', 'both']),
+            'title' =>  $faker->catchPhrase
+        ];
+
+        return $owner->circles()->create($data);
     }
 }

@@ -16,7 +16,21 @@ class MembershipTest extends TestCase
     use DatabaseMigrations;
     use UsersAdmins;
 
-    public function test_create_new_membership_without_circle()
+    private function fetchMembership($data, $user)
+    {
+        $membership = new \App\Membership;
+        
+        $membership->fill($data);
+        
+        $membership->circle_id = 0;
+        $membership->user_id = $user->id;
+        
+        $membership->save();
+
+        return $membership;
+    }
+
+    public function test_create_new_membership()
     {
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
@@ -26,9 +40,9 @@ class MembershipTest extends TestCase
             'begin' => $faker->date
         ];
 
-        $membership = $user->memberships()->create($data);
-        $membership = $user->memberships()->create($data);
-        $membership = $user->memberships()->create($data);
+        $membership = $this->fetchMembership($data, $user);
+        $membership = $this->fetchMembership($data, $user);
+        $membership = $this->fetchMembership($data, $user);
         
         $this->assertDatabaseHas('memberships', [
             'user_id' => $user->id
@@ -51,7 +65,7 @@ class MembershipTest extends TestCase
             'begin' => $faker->date
         ];
 
-        $membership = $user->memberships()->create($data);
+        $membership = $this->fetchMembership($data, $user);
 
         $this->assertDatabaseHas('memberships', [
             'user_id' => $user->id
@@ -77,7 +91,7 @@ class MembershipTest extends TestCase
             'begin' => $faker->date
         ];
 
-        $membership = $user->memberships()->create($data);
+        $membership = $this->fetchMembership($data, $user);
 
         $membership->languages()->attach($lang);
         $membership->languages()->attach($lang2);

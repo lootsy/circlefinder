@@ -25,6 +25,11 @@ class Language extends Model
         return $this->belongsToMany(\App\Membership::class);
     }
 
+    public function circles()
+    {
+        return $this->belongsToMany(\App\Circle::class);
+    }
+
     public static function getListOfLanguages()
     {
         return include(resource_path('lang/codes.php'));

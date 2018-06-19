@@ -29,8 +29,7 @@ class Role extends Model
     {
         parent::boot();
 
-        static::deleting(function($role)
-        {
+        static::deleting(function($role) {
             if ($role->isForceDeleting())
             {
                 $role->users()->detach();
