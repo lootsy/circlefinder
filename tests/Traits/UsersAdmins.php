@@ -51,4 +51,16 @@ trait UsersAdmins
             return \App\Language::find($id);
         }
     }
+
+    private function fetchCircle($id = null)
+    {
+        if($id == null)
+        {
+            return factory(\App\Circle::class)->create();
+        }
+        else
+        {
+            return \App\Circle::find($id);
+        }
+    }
 }
