@@ -13,6 +13,7 @@ class Circle extends Model
     protected $fillable = [
         'type', 
         'title',
+        'limit'
     ];
 
     protected static function boot()
@@ -57,9 +58,26 @@ class Circle extends Model
         }
     }
 
+    public function isFull()
+    {
+        if($this->memberships()->count() >= $this->limit)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public function join($membership_data, $user)
     {
         if(\App\Membership::where(['circle_id' => $this->id, 'user_id' => $user->id])->count() > 0)
+        {
+            return null;
+        }
+
+        if($this->isFull())
         {
             return null;
         }

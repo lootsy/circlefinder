@@ -147,7 +147,6 @@ class CircleTest extends TestCase
         ]);
     }
 
-
     public function test_delete_empty_circle_when_user_deleted()
     {
         $user = $this->fetchUser();
@@ -181,5 +180,34 @@ class CircleTest extends TestCase
             'circle_id' => $circle->id,
             'user_id' => $user->id
         ]);
+    }
+
+    public function test_one_user_cannot_join_if_full()
+    {
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+        $circle = $this->fetchCircle($user);
+
+        for($i = 0; $i < $circle->limit + 1; $i++)
+        {
+            $member = $this->fetchUser();
+            
+            $membership = $circle->join($this->fetchMembershipData(), $member);
+
+            if($i >= $circle->limit)
+            {
+                $this->assertDatabaseMissing('memberships', [
+                    'circle_id' => $circle->id,
+                    'user_id' => $member->id
+                ]);
+            }
+            else
+            {
+                $this->assertDatabaseHas('memberships', [
+                    'circle_id' => $circle->id,
+                    'user_id' => $member->id
+                ]);
+            }
+        }
     }
 }

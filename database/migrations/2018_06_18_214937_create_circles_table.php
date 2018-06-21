@@ -19,6 +19,7 @@ class CreateCirclesTable extends Migration
             $table->string('uuid')->nullable()->unique();
             $table->string('title');
             $table->enum('type', ['f2f', 'virtual', 'both']);
+            $table->integer('limit')->unsigned();
             $table->timestamps();
         });
 

@@ -3,6 +3,7 @@
 namespace Tests\Traits;
 
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Config;
 
 trait UsersAdmins
 {
@@ -58,7 +59,8 @@ trait UsersAdmins
 
         $data = [
             'type' => $faker->randomElement(['f2f', 'virtual', 'both']),
-            'title' =>  $faker->catchPhrase
+            'title' =>  $faker->catchPhrase,
+            'limit' => Config::get('circle.defaults.limit')
         ];
 
         return $owner->circles()->create($data);
