@@ -42,8 +42,13 @@ class CirclesTest extends TestCase
 
     public function test_can_list_circles()
     {
-        $response = $this->get(route('circles.membership.edit', ['circle_uuid' => '1234']));
-        $response->assertStatus(302);
-        $response->assertRedirect('/login');
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+        $circle = $this->fetchCircle($user);
+
+        $response = $this->actingAs($user)->get(route('circles.index'));
+
+        $response->assertStatus(200);
     }
+
 }

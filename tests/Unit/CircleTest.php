@@ -37,6 +37,8 @@ class CircleTest extends TestCase
             'user_id' => $user->id
         ]);
 
+        $this->assertEquals($user->id, $circle->user->id);
+
         $this->assertEquals(36, strlen($circle->uuid));
     }
 

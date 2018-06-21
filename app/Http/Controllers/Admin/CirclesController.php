@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Traits\ResourceCrud;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+
+class CirclesController extends Controller
+{
+    protected $items_per_page = 10;
+
+    public function index()
+    {
+        $model = \App\Circle::orderBy('id', 'desc');
+        $model = $model->with(['memberships', 'users']);
+        $items = $model->paginate($this->items_per_page);
+        
+        return view('admin.circles.index')->with([
+            'items' => $items
+        ]);
+    }
+
+    public function show($id, Request $request)
+    {
+        $item = \App\Circle::findOrFail($id);
+        
+        return view('admin.circles.show')->with([
+            'item' => $item
+        ]);
+    }
+}

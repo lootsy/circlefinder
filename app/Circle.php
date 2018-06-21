@@ -16,6 +16,11 @@ class Circle extends Model
         'limit'
     ];
 
+    public function __toString()
+    {
+        return sprintf('Circle %d', $this->id);
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -39,6 +44,11 @@ class Circle extends Model
     public function memberships()
     {
         return $this->hasMany(\App\Membership::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(\App\User::class);
     }
 
     public function users()

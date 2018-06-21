@@ -97,6 +97,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin',
         Route::get('/trash', 'LanguagesController@trash')->name('trash');
     });
     Route::resource('languages', 'LanguagesController');
+
+    Route::resource('circles', 'CirclesController')->only(['index', 'show']);
 });
 
 # Admin Login URLs
