@@ -6,6 +6,7 @@ $factory->define(\App\Circle::class, function (Faker $faker) {
     return [
         'user_id' => 0,
         'type' => $faker->randomElement(['f2f', 'virtual', 'both']),
-        'title' =>  $faker->catchPhrase
+        'title' =>  $faker->catchPhrase,
+        'completed' => false
     ];
 });

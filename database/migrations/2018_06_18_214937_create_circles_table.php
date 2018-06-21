@@ -20,6 +20,7 @@ class CreateCirclesTable extends Migration
             $table->string('title');
             $table->enum('type', ['f2f', 'virtual', 'both']);
             $table->integer('limit')->unsigned();
+            $table->boolean('completed')->default(false);
             $table->timestamps();
         });
 

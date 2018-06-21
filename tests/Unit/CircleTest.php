@@ -210,4 +210,43 @@ class CircleTest extends TestCase
             }
         }
     }
+
+    public function test_one_user_cannot_join_if_completed()
+    {
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+        $circle = $this->fetchCircle($user);
+
+        $member = $this->fetchUser();    
+        $membership = $circle->join($this->fetchMembershipData(), $member);
+
+        $this->assertDatabaseHas('memberships', [
+            'circle_id' => $circle->id,
+            'user_id' => $member->id
+        ]);
+
+        $circle->complete();
+
+        $member = $this->fetchUser();    
+        $membership = $circle->join($this->fetchMembershipData(), $member);
+
+        $this->assertTrue(is_null($membership));
+
+        $this->assertDatabaseMissing('memberships', [
+            'circle_id' => $circle->id,
+            'user_id' => $member->id
+        ]);
+
+        $circle->uncomplete();
+
+        $member = $this->fetchUser();    
+        $membership = $circle->join($this->fetchMembershipData(), $member);
+
+        $this->assertFalse(is_null($membership));
+
+        $this->assertDatabaseHas('memberships', [
+            'circle_id' => $circle->id,
+            'user_id' => $member->id
+        ]);
+    }
 }

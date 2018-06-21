@@ -58,7 +58,7 @@ class Circle extends Model
         }
     }
 
-    public function isFull()
+    public function full()
     {
         if($this->memberships()->count() >= $this->limit)
         {
@@ -77,7 +77,7 @@ class Circle extends Model
             return null;
         }
 
-        if($this->isFull())
+        if($this->full() || $this->completed)
         {
             return null;
         }
@@ -105,5 +105,15 @@ class Circle extends Model
         }
     }
 
-    
+    public function complete()
+    {
+        $this->completed = true;
+        $this->save();
+    }
+
+    public function uncomplete()
+    {
+        $this->completed = false;
+        $this->save();
+    }
 }
