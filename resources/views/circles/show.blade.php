@@ -27,9 +27,9 @@
         <a href="{{ route('circles.membership.destroy', ['uuid' => $item->uuid]) }}" class="btn btn-success">Leave circle</a>
     @endif
 
-    @if($item->ownedBy($user))
+    @can('update', $item)
         <a href="{{ route('circles.edit', ['uuid' => $item->uuid]) }}" class="btn btn-primary">Edit circle</a>
-    @endif
+    @endcan
 
     @if(count($item->memberships))
         <h2>Memberships</h2>

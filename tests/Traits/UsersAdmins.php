@@ -41,6 +41,17 @@ trait UsersAdmins
         }
     }
 
+    public function fetchModerator()
+    {
+        $user = $this->fetchUser();
+        
+        $role = \App\Role::where('name', 'moderator')->first();
+        
+        $user->roles()->attach($role);
+
+        return $user;
+    }
+
     private function fetchLanguage($id = null)
     {
         if($id == null)

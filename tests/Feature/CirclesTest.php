@@ -76,6 +76,17 @@ class CirclesTest extends TestCase
         $response->assertSessionHasErrors();
     }
 
+    public function test_moderator_can_edit_circle()
+    {
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+        $circle = $this->fetchCircle($user);
+        $user2 = $this->fetchModerator();
+        
+        $response = $this->actingAs($user2)->get(route('circles.edit', ['uuid' => $circle->uuid]));
+        $response->assertStatus(200);
+    }    
+
     public function test_owner_can_edit_circle()
     {
         $user = $this->fetchUser();

@@ -26,6 +26,8 @@ class CirclesController extends Controller
     public function show($uuid, Request $request)
     {
         $item = \App\Circle::withUuid($uuid)->firstOrFail();
+        
+        $this->authorize('view', $item);
 
         $user = auth()->user();
         
@@ -38,9 +40,28 @@ class CirclesController extends Controller
     public function edit($uuid, Request $request)
     {
         $item = \App\Circle::withUuid($uuid)->firstOrFail();
+        
+        $this->authorize('update', $item);
 
         return view('circles.edit')->with([
             'item' => $item
         ]);
     }
+
+    public function update($uuid, Request $request)
+    {
+        $item = \App\Circle::withUuid($uuid)->firstOrFail();
+        
+        $this->authorize('update', $item);
+
+        $this->validate($request, \App\Circle::validationRules());
+
+        $item->update($request->all());
+
+        return redirect()->route('circles.show', $item->uuid)->with([
+            'success' => sprintf('%s was updated!', (string) $item)
+        ]);
+    }
+
+    
 }

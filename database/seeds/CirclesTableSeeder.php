@@ -11,6 +11,6 @@ class CirclesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Circle::class, 20)->create();
+        factory(App\Circle::class, 10)->create();
     }
 }

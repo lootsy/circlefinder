@@ -16,6 +16,20 @@ class Circle extends Model
         'limit'
     ];
 
+    public static function validationRules($except = null)
+    {
+        $rules = [
+            'type' => 'required'
+        ];
+
+        if($except)
+        {
+            $rules = array_except($rules, $except);
+        }
+
+        return $rules;
+    }
+
     public function __toString()
     {
         return sprintf('Circle %d', $this->id);
