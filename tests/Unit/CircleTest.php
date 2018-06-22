@@ -42,6 +42,15 @@ class CircleTest extends TestCase
         $this->assertEquals(36, strlen($circle->uuid));
     }
 
+    public function test_user_owns_circle()
+    {
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+        $circle = $this->fetchCircle($user);
+
+        $this->assertTrue($circle->ownedBy($user));
+    }
+
     public function test_circle_can_create_memberships()
     {
         $user = $this->fetchUser();
@@ -115,6 +124,9 @@ class CircleTest extends TestCase
         $circle = $this->fetchCircle($user);
 
         $this->assertFalse(is_null($circle->join($this->fetchMembershipData(), $user)));
+
+        $this->assertFalse($circle->joinable($user));
+
         $this->assertTrue(is_null($circle->join($this->fetchMembershipData(), $user)));
     }
 
@@ -198,6 +210,8 @@ class CircleTest extends TestCase
 
             if($i >= $circle->limit)
             {
+                $this->assertFalse($circle->joinable());
+
                 $this->assertDatabaseMissing('memberships', [
                     'circle_id' => $circle->id,
                     'user_id' => $member->id
@@ -233,6 +247,7 @@ class CircleTest extends TestCase
         $membership = $circle->join($this->fetchMembershipData(), $member);
 
         $this->assertTrue(is_null($membership));
+        $this->assertFalse($circle->joinable());
 
         $this->assertDatabaseMissing('memberships', [
             'circle_id' => $circle->id,
@@ -245,6 +260,7 @@ class CircleTest extends TestCase
         $membership = $circle->join($this->fetchMembershipData(), $member);
 
         $this->assertFalse(is_null($membership));
+        $this->assertTrue($circle->joinable());
 
         $this->assertDatabaseHas('memberships', [
             'circle_id' => $circle->id,

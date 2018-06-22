@@ -80,14 +80,31 @@ class Circle extends Model
         }
     }
 
-    public function join($membership_data, $user)
+    public function joinable($user = null)
+    {
+        if($user && $this->joined($user))
+        {
+            return false;
+        }
+
+        return !$this->full() && !$this->completed;
+    }
+
+    public function joined($user)
     {
         if(\App\Membership::where(['circle_id' => $this->id, 'user_id' => $user->id])->count() > 0)
         {
-            return null;
+            return true;
         }
+        else
+        {
+            return false;
+        }
+    }
 
-        if($this->full() || $this->completed)
+    public function join($membership_data, $user)
+    {
+        if($this->joinable($user) == false)
         {
             return null;
         }
@@ -113,6 +130,11 @@ class Circle extends Model
         {
             $memberships->first()->delete();
         }
+    }
+
+    public function ownedBy($user)
+    {
+        return $this->user->id == $user->id;
     }
 
     public function complete()
