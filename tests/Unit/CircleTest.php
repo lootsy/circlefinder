@@ -22,7 +22,7 @@ class CircleTest extends TestCase
         $faker = $this->fetchFaker();
 
         return [
-            'type' => 'both',
+            'type' => 'any',
             'begin' => $faker->date
         ];
     }

@@ -45,7 +45,7 @@
     <ul class="form-check">
         @foreach(\App\Role::all() as $role)
         <li>
-            {{ Form::checkbox('roles[]', $role->id, $item->roles->contains($role), ['class' => 'form-check-input', 'id' => 'role-' . $role->id]) }} 
+            {{ Form::checkbox('roles[]', $role->id, isset($item) && $item->roles->contains($role), ['class' => 'form-check-input', 'id' => 'role-' . $role->id]) }} 
             {{ Form::label('role-' . $role->id, $role->title) }}
         </li>
         @endforeach

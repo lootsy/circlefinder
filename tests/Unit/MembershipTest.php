@@ -36,7 +36,7 @@ class MembershipTest extends TestCase
         $faker = $this->fetchFaker();
 
         $data = [
-            'type' => 'both',
+            'type' => 'any',
             'begin' => $faker->date
         ];
 
@@ -61,7 +61,7 @@ class MembershipTest extends TestCase
         $faker = $this->fetchFaker();
 
         $data = [
-            'type' => 'both',
+            'type' => 'any',
             'begin' => $faker->date
         ];
 
@@ -87,7 +87,7 @@ class MembershipTest extends TestCase
         $lang2 = factory(\App\Language::class)->create();
 
         $data = [
-            'type' => 'both',
+            'type' => 'any',
             'begin' => $faker->date
         ];
 

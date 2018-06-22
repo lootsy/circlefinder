@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use \App\Traits\RandomId;
-
+use Illuminate\Support\Facades\Config;
 
 class Circle extends Model
 {
@@ -13,13 +13,14 @@ class Circle extends Model
     protected $fillable = [
         'type', 
         'title',
-        'limit'
+        'limit',
+        'description'
     ];
 
     public static function validationRules($except = null)
     {
         $rules = [
-            'type' => 'required'
+            'type' => 'required|in:'.implode(',', Config::get('circle.defaults.types'))
         ];
 
         if($except)

@@ -51,7 +51,7 @@ class CirclesTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_can_show_circle()
+    public function test_user_can_show_circle()
     {
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
@@ -62,6 +62,11 @@ class CirclesTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('circles.show', ['uuid' => $faker->uuid]));
         $response->assertStatus(404);
+    }
+
+    public function test_user_can_create_circle()
+    {
+        
     }
 
     public function test_some_user_cannot_edit_circle()
@@ -95,5 +100,31 @@ class CirclesTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('circles.edit', ['uuid' => $circle->uuid]));
         $response->assertStatus(200);
+    }
+
+    public function test_owner_can_update_circle()
+    {
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+        $circle = $this->fetchCircle($user);
+
+        $response = $this->actingAs($user)->put(route('circles.update', ['uuid' => $circle->uuid]), [
+            'type' => 'any',
+            'title' =>  $faker->catchPhrase,
+            'description' => $faker->text
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success');
+    }
+
+    public function test_owner_can_complete_circle()
+    {
+
+    }
+
+    public function test_owner_can_uncomplete_circle()
+    {
+
     }
 }

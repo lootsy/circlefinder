@@ -29,6 +29,10 @@
 
     @can('update', $item)
         <a href="{{ route('circles.edit', ['uuid' => $item->uuid]) }}" class="btn btn-primary">Edit circle</a>
+
+        {!! Form::open(['route' => ['circles.'.($item->completed ? 'uncomplete' : 'complete'), 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
+            {{ Form::submit($item->completed ? 'Uncomplete' : 'Complete', ['class' => 'delete btn btn-primary confirm']) }}
+        {!! Form::close() !!}
     @endcan
 
     @if(count($item->memberships))

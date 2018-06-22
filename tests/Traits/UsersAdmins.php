@@ -69,7 +69,7 @@ trait UsersAdmins
         $faker = $this->fetchFaker();
 
         $data = [
-            'type' => $faker->randomElement(['f2f', 'virtual', 'both']),
+            'type' => $faker->randomElement(Config::get('circle.defaults.types')),
             'title' =>  $faker->catchPhrase,
             'limit' => Config::get('circle.defaults.limit')
         ];

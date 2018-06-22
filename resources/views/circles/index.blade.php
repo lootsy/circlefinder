@@ -27,7 +27,7 @@
             <td class="align-middle">{{ $item->completed ? 'Yes': 'No' }}</td>
             <td class="align-middle">{{ $item->memberships()->count() }} / {{ $item->limit }}</td>
             <td class="align-middle">{{ $item->type }}</td>
-            <td class="align-middle">{{ $item->user->name }}</td>
+            <td class="align-middle"><a href="{{ route('profile.show', $item->user->uuid) }}">{{ $item->user->name }}</a></td>
         </tr>
         @endforeach
     </table>

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Config;
 
 class CreateCirclesTable extends Migration
 {
@@ -17,8 +18,9 @@ class CreateCirclesTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->string('uuid')->nullable()->unique();
-            $table->string('title');
-            $table->enum('type', ['f2f', 'virtual', 'both']);
+            $table->string('title')->nullable();
+            $table->text('description')->nullable();
+            $table->enum('type', Config::get('circle.defaults.types'));
             $table->integer('limit')->unsigned();
             $table->boolean('completed')->default(false);
             $table->timestamps();

@@ -5,10 +5,20 @@
 @endif
 
     <div class="form-group">
+        {{ Form::label('type', 'Type') }}
+        {{ Form::select('type', array_combine(Config::get('circle.defaults.types'), Config::get('circle.defaults.types')), null, ['class' => 'form-control']) }}
+    </div>
+
+    <div class="form-group">
         {{ Form::label('title', 'Title') }}
         {{ Form::text('title', null, ['class' => 'form-control']) }}
     </div>
-    
+
+    <div class="form-group">
+        {{ Form::label('description', 'Description') }}
+        {{ Form::textarea('description', null, ['class' => 'form-control']) }}
+    </div>
+
     @if(isset($item))
         {{ Form::submit('Update', ['class' => 'btn btn-primary']) }}
     @else
