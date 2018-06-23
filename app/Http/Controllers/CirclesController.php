@@ -117,4 +117,26 @@ class CirclesController extends Controller
             'success' => sprintf('You have left %s!', (string) $item)
         ]);
     }
+
+    public function complete($uuid, Request $request)
+    {
+        $item = \App\Circle::withUuid($uuid)->firstOrFail();
+
+        $item->complete(); 
+
+        return redirect()->route('circles.show', $item->uuid)->with([
+            'success' => sprintf('%s is completed!', (string) $item)
+        ]);
+    }
+
+    public function uncomplete($uuid, Request $request)
+    {
+        $item = \App\Circle::withUuid($uuid)->firstOrFail();
+
+        $item->uncomplete(); 
+
+        return redirect()->route('circles.show', $item->uuid)->with([
+            'success' => sprintf('%s is not completed!', (string) $item)
+        ]);
+    }
 }

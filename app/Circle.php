@@ -20,7 +20,8 @@ class Circle extends Model
     public static function validationRules($except = null)
     {
         $rules = [
-            'type' => 'required|in:'.implode(',', config('circle.defaults.types'))
+            'type' => 'required|in:'.implode(',', config('circle.defaults.types')),
+            'begin' => 'required|date'
         ];
 
         if($except)

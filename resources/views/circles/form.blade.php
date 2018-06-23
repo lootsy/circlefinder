@@ -11,7 +11,7 @@
 
     <div class="form-group">
         {{ Form::label('begin', 'Begin') }}
-        {{ Form::date('begin', \Carbon\Carbon::now(), ['class' => 'form-control']) }}
+        {{ Form::date('begin', isset($item) ? null : today(), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">

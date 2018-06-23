@@ -13,20 +13,21 @@
     <p>Begin: {{ $item->begin }}</p>
     <p>Members: {{ count($item->memberships) }}</p>
 
+    @if($item->full())
+    <p>Circle is full!</p>
+    @endif
+
+    @if($item->completed)
+        <p>Circle is completed!</p>
+    @endif
+
     <div class="border p-2 mb-4">
         <a href="{{ route('circles.index') }}" class="btn btn-secondary">Back</a>
 
         @if($item->joinable($user))
             {!! Form::open(['route' => ['circles.join', 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
-                {{ Form::submit('Join circle', ['class' => 'btn btn-primary']) }}
+                {{ Form::submit('Join circle', ['class' => 'btn btn-success']) }}
             {!! Form::close() !!}
-        @else
-            @if($item->full())
-                <p>Circle is full!</p>
-            @endif
-            @if($item->completed)
-                <p>Circle is completed!</p>
-            @endif
         @endif
         
         @if($item->joined($user))

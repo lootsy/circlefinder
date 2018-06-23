@@ -5,10 +5,12 @@
 @section('content')
 
     <h1>@yield('title')</h1>
+
+    <a href="{{ route('circles.create') }}" class="btn btn-success mb-4">New</a>
         
     @if(count($items) > 0)
 
-    @include('admin.inc.pagination')
+    @include('inc.pagination')
 
     <table class="table table-striped">
         <tr>
@@ -22,7 +24,7 @@
         
         @foreach($items as $item)
         <tr class="item-{{ $item->id }}">
-            <td class="align-middle">{{ $item->id }}</td>
+            <td class="align-middle"><a href="{{ route('circles.show', ['uuid' => $item->uuid]) }}">{{ $item->id }}</a></td>
             <td class="align-middle"><a href="{{ route('circles.show', ['uuid' => $item->uuid]) }}">{{ $item->title }}</a></td>
             <td class="align-middle">{{ $item->completed ? 'Yes': 'No' }}</td>
             <td class="align-middle">{{ $item->memberships()->count() }} / {{ $item->limit }}</td>
@@ -32,7 +34,7 @@
         @endforeach
     </table>
 
-    @include('admin.inc.pagination')
+    @include('inc.pagination')
 
     @else
         <p>No circles were found</p>
