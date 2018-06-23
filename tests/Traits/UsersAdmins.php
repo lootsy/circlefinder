@@ -3,7 +3,6 @@
 namespace Tests\Traits;
 
 use Faker\Factory as Faker;
-use Illuminate\Support\Facades\Config;
 
 trait UsersAdmins
 {
@@ -45,7 +44,10 @@ trait UsersAdmins
     {
         $user = $this->fetchUser();
         
-        $role = \App\Role::where('name', 'moderator')->first();
+        $role = \App\Role::firstOrCreate([
+            'name' => 'moderator',
+            'title' => 'Moderator'
+        ]);
         
         $user->roles()->attach($role);
 
@@ -69,9 +71,10 @@ trait UsersAdmins
         $faker = $this->fetchFaker();
 
         $data = [
-            'type' => $faker->randomElement(Config::get('circle.defaults.types')),
+            'type' => $faker->randomElement(config('circle.defaults.types')),
             'title' =>  $faker->catchPhrase,
-            'limit' => Config::get('circle.defaults.limit')
+            'limit' => config('circle.defaults.limit'),
+            'begin' => today()
         ];
 
         return $owner->circles()->create($data);

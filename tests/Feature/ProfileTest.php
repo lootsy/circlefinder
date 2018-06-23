@@ -10,7 +10,6 @@ use Tests\Traits\UsersAdmins;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Config;
 
 
 /**
@@ -152,7 +151,7 @@ class ProfileTest extends TestCase
 
         Storage::fake('fakedisk');
 
-        $min_upload_size = Config::get('userprofile.avatar.min_upload_size');
+        $min_upload_size = config('userprofile.avatar.min_upload_size');
 
         $response = $this->actingAs($user)->put(route('profile.avatar.update'), [
             'avatar' => UploadedFile::fake()->image('avatar.jpeg', $min_upload_size, $min_upload_size)
@@ -173,7 +172,7 @@ class ProfileTest extends TestCase
 
         Storage::persistentFake('fakedisk');
 
-        $min_upload_size = Config::get('userprofile.avatar.min_upload_size');
+        $min_upload_size = config('userprofile.avatar.min_upload_size');
 
         $response = $this->actingAs($user)->put(route('profile.avatar.update'), [
             'avatar' => UploadedFile::fake()->image('avatar.jpeg', $min_upload_size, $min_upload_size)

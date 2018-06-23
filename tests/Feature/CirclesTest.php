@@ -66,7 +66,21 @@ class CirclesTest extends TestCase
 
     public function test_user_can_create_circle()
     {
-        
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+
+        $response = $this->actingAs($user)->get(route('circles.create'));
+        $response->assertStatus(200);
+
+        $response = $this->actingAs($user)->post(route('circles.store'), [
+            'type' => $faker->randomElement(config('circle.defaults.types')),
+            'title' =>  $faker->catchPhrase,
+            'limit' => config('circle.defaults.limit'),
+            'begin' => today()
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success');
     }
 
     public function test_some_user_cannot_edit_circle()
@@ -90,7 +104,7 @@ class CirclesTest extends TestCase
         
         $response = $this->actingAs($user2)->get(route('circles.edit', ['uuid' => $circle->uuid]));
         $response->assertStatus(200);
-    }    
+    }
 
     public function test_owner_can_edit_circle()
     {
@@ -126,5 +140,56 @@ class CirclesTest extends TestCase
     public function test_owner_can_uncomplete_circle()
     {
 
+    }
+
+    public function test_user_cannot_join_full_circle()
+    {
+        $user = $this->fetchUser();
+        $user2 = $this->fetchUser();
+        $faker = $this->fetchFaker();
+        $circle = $this->fetchCircle($user);
+
+        for($i = 0; $i < $circle->limit; $i++)
+        {
+            $circle->joinWithDefaults($this->fetchUser());
+        }
+
+        $response = $this->actingAs($user2)->post(route('circles.join', ['uuid' => $circle->uuid]));
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors();
+
+        $this->assertDatabaseMissing('memberships', [
+            'circle_id' => $circle->id,
+            'user_id' => $user2->id
+        ]);
+    }
+
+    public function test_user_can_join_and_leave_circle()
+    {
+        $user = $this->fetchUser();
+        $user2 = $this->fetchUser();
+        $faker = $this->fetchFaker();
+        $circle = $this->fetchCircle($user);
+
+        $response = $this->actingAs($user2)->post(route('circles.join', ['uuid' => $circle->uuid]));
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('memberships', [
+            'circle_id' => $circle->id,
+            'user_id' => $user2->id
+        ]);
+
+        $response = $this->actingAs($user2)->post(route('circles.leave', ['uuid' => $circle->uuid]));
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseMissing('memberships', [
+            'circle_id' => $circle->id,
+            'user_id' => $user2->id
+        ]);
     }
 }

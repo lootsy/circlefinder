@@ -60,14 +60,16 @@ Route::group(['prefix' => '/circles', 'as' => 'circles.', 'middleware' => 'auth'
     Route::get('/', 'CirclesController@index')->name('index');
     Route::get('/search', 'CirclesController@search')->name('search');
     
-    Route::get('/{uuid}', 'CirclesController@show')->name('show');
     Route::get('/create', 'CirclesController@create')->name('create');
-    Route::put('/store', 'CirclesController@store')->name('store');
+    Route::post('/store', 'CirclesController@store')->name('store');
+    Route::get('/{uuid}', 'CirclesController@show')->name('show');
     Route::get('/{uuid}/edit', 'CirclesController@edit')->name('edit');
     Route::put('/{uuid}/update', 'CirclesController@update')->name('update');
     Route::delete('/{uuid}/destroy', 'CirclesController@destroy')->name('destroy');
     Route::post('/{uuid}/complete', 'CirclesController@complete')->name('complete');
     Route::post('/{uuid}/uncomplete', 'CirclesController@uncomplete')->name('uncomplete');
+    Route::post('/{uuid}/join', 'CirclesController@join')->name('join');
+    Route::post('/{uuid}/leave', 'CirclesController@leave')->name('leave');
 });
 
 

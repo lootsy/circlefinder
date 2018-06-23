@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use \App\Traits\RandomId;
-use Illuminate\Support\Facades\Config;
 
 class Circle extends Model
 {
@@ -14,13 +13,14 @@ class Circle extends Model
         'type', 
         'title',
         'limit',
-        'description'
+        'description',
+        'begin'
     ];
 
     public static function validationRules($except = null)
     {
         $rules = [
-            'type' => 'required|in:'.implode(',', Config::get('circle.defaults.types'))
+            'type' => 'required|in:'.implode(',', config('circle.defaults.types'))
         ];
 
         if($except)
@@ -135,6 +135,16 @@ class Circle extends Model
         $membership->save();
 
         return $membership;
+    }
+
+    public function joinWithDefaults($user)
+    {
+        $default_membership_data = [
+            'type' => $circle->type,
+            'begin' => $circle->begin
+        ];
+
+        return $this->join($default_membership_data, $user);
     }
 
     public function leave($user)

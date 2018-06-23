@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 
 class CirclesController extends Controller
 {
     public function __construct()
     {
-        $this->items_per_page = Config::get('circles.listing.items_per_page');
+        $this->items_per_page = config('circles.listing.items_per_page');
     }
 
     public function index()
@@ -20,6 +19,29 @@ class CirclesController extends Controller
         
         return view('circles.index')->with([
             'items' => $items
+        ]);
+    }
+
+    public function create()
+    {
+        $this->authorize('create', \App\Circle::class);
+        return view('circles.create');
+    }
+
+    public function store(Request $request)
+    {        
+        $this->authorize('create', \App\Circle::class);
+
+        $this->validate($request, \App\Circle::validationRules());
+
+        $user = auth()->user();
+
+        $request->merge(['limit' => config('circle.defaults.limit')]);
+
+        $item = $user->circles()->create($request->all());
+
+        return redirect()->route('circles.show', $item->uuid)->with([
+            'success' => sprintf('%s was created!', (string) $item)
         ]);
     }
 
@@ -63,5 +85,21 @@ class CirclesController extends Controller
         ]);
     }
 
-    
+    public function join($uuid, Request $request)
+    {
+        $item = \App\Circle::withUuid($uuid)->firstOrFail();
+
+        $user = auth()->user();
+
+        if($item->joinable($user) == false)
+        {
+            return redirect()->route('circles.show', $item->uuid)->withErrors(
+                sprintf('You cannot join circle %s', (string) $item)
+            );
+        }
+
+        return redirect()->route('circles.membership', $item->uuid)->with([
+            'success' => sprintf('You have joined circle %s!', (string) $item)
+        ]);
+    }
 }

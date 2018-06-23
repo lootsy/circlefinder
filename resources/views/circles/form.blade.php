@@ -6,7 +6,14 @@
 
     <div class="form-group">
         {{ Form::label('type', 'Type') }}
-        {{ Form::select('type', array_combine(Config::get('circle.defaults.types'), Config::get('circle.defaults.types')), null, ['class' => 'form-control']) }}
+        {{ Form::select('type', array_combine(config('circle.defaults.types'), config('circle.defaults.types')), null, ['class' => 'form-control']) }}
+    </div>
+
+    {{ $item->begin }}
+
+    <div class="form-group">
+        {{ Form::label('begin', 'Begin') }}
+        {{ Form::date('begin', \Carbon\Carbon::now(), ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
@@ -24,7 +31,10 @@
     @else
         {{ Form::submit('Create', ['class' => 'btn btn-success']) }}
     @endif
-
+    
+    @if(isset($item))
     <a href="{{ route('circles.show', ['uuid' => $item->uuid]) }}" class="btn btn-light">Cancel</a>
-
+    @else
+    <a href="{{ route('circles.index') }}" class="btn btn-light">Cancel</a>
+    @endif
 {!! Form::close() !!}
