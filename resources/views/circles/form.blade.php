@@ -9,8 +9,6 @@
         {{ Form::select('type', array_combine(config('circle.defaults.types'), config('circle.defaults.types')), null, ['class' => 'form-control']) }}
     </div>
 
-    {{ $item->begin }}
-
     <div class="form-group">
         {{ Form::label('begin', 'Begin') }}
         {{ Form::date('begin', \Carbon\Carbon::now(), ['class' => 'form-control']) }}

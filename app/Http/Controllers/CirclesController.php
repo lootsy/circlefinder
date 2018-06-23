@@ -98,12 +98,23 @@ class CirclesController extends Controller
             );
         }
 
-        $membership = $item->joinWithDefaults($user);
-
-        
+        $item->joinWithDefaults($user);
 
         return redirect()->route('circles.membership.edit', $item->uuid)->with([
-            'success' => sprintf('You have joined circle %s!', (string) $item)
+            'success' => sprintf('You have joined %s!', (string) $item)
+        ]);
+    }
+
+    public function leave($uuid, Request $request)
+    {
+        $item = \App\Circle::withUuid($uuid)->firstOrFail();
+
+        $user = auth()->user();
+
+        $item->leave($user);
+
+        return redirect()->route('circles.show', $item->uuid)->with([
+            'success' => sprintf('You have left %s!', (string) $item)
         ]);
     }
 }
