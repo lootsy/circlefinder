@@ -51,8 +51,8 @@ Route::group(['prefix' => 'profile', 'middleware' => 'auth',
 
 Route::group(['prefix' => '/circles', 'as' => 'circles.', 'middleware' => 'auth'], function() {
     Route::group(['prefix' => '/{uuid}/membership', 'as' => 'membership.'], function($circle_uuid) {
-        Route::get('/create', 'MembershipController@create')->name('create');
-        Route::put('/store', 'MembershipController@store')->name('store');
+        #Route::get('/create', 'MembershipController@create')->name('create');
+        #Route::put('/store', 'MembershipController@store')->name('store');
         Route::get('/edit', 'MembershipController@edit')->name('edit');
         Route::put('/update', 'MembershipController@update')->name('update');        
     });

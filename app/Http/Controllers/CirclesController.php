@@ -98,7 +98,11 @@ class CirclesController extends Controller
             );
         }
 
-        return redirect()->route('circles.membership', $item->uuid)->with([
+        $membership = $item->joinWithDefaults($user);
+
+        
+
+        return redirect()->route('circles.membership.edit', $item->uuid)->with([
             'success' => sprintf('You have joined circle %s!', (string) $item)
         ]);
     }

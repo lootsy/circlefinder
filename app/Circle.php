@@ -140,8 +140,8 @@ class Circle extends Model
     public function joinWithDefaults($user)
     {
         $default_membership_data = [
-            'type' => $circle->type,
-            'begin' => $circle->begin
+            'type' => $this->type,
+            'begin' => $this->begin
         ];
 
         return $this->join($default_membership_data, $user);

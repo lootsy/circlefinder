@@ -9,6 +9,7 @@ $factory->define(\App\Circle::class, function (Faker $faker) {
         'title' =>  $faker->catchPhrase,
         'completed' => false,
         'limit' => 5,
-        'description' => $faker->text
+        'description' => $faker->text,
+        'begin' => today()
     ];
 });

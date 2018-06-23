@@ -10,9 +10,10 @@
     <p>Completed: {{ $item->completed ? 'Yes': 'No' }}</p>
     <p>Limit: {{ $item->limit }}</p>
     <p>Type: {{ $item->type }}</p>
+    <p>Begin: {{ $item->begin }}</p>
     <p>Members: {{ count($item->memberships) }}</p>
 
-    <div class="border p-2">
+    <div class="border p-2 mb-4">
         <a href="{{ route('circles.index') }}" class="btn btn-secondary">Back</a>
 
         @if($item->joinable($user))
@@ -47,7 +48,7 @@
         <h2>Memberships</h2>
 
         <ul>
-        @foreach($item->memeberships as $membership)
+        @foreach($item->memberships as $membership)
             <li>{{ $membership->user->name }}</li>
         @endforeach
         </ul>

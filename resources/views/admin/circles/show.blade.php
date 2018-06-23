@@ -14,7 +14,7 @@
         <h2>Memberships</h2>
 
         <ul>
-        @foreach($item->memeberships as $membership)
+        @foreach($item->memberships as $membership)
             <li>{{ $membership->user->name }}</li>
         @endforeach
         </ul>
