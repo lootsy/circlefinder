@@ -31,6 +31,11 @@ class Membership extends Model
         return $this->belongsToMany(\App\Language::class);
     }
 
+    public function circle()
+    {
+        return $this->belongsTo(\App\Circle::class);
+    }
+
     public function ownedBy($user)
     {
         return $this->user->id == $user->id;
