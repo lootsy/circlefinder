@@ -6,4 +6,5 @@ return array
     "de" => "Deutsch",
     "en" => "English",
     "fr" => "French",
+    "es" => "Spanish",
 );

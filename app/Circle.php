@@ -130,14 +130,15 @@ class Circle extends Model
         }
 
         $membership = new \App\Membership;
-
         $membership->fill($membership_data);
-        
         $membership->user_id = $user->id;
-
         $membership->circle_id = $this->id;
-
         $membership->save();
+
+        if($this->memberships()->count() >= $this->limit)
+        {
+            $this->complete();
+        }
 
         return $membership;
     }

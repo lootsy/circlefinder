@@ -2,13 +2,11 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(\App\Language::class, function (Faker $faker) {    
-    $list = \App\Language::getListOfLanguages();
-
-    $language_code = $faker->randomElement(array_keys($list));
+$factory->define(\App\Language::class, function (Faker $faker) {
+    $languageCode = $faker->languageCode;
 
     return [
-        'title' => $list[$language_code],
-        'code' => $language_code
+        'title' => 'Lang_' . $languageCode,
+        'code' => $languageCode
     ];
 });

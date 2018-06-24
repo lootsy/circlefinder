@@ -188,6 +188,28 @@ class CirclesTest extends TestCase
             $circle->joinWithDefaults($this->fetchUser());
         }
 
+        $this->assertTrue($circle->completed);
+
+        $response = $this->actingAs($user2)->post(route('circles.join', ['uuid' => $circle->uuid]));
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors();
+
+        $this->assertDatabaseMissing('memberships', [
+            'circle_id' => $circle->id,
+            'user_id' => $user2->id
+        ]);
+    }
+
+    public function test_user_cannot_join_completed_circle()
+    {
+        $user = $this->fetchUser();
+        $user2 = $this->fetchUser();
+        $faker = $this->fetchFaker();
+        $circle = $this->fetchCircle($user);
+
+        $circle->complete();
+
         $response = $this->actingAs($user2)->post(route('circles.join', ['uuid' => $circle->uuid]));
 
         $response->assertStatus(302);

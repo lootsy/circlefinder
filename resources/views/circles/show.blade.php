@@ -31,13 +31,15 @@
         @endif
         
         @if($item->joined($user))
+            <a href="{{ route('circles.membership.edit', ['uuid' => $item->uuid]) }}" class="btn btn-primary">Edit membership</a>
+
             {!! Form::open(['route' => ['circles.leave', 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
-                {{ Form::submit('Leave circle', ['class' => 'btn btn-danger']) }}
+                {{ Form::submit('Leave circle', ['class' => 'btn btn-danger confirm']) }}
             {!! Form::close() !!}
         @endif
 
         @can('update', $item)
-            <a href="{{ route('circles.edit', ['uuid' => $item->uuid]) }}" class="btn btn-primary">Edit</a>
+            <a href="{{ route('circles.edit', ['uuid' => $item->uuid]) }}" class="btn btn-primary">Edit circle</a>
 
             {!! Form::open(['route' => ['circles.'.($item->completed ? 'uncomplete' : 'complete'), 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
                 {{ Form::submit($item->completed ? 'Uncomplete' : 'Complete', ['class' => 'btn btn-primary confirm']) }}
