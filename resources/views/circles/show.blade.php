@@ -22,8 +22,27 @@
         <p>Circle is completed!</p>
     @endif
 
-    <h3>My membership</h3>
+    @if(count($item->memberships))
+        <h2>Memberships</h2>
 
+        <table class="table table-striped">
+            <tr>
+                <th>Name</th>
+                <th>Type (virtual/f2f)</th>
+                <th>Begin</th>
+            </tr>
+            
+            @foreach($item->memberships as $membership)
+            <tr>
+                <td class="align-middle">{{ $membership->user->name }}</td>
+                <td class="align-middle">{{ $membership->type }}</td>
+                <td class="align-middle">{{ $membership->begin }}</td>
+            </tr>
+            @endforeach
+        </table>
+    @endif
+
+    <h2>My membership</h2>
 
     @if($item->joined($user))
         <p>Type: {{ $membership->type }}</p>
@@ -57,14 +76,5 @@
         @endcan
     </div>
 
-    @if(count($item->memberships))
-        <h2>Memberships</h2>
-
-        <ul>
-        @foreach($item->memberships as $membership)
-            <li>{{ $membership->user->name }}</li>
-        @endforeach
-        </ul>
-    @endif
 
 @endsection
