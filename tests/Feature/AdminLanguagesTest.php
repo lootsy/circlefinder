@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 /**
  * @group languages
  */
-class LanguagesTest extends TestCase
+class AdminLanguagesTest extends TestCase
 {
     use DatabaseMigrations;
     use UsersAdmins;

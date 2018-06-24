@@ -18,7 +18,7 @@
     </div>
 @endif
 
-@if(!isset($items) && isset($item) && $item->trashed())
+@if(!isset($items) && isset($item) && method_exists($item, 'trashed') && $item->trashed())
     <div class="alert alert-warning">
         {{ $item }} is located in the Trash!
     </div>

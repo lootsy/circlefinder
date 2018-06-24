@@ -54,7 +54,8 @@ class User extends Authenticatable
             'yammer_profile_url' => 'nullable|url',
         ];
 
-        if($except) {
+        if($except)
+        {
             $rules = array_except($rules, $except);
         }
 
@@ -69,15 +70,52 @@ class User extends Authenticatable
             $user->generateUniqueId();
         });
 
-        static::deleting(function($user)
-        {
+        static::deleting(function($user) {
             if ($user->isForceDeleting())
             {
                 $user->roles()->detach();
             }
 
+            $user->deleteCirclesOrChangeOwnership();
+
             $user->memberships()->delete();
         });
+    }
+
+    private function deleteCirclesOrChangeOwnership()
+    {
+        foreach($this->circles as $circle)
+        {
+            $members = $circle->users;
+
+            # Check if the circle has members
+            if($members->count() > 0)
+            {
+                # If the only member is the current user, delete the circle
+                if($members->count() == 1 && $members->first()->id == $this->id)
+                {
+                    $circle->delete();
+                    continue;
+                }
+
+                # If there are more members, change the ownership
+                foreach($members as $member)
+                {
+                    if($member->id != $this->id)
+                    {
+                        $circle->user_id = $member->id;
+                        $circle->save();
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                # The circle has no members, so delete it
+                $circle->delete();
+                continue;
+            }
+        }
     }
 
     public function __toString()
@@ -92,8 +130,8 @@ class User extends Authenticatable
 
     public function hasRole($role_name)
     {
-        $role = $this->roles->where('name', $role_name);
-        return (count($role) > 0);
+        $roles = $this->roles->where('name', $role_name);
+        return ($roles->count() > 0);
     }
 
     public function memberships()
@@ -101,9 +139,13 @@ class User extends Authenticatable
         return $this->hasMany(\App\Membership::class);
     }
 
+    public function circles()
+    {
+        return $this->hasMany(\App\Circle::class);
+    }
+
     public function newAvatarFileName()
     {
         return $this->newUuid() . '.jpg';
     }
-
 }

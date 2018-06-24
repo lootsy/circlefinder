@@ -16,7 +16,7 @@ class CreateMembershipsTable extends Migration
         Schema::create('memberships', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->enum('type', ['f2f', 'virtual', 'both']);
+            $table->enum('type', config('circle.defaults.types'));
             $table->date('begin');
             $table->timestamps();
         });

@@ -40,6 +40,20 @@ trait UsersAdmins
         }
     }
 
+    public function fetchModerator()
+    {
+        $user = $this->fetchUser();
+        
+        $role = \App\Role::firstOrCreate([
+            'name' => 'moderator',
+            'title' => 'Moderator'
+        ]);
+        
+        $user->roles()->attach($role);
+
+        return $user;
+    }
+
     private function fetchLanguage($id = null)
     {
         if($id == null)
@@ -50,5 +64,19 @@ trait UsersAdmins
         {
             return \App\Language::find($id);
         }
+    }
+
+    private function fetchCircle($owner)
+    {
+        $faker = $this->fetchFaker();
+
+        $data = [
+            'type' => $faker->randomElement(config('circle.defaults.types')),
+            'title' =>  $faker->catchPhrase,
+            'limit' => config('circle.defaults.limit'),
+            'begin' => today()
+        ];
+
+        return $owner->circles()->create($data);
     }
 }

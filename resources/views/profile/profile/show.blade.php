@@ -46,6 +46,39 @@
                 <li><a href="{{ $item->linkedin_profile_url }}">LinkedIn</a></li>
                 @endif
             </div>
+
+        </div>
+
+        <div class="card-body row">
+
+            <div class="col-8">
+                <h5 class="card-title">Owned circles</h5>
+                
+                @if(count($item->circles))
+                    <ul>
+                    @foreach($item->circles as $circle)
+                        <li><a href="{{ route('circles.show', ['uuid' => $circle->uuid]) }}">{{ $circle }}</a></li>
+                    @endforeach
+                    </ul>
+                @else
+                    <p>No circles</p>
+                @endif
+            </div>
+
+            <div class="col-8">
+                <h5 class="card-title">Member of circles</h5>
+                
+                @if(count($item->memberships))
+                    <ul>
+                    @foreach($item->memberships as $membership)
+                        <li><a href="{{ route('circles.show', ['uuid' => $membership->circle->uuid]) }}">{{ $membership->circle }}</a></li>
+                    @endforeach
+                    </ul>
+                @else
+                    <p>No circles</p>
+                @endif
+            </div>
+
         </div>
     </div>
 

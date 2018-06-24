@@ -17,7 +17,7 @@ if (App::environment('production')) {
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('index');
 
 Auth::routes();
 
@@ -49,16 +49,25 @@ Route::group(['prefix' => 'profile', 'middleware' => 'auth',
     Route::get('/{uuid}', 'ProfileController@show')->name('show');
 });
 
-Route::group(['prefix' => 'circles/{circle_uuid}', 'as' => 'circles.', 'middleware' => 'auth'], function() {
-
-    #Route::get('/', 'CircleController@index')->name('index');
-
-    Route::group(['prefix' => 'membership', 'as' => 'membership.'], function($circle_uuid) {
-        Route::get('/create', 'MembershipController@create')->name('create');
-        Route::put('/store', 'MembershipController@store')->name('store');
+Route::group(['prefix' => '/circles', 'as' => 'circles.', 'middleware' => 'auth'], function() {
+    Route::group(['prefix' => '/{uuid}/membership', 'as' => 'membership.'], function($circle_uuid) {
         Route::get('/edit', 'MembershipController@edit')->name('edit');
         Route::put('/update', 'MembershipController@update')->name('update');        
     });
+
+    Route::get('/', 'CirclesController@index')->name('index');
+    Route::get('/search', 'CirclesController@search')->name('search');
+    
+    Route::get('/create', 'CirclesController@create')->name('create');
+    Route::post('/store', 'CirclesController@store')->name('store');
+    Route::get('/{uuid}', 'CirclesController@show')->name('show');
+    Route::get('/{uuid}/edit', 'CirclesController@edit')->name('edit');
+    Route::put('/{uuid}/update', 'CirclesController@update')->name('update');
+    Route::delete('/{uuid}/destroy', 'CirclesController@destroy')->name('destroy');
+    Route::post('/{uuid}/complete', 'CirclesController@complete')->name('complete');
+    Route::post('/{uuid}/uncomplete', 'CirclesController@uncomplete')->name('uncomplete');
+    Route::post('/{uuid}/join', 'CirclesController@join')->name('join');
+    Route::post('/{uuid}/leave', 'CirclesController@leave')->name('leave');
 });
 
 
@@ -89,6 +98,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin',
         Route::get('/trash', 'LanguagesController@trash')->name('trash');
     });
     Route::resource('languages', 'LanguagesController');
+
+    Route::resource('circles', 'CirclesController')->only(['index', 'show']);
 });
 
 # Admin Login URLs
