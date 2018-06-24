@@ -17,6 +17,10 @@ class Circle extends Model
         'begin'
     ];
 
+    protected $casts = [
+        'completed' => 'boolean',
+    ];
+
     public static function validationRules($except = null)
     {
         $rules = [

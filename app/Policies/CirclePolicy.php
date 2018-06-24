@@ -56,4 +56,9 @@ class CirclePolicy
     {
         return $circle->ownedBy($user) || $user->hasRole('moderator');
     }
+
+    public function complete(User $user, Circle $circle)
+    {
+        return $circle->ownedBy($user) || $user->hasRole('moderator');
+    }
 }

@@ -122,6 +122,8 @@ class CirclesController extends Controller
     {
         $item = \App\Circle::withUuid($uuid)->firstOrFail();
 
+        $this->authorize('complete', $item);
+
         $item->complete(); 
 
         return redirect()->route('circles.show', $item->uuid)->with([
@@ -133,7 +135,9 @@ class CirclesController extends Controller
     {
         $item = \App\Circle::withUuid($uuid)->firstOrFail();
 
-        $item->uncomplete(); 
+        $this->authorize('complete', $item);
+
+        $item->uncomplete();
 
         return redirect()->route('circles.show', $item->uuid)->with([
             'success' => sprintf('%s is not completed!', (string) $item)

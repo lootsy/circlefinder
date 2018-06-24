@@ -125,7 +125,8 @@ class CirclesTest extends TestCase
         $response = $this->actingAs($user)->put(route('circles.update', ['uuid' => $circle->uuid]), [
             'type' => 'any',
             'title' =>  $faker->catchPhrase,
-            'description' => $faker->text
+            'description' => $faker->text,
+            'begin' => today()
         ]);
 
         $response->assertStatus(302);
@@ -134,12 +135,45 @@ class CirclesTest extends TestCase
 
     public function test_owner_can_complete_circle()
     {
+        $user = $this->fetchUser();
+        $circle = $this->fetchCircle($user);
 
+        $response = $this->actingAs($user)->post(route('circles.complete', ['uuid' => $circle->uuid]));
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success');
+
+        $this->assertTrue($circle->refresh()->completed);
+    }
+
+    public function test_user_cannot_complete_circle()
+    {
+        $user = $this->fetchUser();
+        $user2 = $this->fetchUser();
+        $circle = $this->fetchCircle($user);
+
+        $response = $this->actingAs($user2)->post(route('circles.complete', ['uuid' => $circle->uuid]));
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors();
+
+        $this->assertFalse($circle->refresh()->completed);
     }
 
     public function test_owner_can_uncomplete_circle()
     {
+        $user = $this->fetchUser();
+        $user2 = $this->fetchUser();
+        $circle = $this->fetchCircle($user);
 
+        $circle->complete();
+
+        $response = $this->actingAs($user2)->post(route('circles.uncomplete', ['uuid' => $circle->uuid]));
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors();
+
+        $this->assertTrue($circle->refresh()->completed);
     }
 
     public function test_user_cannot_join_full_circle()
