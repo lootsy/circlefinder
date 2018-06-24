@@ -11,6 +11,26 @@ class Membership extends Model
         'begin',
     ];
 
+    public static function validationRules($except = null)
+    {
+        $rules = [
+            'type' => 'required|in:'.implode(',', config('circle.defaults.types')),
+            'begin' => 'required|date'
+        ];
+
+        if($except)
+        {
+            $rules = array_except($rules, $except);
+        }
+
+        return $rules;
+    }
+
+    public function __toString()
+    {
+        return sprintf('Membership in %s', $this->circle);
+    }
+
     public function user()
     {
         return $this->belongsTo(\App\User::class);

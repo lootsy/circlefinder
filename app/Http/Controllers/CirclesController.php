@@ -52,10 +52,13 @@ class CirclesController extends Controller
         $this->authorize('view', $item);
 
         $user = auth()->user();
+
+        $membership = $item->membershipOf($user);
         
         return view('circles.show')->with([
             'item' => $item,
-            'user' => $user
+            'user' => $user,
+            'membership' => $membership
         ]);
     }
 

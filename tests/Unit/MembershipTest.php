@@ -114,4 +114,16 @@ class MembershipTest extends TestCase
             'membership_id' => $membership->id
         ]);
     }
+
+    public function test_validation_rules()
+    {
+        $rules = \App\Membership::validationRules();
+        $rules2 = \App\Membership::validationRules(['type']);
+
+        $this->assertTrue(count($rules) > 0);
+
+        $this->assertTrue(key_exists('type', $rules));
+        
+        $this->assertFalse(key_exists('type', $rules2));
+    }
 }

@@ -66,6 +66,11 @@ class Circle extends Model
         return $this->hasMany(\App\Membership::class);
     }
 
+    public function membershipOf($user)
+    {
+        return \App\Membership::where(['circle_id' => $this->id, 'user_id' => $user->id])->first();
+    }
+
     public function user()
     {
         return $this->belongsTo(\App\User::class);

@@ -22,22 +22,31 @@
         <p>Circle is completed!</p>
     @endif
 
-    <div class="border p-2 mb-4">
-        <a href="{{ route('circles.index') }}" class="btn btn-secondary">Back</a>
+    <h3>My membership</h3>
 
+
+    @if($item->joined($user))
+        <p>Type: {{ $membership->type }}</p>
+        <p>Begin: {{ $membership->begin }}</p>
+
+        <p><a href="{{ route('circles.membership.edit', ['uuid' => $item->uuid]) }}" class="btn btn-primary">Edit membership</a></p>
+
+        {!! Form::open(['route' => ['circles.leave', 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
+            {{ Form::submit('Leave circle', ['class' => 'btn btn-danger confirm']) }}
+        {!! Form::close() !!}
+    @else
+        <p>You are not a member of {{ $item }}</p>
         @if($item->joinable($user))
-            {!! Form::open(['route' => ['circles.join', 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
-                {{ Form::submit('Join circle', ['class' => 'btn btn-success']) }}
-            {!! Form::close() !!}
+        {!! Form::open(['route' => ['circles.join', 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
+            {{ Form::submit('Join circle', ['class' => 'btn btn-success']) }}
+        {!! Form::close() !!}
+        @else
+        <p>You can not join this circle.</p>
         @endif
-        
-        @if($item->joined($user))
-            <a href="{{ route('circles.membership.edit', ['uuid' => $item->uuid]) }}" class="btn btn-primary">Edit membership</a>
+    @endif
 
-            {!! Form::open(['route' => ['circles.leave', 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
-                {{ Form::submit('Leave circle', ['class' => 'btn btn-danger confirm']) }}
-            {!! Form::close() !!}
-        @endif
+    <div class="border p-2 mt-4 mb-4">
+        <a href="{{ route('circles.index') }}" class="btn btn-secondary">Back</a>
 
         @can('update', $item)
             <a href="{{ route('circles.edit', ['uuid' => $item->uuid]) }}" class="btn btn-primary">Edit circle</a>
