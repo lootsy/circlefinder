@@ -14,7 +14,7 @@
     <p>Members: {{ count($item->memberships) }}</p>
 
     @if($item->full())
-    <p>Circle is full!</p>
+        <p>Circle is full!</p>
     @endif
 
     @if($item->completed)

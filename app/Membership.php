@@ -30,4 +30,9 @@ class Membership extends Model
     {
         return $this->belongsToMany(\App\Language::class);
     }
+
+    public function ownedBy($user)
+    {
+        return $this->user->id == $user->id;
+    }    
 }

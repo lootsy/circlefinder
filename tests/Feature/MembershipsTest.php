@@ -22,4 +22,19 @@ class MembershipsTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect('/login');
     }
+
+    public function test_user_cannot_access_foreign_membership()
+    {
+        
+    }
+
+    public function test_user_can_access_own_membership()
+    {
+        
+    }
+
+    public function test_user_can_update_own_membership()
+    {
+        
+    }
 }
