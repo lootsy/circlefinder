@@ -136,6 +136,9 @@ class CircleTest extends TestCase
         $user2 = $this->fetchUser();
 
         $faker = $this->fetchFaker();
+
+        $circle = $this->fetchCircle($user);
+        $circle = $this->fetchCircle($user);
         $circle = $this->fetchCircle($user);
 
         $circle->join($this->fetchMembershipData(), $user);
@@ -159,6 +162,31 @@ class CircleTest extends TestCase
         $this->assertDatabaseMissing('circles', [
             'id' => $circle->id
         ]);
+    }
+
+    public function test_circle_gets_new_owner_if_user_not_member_and_deleted()
+    {
+        $user = $this->fetchUser();
+        $user2 = $this->fetchUser();
+        $user3 = $this->fetchUser();
+        
+        $faker = $this->fetchFaker();
+
+        $circle = $this->fetchCircle($user);
+        $circle = $this->fetchCircle($user);
+        $circle = $this->fetchCircle($user);
+
+        $circle->join($this->fetchMembershipData(), $user2);
+        $circle->join($this->fetchMembershipData(), $user3);
+
+        $this->assertEquals(2, $circle->users()->count());
+
+        $user->delete();
+
+        $circle = $circle->fresh();
+
+        $this->assertEquals(2, $circle->users()->count());
+        $this->assertEquals($circle->user_id, $user2->id);       
     }
 
     public function test_delete_empty_circle_when_user_deleted()
@@ -266,5 +294,17 @@ class CircleTest extends TestCase
             'circle_id' => $circle->id,
             'user_id' => $member->id
         ]);
+    }
+
+    public function test_validation_rules()
+    {
+        $rules = \App\Circle::validationRules();
+        $rules2 = \App\Circle::validationRules(['type']);
+
+        $this->assertTrue(count($rules) > 0);
+
+        $this->assertTrue(key_exists('type', $rules));
+        
+        $this->assertFalse(key_exists('type', $rules2));
     }
 }

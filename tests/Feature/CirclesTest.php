@@ -64,6 +64,17 @@ class CirclesTest extends TestCase
         $response->assertStatus(404);
     }
 
+    public function test_user_cannot_get_post_route()
+    {
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+
+        $response = $this->actingAs($user)->get(route('circles.update', ['uuid' => $faker->uuid]));
+        
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors();
+    }
+
     public function test_user_can_create_circle()
     {
         $user = $this->fetchUser();

@@ -59,7 +59,7 @@ class Handler extends ExceptionHandler
     
             if($exception instanceof MethodNotAllowedHttpException)
             {
-                return redirect(route('index'));
+                return redirect(route('index'))->withErrors('Ooops, something went wrong...');
             }
         }
 

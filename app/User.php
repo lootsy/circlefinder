@@ -95,7 +95,7 @@ class User extends Authenticatable
                 if($members->count() == 1 && $members->first()->id == $this->id)
                 {
                     $circle->delete();
-                    return;
+                    continue;
                 }
 
                 # If there are more members, change the ownership
@@ -105,7 +105,7 @@ class User extends Authenticatable
                     {
                         $circle->user_id = $member->id;
                         $circle->save();
-                        return;
+                        break;
                     }
                 }
             }
@@ -113,7 +113,7 @@ class User extends Authenticatable
             {
                 # The circle has no members, so delete it
                 $circle->delete();
-                return;
+                continue;
             }
         }
     }

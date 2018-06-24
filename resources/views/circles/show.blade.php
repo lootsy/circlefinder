@@ -11,6 +11,7 @@
     <p>Limit: {{ $item->limit }}</p>
     <p>Type: {{ $item->type }}</p>
     <p>Begin: {{ $item->begin }}</p>
+    <p>Owner: {{ $item->user->name }}</p>
     <p>Members: {{ count($item->memberships) }}</p>
 
     @if($item->full())
