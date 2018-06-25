@@ -31,6 +31,7 @@
                 <th>Name</th>
                 <th>Type (virtual/f2f)</th>
                 <th>Begin</th>
+                <th>Language</th>
             </tr>
             
             @foreach($item->memberships as $memb)
@@ -38,6 +39,7 @@
                 <td class="align-middle"><a href="{{ route('profile.show', ['uuid' => $memb->user->uuid]) }}">{{ $memb->user->name }}</a></td>
                 <td class="align-middle">{{ $memb->type }}</td>
                 <td class="align-middle">{{ $memb->begin }}</td>
+                <td class="align-middle">{{ $memb->languages->implode('title', ', ') }}</td>
             </tr>
             @endforeach
         </table>

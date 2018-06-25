@@ -10,6 +10,8 @@
         {{ Form::date('begin', isset($item) ? null : today(), ['class' => 'form-control']) }}
     </div>
 
+    @include('inc.form-languages')
+
     {{ Form::submit('Save', ['class' => 'btn btn-primary']) }}
     
     <a href="{{ route('circles.show', ['uuid' => $item->circle->uuid]) }}" class="btn btn-light">Cancel</a>

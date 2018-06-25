@@ -43,7 +43,12 @@ class CirclesController extends Controller
         if($request->languages)
         {
             $languages = \App\Language::whereIn('code', array_values($request->languages))->get();
-            $item->languages()->sync($languages);
+            $item->languages()->attach($languages);
+        }
+
+        if($user->moderator() == false)
+        {
+            $item->joinWithDefaults($user);
         }
 
         return redirect()->route('circles.show', $item->uuid)->with([

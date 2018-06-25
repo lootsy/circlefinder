@@ -107,7 +107,32 @@ class CirclesTest extends TestCase
 
         $circle = $user->circles()->first();
 
+        $this->assertTrue($circle->joined($user));
+
         $this->assertEquals(3, count($circle->languages));
+    }
+
+    public function test_moderator_does_not_autojoin_circle()
+    {
+        $user = $this->fetchModerator();
+        $faker = $this->fetchFaker();
+
+        $response = $this->actingAs($user)->get(route('circles.create'));
+        $response->assertStatus(200);
+
+        $response = $this->actingAs($user)->post(route('circles.store'), [
+            'type' => $faker->randomElement(config('circle.defaults.types')),
+            'title' =>  $faker->catchPhrase,
+            'limit' => config('circle.defaults.limit'),
+            'begin' => today()
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success');
+
+        $circle = $user->circles()->first();
+
+        $this->assertFalse($circle->joined($user));
     }
 
     public function test_some_user_cannot_edit_circle()

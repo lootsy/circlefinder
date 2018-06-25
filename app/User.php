@@ -134,6 +134,11 @@ class User extends Authenticatable
         return ($roles->count() > 0);
     }
 
+    public function moderator()
+    {
+        return $this->hasRole('moderator');
+    }
+
     public function memberships()
     {
         return $this->hasMany(\App\Membership::class);

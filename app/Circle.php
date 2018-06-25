@@ -140,6 +140,11 @@ class Circle extends Model
         $membership->user_id = $user->id;
         $membership->circle_id = $this->id;
         $membership->save();
+        
+        if(key_exists('languages', $membership_data))
+        {
+            $membership->languages()->attach($membership_data['languages']);
+        }
 
         if($this->memberships()->count() >= $this->limit)
         {
@@ -153,7 +158,8 @@ class Circle extends Model
     {
         $default_membership_data = [
             'type' => $this->type,
-            'begin' => $this->begin
+            'begin' => $this->begin,
+            'languages' => $this->languages,
         ];
 
         return $this->join($default_membership_data, $user);
