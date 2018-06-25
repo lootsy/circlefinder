@@ -72,6 +72,11 @@
                 @yield('content')
             </div>
         </main>
+
+        <footer class="text-center mb-4 mt-4">
+            <p>{{ config('app.name') }} @version</p>
+            <p>Created by <a href="https://twitter.com/leonidlezner">@@leonidlezner</a> - <a href="https://github.com/leonidlezner/circlefinder">Source at Github</a></p>
+        </footer>
     </div>
 </body>
 </html>
