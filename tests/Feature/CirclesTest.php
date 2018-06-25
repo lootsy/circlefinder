@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\Traits\UsersAdmins;
-
+use Illuminate\Support\Facades\Artisan;
 
 /**
  * @group circles
@@ -16,6 +16,13 @@ class CirclesTest extends TestCase
 {
     use DatabaseMigrations;
     use UsersAdmins;
+
+    public function setUp()
+    {
+        parent::setUp();
+        Artisan::call('migrate');
+        Artisan::call('db:seed', ['--class' => 'LanguagesTableSeeder', '--env' => 'testing']);
+    }
 
     public function test_guest_cannot_access_circle()
     {
@@ -87,11 +94,45 @@ class CirclesTest extends TestCase
             'type' => $faker->randomElement(config('circle.defaults.types')),
             'title' =>  $faker->catchPhrase,
             'limit' => config('circle.defaults.limit'),
+            'begin' => today(),
+            'languages' => [
+                '0' => \App\Language::find(1)->code,
+                '1' => \App\Language::find(2)->code,
+                '2' => \App\Language::find(3)->code
+            ]
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success');
+
+        $circle = $user->circles()->first();
+
+        $this->assertTrue($circle->joined($user));
+
+        $this->assertEquals(3, count($circle->languages));
+    }
+
+    public function test_moderator_does_not_autojoin_circle()
+    {
+        $user = $this->fetchModerator();
+        $faker = $this->fetchFaker();
+
+        $response = $this->actingAs($user)->get(route('circles.create'));
+        $response->assertStatus(200);
+
+        $response = $this->actingAs($user)->post(route('circles.store'), [
+            'type' => $faker->randomElement(config('circle.defaults.types')),
+            'title' =>  $faker->catchPhrase,
+            'limit' => config('circle.defaults.limit'),
             'begin' => today()
         ]);
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
+
+        $circle = $user->circles()->first();
+
+        $this->assertFalse($circle->joined($user));
     }
 
     public function test_some_user_cannot_edit_circle()
@@ -137,11 +178,32 @@ class CirclesTest extends TestCase
             'type' => 'any',
             'title' =>  $faker->catchPhrase,
             'description' => $faker->text,
-            'begin' => today()
+            'begin' => today(),
+            'languages' => [
+                '0' => \App\Language::find(1)->code,
+                '1' => \App\Language::find(2)->code,
+                '2' => \App\Language::find(3)->code
+            ]
         ]);
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
+
+        $this->assertEquals(3, count($circle->languages));
+
+        $response = $this->actingAs($user)->put(route('circles.update', ['uuid' => $circle->uuid]), [
+            'type' => 'any',
+            'title' =>  $faker->catchPhrase,
+            'description' => $faker->text,
+            'begin' => today(),
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success');
+
+        $circle = $circle->refresh();
+
+        $this->assertEquals(0, count($circle->languages));
     }
 
     public function test_owner_can_complete_circle()
@@ -300,4 +362,6 @@ class CirclesTest extends TestCase
         $response->assertStatus(302);
         $response->assertSessionHas('success');
     }
+
+
 }

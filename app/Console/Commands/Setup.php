@@ -50,11 +50,16 @@ class Setup extends Command
 
         foreach($list as $code => $title)
         {
-            \App\Language::firstOrCreate([
-                'code' => $code,
-                'title' => $title
-            ]);
+            if(\App\Language::where('code', $code)->count() == 0)
+            {
+                \App\Language::create([
+                    'code' => $code,
+                    'title' => $title
+                ]);
+            }
         }
+
+        $this->info('List of languages created');
     }
 
     /**

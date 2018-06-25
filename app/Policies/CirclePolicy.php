@@ -42,7 +42,7 @@ class CirclePolicy
      */
     public function update(User $user, Circle $circle)
     {
-        return $circle->ownedBy($user) || $user->hasRole('moderator');
+        return $circle->ownedBy($user) || $user->moderator();
     }
 
     /**
@@ -54,11 +54,11 @@ class CirclePolicy
      */
     public function delete(User $user, Circle $circle)
     {
-        return $circle->ownedBy($user) || $user->hasRole('moderator');
+        return $circle->ownedBy($user) || $user->moderator();
     }
 
     public function complete(User $user, Circle $circle)
     {
-        return $circle->ownedBy($user) || $user->hasRole('moderator');
+        return $circle->ownedBy($user) || $user->moderator();
     }
 }

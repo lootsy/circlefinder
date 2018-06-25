@@ -14,6 +14,8 @@
         {{ Form::date('begin', isset($item) ? null : today(), ['class' => 'form-control']) }}
     </div>
 
+    @include('inc.form-languages')
+
     <div class="form-group">
         {{ Form::label('title', 'Title') }}
         {{ Form::text('title', null, ['class' => 'form-control']) }}

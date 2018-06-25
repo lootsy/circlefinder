@@ -11,6 +11,7 @@
     <p>Limit: {{ $item->limit }}</p>
     <p>Type: {{ $item->type }}</p>
     <p>Begin: {{ $item->begin }}</p>
+    <p>Languages: {{ $item->languages->implode('title', ', ') }}</p>
     <p>Owner: {{ $item->user->name }}</p>
     <p>Members: {{ count($item->memberships) }}</p>
 
@@ -30,13 +31,15 @@
                 <th>Name</th>
                 <th>Type (virtual/f2f)</th>
                 <th>Begin</th>
+                <th>Language</th>
             </tr>
             
-            @foreach($item->memberships as $membership)
+            @foreach($item->memberships as $memb)
             <tr>
-                <td class="align-middle"><a href="{{ route('profile.show', ['uuid' => $membership->user->uuid]) }}">{{ $membership->user->name }}</a></td>
-                <td class="align-middle">{{ $membership->type }}</td>
-                <td class="align-middle">{{ $membership->begin }}</td>
+                <td class="align-middle"><a href="{{ route('profile.show', ['uuid' => $memb->user->uuid]) }}">{{ $memb->user->name }}</a></td>
+                <td class="align-middle">{{ $memb->type }}</td>
+                <td class="align-middle">{{ $memb->begin }}</td>
+                <td class="align-middle">{{ $memb->languages->implode('title', ', ') }}</td>
             </tr>
             @endforeach
         </table>

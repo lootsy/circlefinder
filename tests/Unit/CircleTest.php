@@ -116,6 +116,23 @@ class CircleTest extends TestCase
         $this->assertEquals(3, $circle->users()->count());
     }
 
+    public function test_user_can_join_circle_with_defaults()
+    {
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+        $circle = $this->fetchCircle($user);
+
+        $circle->languages()->attach($this->fetchLanguage());
+        $circle->languages()->attach($this->fetchLanguage());
+
+        $membership = $circle->joinWithDefaults($user);
+
+        $this->assertEquals($circle->type, $membership->type);
+        $this->assertEquals($circle->begin, $membership->begin);
+        $this->assertEquals($circle->languages[0]->code, $membership->languages[0]->code);
+        $this->assertEquals($circle->languages[1]->code, $membership->languages[1]->code);
+    }
+
     public function test_one_user_cannot_join_twice()
     {
         $user = $this->fetchUser();
