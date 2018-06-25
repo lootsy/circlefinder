@@ -39,6 +39,8 @@ class MembershipController extends Controller
 
         $this->validate($request, \App\Membership::validationRules());
 
+        # Refactoring - start
+
         $item->update($request->all());
 
         if($request->languages)
@@ -50,6 +52,8 @@ class MembershipController extends Controller
         {
             $item->languages()->detach();
         }
+
+        # Refactoring - end
 
         return redirect()->route('circles.show', $circle->uuid)->with([
             'success' => sprintf('%s was updated!', (string) $item)

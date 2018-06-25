@@ -38,6 +38,8 @@ class CirclesController extends Controller
 
         $request->merge(['limit' => config('circle.defaults.limit')]);
 
+        # Refactoring - start
+
         $item = $user->circles()->create($request->all());
 
         if($request->languages)
@@ -51,6 +53,8 @@ class CirclesController extends Controller
             $item->joinWithDefaults($user);
         }
 
+        # Refactoring - end
+
         return redirect()->route('circles.show', $item->uuid)->with([
             'success' => sprintf('%s was created!', (string) $item)
         ]);
@@ -63,13 +67,11 @@ class CirclesController extends Controller
         $this->authorize('view', $item);
 
         $user = auth()->user();
-
-        $membership = $item->membershipOf($user);
         
         return view('circles.show')->with([
             'item' => $item,
             'user' => $user,
-            'membership' => $membership
+            'membership' => $item->membershipOf($user)
         ]);
     }
 
@@ -94,6 +96,8 @@ class CirclesController extends Controller
 
         $item->update($request->all());
 
+        # Refactoring - start
+
         if($request->languages)
         {
             $languages = \App\Language::whereIn('code', array_values($request->languages))->get();
@@ -103,6 +107,8 @@ class CirclesController extends Controller
         {
             $item->languages()->detach();
         }
+
+        # Refactoring - end
 
         return redirect()->route('circles.show', $item->uuid)->with([
             'success' => sprintf('%s was updated!', (string) $item)
@@ -115,14 +121,16 @@ class CirclesController extends Controller
 
         $user = auth()->user();
 
-        if($item->joinable($user) == false)
+        if($item->joinable($user))
+        {
+            $item->joinWithDefaults($user);
+        }
+        else
         {
             return redirect()->route('circles.show', $item->uuid)->withErrors(
                 sprintf('You cannot join %s', (string) $item)
             );
         }
-
-        $item->joinWithDefaults($user);
 
         return redirect()->route('circles.membership.edit', $item->uuid)->with([
             'success' => sprintf('You have joined %s!', (string) $item)
@@ -174,14 +182,16 @@ class CirclesController extends Controller
 
         $this->authorize('delete', $item);
 
-        if($item->deletable() == false)
+        if($item->deletable())
+        {
+            $item->delete();
+        }
+        else
         {
             return redirect()->route('circles.show', $item->uuid)->withErrors(
                 sprintf('You cannot delete %s', (string) $item)
             );
         }
-
-        $item->delete();
 
         return redirect()->route('circles.index')->with([
             'success' => sprintf('%s is deleted!', (string) $item)

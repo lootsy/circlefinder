@@ -69,7 +69,11 @@ class Setup extends Command
      */
     public function handle()
     {
+        $this->info('Running migrations...');
         Artisan::call('migrate');
+
+        $this->info('Refreshing version...');
+        Artisan::call('version:refresh');
 
         if($this->createModeratorRole() == false)
         {
