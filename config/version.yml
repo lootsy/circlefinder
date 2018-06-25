@@ -8,7 +8,7 @@ current:
   git_absorb: false # "false", "git-local" or "git-remote"
 cache:
   enabled: true
-  key: pragmarx-version
+  key: circlefinder-version
   time: 525600 #minutes = 1 year
 build:
   mode: git-local # "number", "git-local" or "git-remote"
@@ -24,7 +24,7 @@ git:
   version:
     git-local: "git describe"
     git-remote: "git ls-remote {$repository} | grep tags/ | grep -v {} | cut -d \/ -f 3 | sort --version-sort | tail -1"
-    matcher: "/[V|v]*[ersion]*\\s*\\.*(\\d+)\\.(\\d+)\\.(\\d+)\\.*(\\w*)/"
+    matcher: "/[V|v]*[ersion]*\\s*\\.*(\\d+)\\.(\\d+)\\.(\\d+)\\-(.*)/"
 format:
   major: "{$major}"
   minor: "{$minor}"
