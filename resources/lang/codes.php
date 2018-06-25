@@ -3,8 +3,9 @@
 
 return array
 (
-    "de" => "Deutsch",
+    "de" => "German",
     "en" => "English",
     "fr" => "French",
     "es" => "Spanish",
+    "it" => "Italian"
 );
