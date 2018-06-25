@@ -74,7 +74,7 @@ class CircleTest extends TestCase
         $faker = $this->fetchFaker();
         $circle = $this->fetchCircle($user);
 
-        $this->assertTrue($circle->canDelete());
+        $this->assertTrue($circle->deletable());
 
         $membership = $circle->join($this->fetchMembershipData(), $user);
 
@@ -84,7 +84,7 @@ class CircleTest extends TestCase
 
         $this->assertEquals($circle->id, $membership->circle_id);
 
-        $this->assertFalse($circle->canDelete());
+        $this->assertFalse($circle->deletable());
 
         $circle->delete();
 
