@@ -40,6 +40,12 @@ class CirclesController extends Controller
 
         $item = $user->circles()->create($request->all());
 
+        if($request->languages)
+        {
+            $languages = \App\Language::whereIn('code', array_values($request->languages))->get();
+            $item->languages()->sync($languages);
+        }
+
         return redirect()->route('circles.show', $item->uuid)->with([
             'success' => sprintf('%s was created!', (string) $item)
         ]);
@@ -82,6 +88,16 @@ class CirclesController extends Controller
         $this->validate($request, \App\Circle::validationRules());
 
         $item->update($request->all());
+
+        if($request->languages)
+        {
+            $languages = \App\Language::whereIn('code', array_values($request->languages))->get();
+            $item->languages()->sync($languages);
+        }
+        else
+        {
+            $item->languages()->detach();
+        }
 
         return redirect()->route('circles.show', $item->uuid)->with([
             'success' => sprintf('%s was updated!', (string) $item)

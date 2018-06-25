@@ -14,7 +14,7 @@ class Circle extends Model
         'title',
         'limit',
         'description',
-        'begin'
+        'begin',
     ];
 
     protected $casts = [
@@ -25,7 +25,8 @@ class Circle extends Model
     {
         $rules = [
             'type' => 'required|in:'.implode(',', config('circle.defaults.types')),
-            'begin' => 'required|date'
+            'begin' => 'required|date',
+            'languages' => 'exists:languages,code',
         ];
 
         if($except)
