@@ -39,21 +39,7 @@ class MembershipController extends Controller
 
         $this->validate($request, \App\Membership::validationRules());
 
-        # Refactoring - start
-
-        $item->update($request->all());
-
-        if($request->languages)
-        {
-            $languages = \App\Language::whereIn('code', array_values($request->languages))->get();
-            $item->languages()->sync($languages);
-        }
-        else
-        {
-            $item->languages()->detach();
-        }
-
-        # Refactoring - end
+        $item->updateAndModify($request);
 
         return redirect()->route('circles.show', $circle->uuid)->with([
             'success' => sprintf('%s was updated!', (string) $item)

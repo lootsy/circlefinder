@@ -59,5 +59,20 @@ class Membership extends Model
     public function ownedBy($user)
     {
         return $this->user->id == $user->id;
-    }    
+    }
+
+    public function updateAndModify($request)
+    {
+        $this->update($request->all());
+
+        if($request->languages)
+        {
+            $languages = \App\Language::whereIn('code', array_values($request->languages))->get();
+            $this->languages()->sync($languages);
+        }
+        else
+        {
+            $this->languages()->detach();
+        }
+    }
 }
