@@ -52,7 +52,7 @@
             
 
             @if(count($item->memberships))        
-                <table class="table table-striped">
+                <table class="table table-striped table-bordered">
                     <tr>
                         <th>Name</th>
                         <th>Type (virtual/f2f)</th>
@@ -68,6 +68,15 @@
                         <td class="align-middle">{{ $memb->languages->implode('title', ', ') }}</td>
                     </tr>
                     @endforeach
+
+                    @for($i = 0; $i < $item->limit - count($item->memberships); $i++)
+                        <tr>
+                            <td class="align-middle">&nbsp;</td>
+                            <td class="align-middle">&nbsp;</td>
+                            <td class="align-middle">&nbsp;</td>
+                            <td class="align-middle">&nbsp;</td>
+                        </tr>
+                    @endfor
                 </table>
             @else
                 <p>Currenly there are no members in the circle</p>
@@ -81,16 +90,13 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-lg col-12">
-                    <p>Completed: {{ $item->completed ? 'Yes': 'No' }}</p>
-                    <p>Limit: {{ $item->limit }}</p>
                     <p>Type: {{ $item->type }}</p>
                     <p>Begin: {{ $item->begin }}</p>
-                    <p>Languages: {{ $item->languages->implode('title', ', ') }}</p>
-                    <p>Owner: {{ $item->user->name }}</p>
                 </div>
         
                 <div class="col-lg col-12">                   
-
+                    <p>Languages: {{ $item->languages->implode('title', ', ') }}</p>
+                    <p>Owner: {!! $item->user->link() !!}</p>
                 </div>
             </div>
         </div>
