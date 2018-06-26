@@ -226,4 +226,30 @@ class Circle extends Model
             $this->languages()->detach();
         }
     }
+
+    public function link($title = null, $class = null)
+    {
+        $link_title = $title ? $title : (string) $this;
+
+        if($class)
+        {
+            $class = sprintf(' class="%s"', $class);
+        }
+
+        $link = sprintf('<a href="%s"%s>%s</a>', route('circles.show', ['uuid' => $this->uuid]), $class, $link_title);
+
+        return $link;
+    }
+
+    public function goodTitle()
+    {
+        if($this->title)
+        {
+            return $this->title . ' (' . $this . ')';
+        }
+        else
+        {
+            return (string) $this;
+        }
+    }
 }

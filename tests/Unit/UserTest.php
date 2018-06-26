@@ -63,4 +63,15 @@ class UserTest extends TestCase
 
         $this->assertTrue(strlen($user->newAvatarFileName()) > 0);
     }
+
+    public function test_get_link_to_user_profile()
+    {
+        $user = $this->fetchUser();
+
+        $link = sprintf('<a href="%s">%s</a>', route('profile.show', ['uuid' => $user->uuid]), $user->name);
+        $this->assertEquals($link, $user->link());
+
+        $link = sprintf('<a href="%s">%s</a>', route('profile.show', ['uuid' => $user->uuid]), 'Test');
+        $this->assertEquals($link, $user->link('Test'));
+    }
 }
