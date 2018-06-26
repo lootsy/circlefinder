@@ -153,4 +153,13 @@ class User extends Authenticatable
     {
         return $this->newUuid() . '.jpg';
     }
+
+    public function link($title = null)
+    {
+        $link_title = $title ? $title : (string) $this->name;
+
+        $link = sprintf('<a href="%s">%s</a>', route('profile.show', ['uuid' => $this->uuid]), $link_title);
+
+        return $link;
+    }
 }

@@ -191,4 +191,65 @@ class Circle extends Model
         $this->completed = false;
         $this->save();
     }
+
+    public static function createAndModify($user, $request)
+    {
+        $item = $user->circles()->create($request->all());
+
+        $request->merge(['limit' => config('circle.defaults.limit')]);
+
+        if($request->languages)
+        {
+            $languages = \App\Language::whereIn('code', array_values($request->languages))->get();
+            $item->languages()->attach($languages);
+        }
+
+        if($user->moderator() == false)
+        {
+            $item->joinWithDefaults($user);
+        }
+
+        return $item;
+    }
+
+    public function updateAndModify($request)
+    {
+        $this->update($request->all());
+
+        if($request->languages)
+        {
+            $languages = \App\Language::whereIn('code', array_values($request->languages))->get();
+            $this->languages()->sync($languages);
+        }
+        else
+        {
+            $this->languages()->detach();
+        }
+    }
+
+    public function link($title = null, $class = null)
+    {
+        $link_title = $title ? $title : (string) $this;
+
+        if($class)
+        {
+            $class = sprintf(' class="%s"', $class);
+        }
+
+        $link = sprintf('<a href="%s"%s>%s</a>', route('circles.show', ['uuid' => $this->uuid]), $class, $link_title);
+
+        return $link;
+    }
+
+    public function goodTitle()
+    {
+        if($this->title)
+        {
+            return $this->title . ' (' . $this . ')';
+        }
+        else
+        {
+            return (string) $this;
+        }
+    }
 }

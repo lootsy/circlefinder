@@ -33,7 +33,7 @@
     @endif
     
     @if(isset($item))
-    <a href="{{ route('circles.show', ['uuid' => $item->uuid]) }}" class="btn btn-light">Cancel</a>
+    {!! $item->link('Cancel', 'btn btn-light') !!}
     @else
     <a href="{{ route('circles.index') }}" class="btn btn-light">Cancel</a>
     @endif

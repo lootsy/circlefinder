@@ -324,4 +324,20 @@ class CircleTest extends TestCase
         
         $this->assertFalse(key_exists('type', $rules2));
     }
+
+    public function test_get_link_to_circle()
+    {
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+        $circle = $this->fetchCircle($user);
+
+        $link = sprintf('<a href="%s">%s</a>', route('circles.show', ['uuid' => $circle->uuid]), (string) $circle);
+        $this->assertEquals($link, $circle->link());
+
+        $link = sprintf('<a href="%s">%s</a>', route('circles.show', ['uuid' => $circle->uuid]), 'Test');
+        $this->assertEquals($link, $circle->link('Test'));
+
+        $link = sprintf('<a href="%s" class="demo">%s</a>', route('circles.show', ['uuid' => $circle->uuid]), 'Test');
+        $this->assertEquals($link, $circle->link('Test', 'demo'));
+    }
 }

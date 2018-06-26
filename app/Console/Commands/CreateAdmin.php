@@ -12,7 +12,7 @@ class CreateAdmin extends Command
      *
      * @var string
      */
-    protected $signature = 'admin:create {name} {email} {--pass=}';
+    protected $signature = 'admin:create {name} {email} {pass}';
 
     /**
      * The console command description.
@@ -43,36 +43,6 @@ class CreateAdmin extends Command
         return true;
     }
 
-    public function passwordPrompt($min_pass_len = 6)
-    {
-        $password_ok = false;
-
-        $password = "";
-
-        while($password_ok == false)
-        {
-            $password = $this->secret('Please enter the admin password');
-
-            if ($this->validate_password($password) == false)
-            {
-                continue;
-            }
-
-            $password_repeat = $this->secret('Please repeat the admin password');
-
-            if($password === $password_repeat)
-            {
-                $password_ok = true;
-            }
-            else
-            {
-                $this->error('Passwords don\'t match!');
-            }
-        }
-
-        return $password;
-    }
-
     /**
      * Execute the console command.
      *
@@ -89,22 +59,15 @@ class CreateAdmin extends Command
             return $this->error('Admin with this email is already in the database!');
         }
 
-        $pwd_from_cli = $this->option('pass');
+        $pwd_from_cli = $this->argument('pass');
 
-        if(strlen($pwd_from_cli) > 0)
+        if($this->validate_password($pwd_from_cli) == false)
         {
-            if($this->validate_password($pwd_from_cli) == false)
-            {
-                return -1;
-            }
-            else
-            {
-                $password = $pwd_from_cli;
-            }
+            return -1;
         }
         else
         {
-            $password = $this->passwordPrompt($min_pass_len);
+            $password = $pwd_from_cli;
         }
 
 

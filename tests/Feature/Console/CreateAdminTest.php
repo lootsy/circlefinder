@@ -21,7 +21,7 @@ class CreateAdminTest extends TestCase
         $command = Artisan::call('admin:create', [
             'name' => 'value1',
             'email' => 'value2',
-            '--pass' => "abcde"
+            'pass' => "abcde"
         ]);
 
         $resultAsText = Artisan::output();
@@ -38,7 +38,7 @@ class CreateAdminTest extends TestCase
         $command = Artisan::call('admin:create', [
             'name' => 'Max Power',
             'email' => 'max@pow.er',
-            '--pass' => "abcdef"
+            'pass' => "abcdef"
         ]);
 
         $resultAsText = Artisan::output();
@@ -61,7 +61,7 @@ class CreateAdminTest extends TestCase
         $command = Artisan::call('admin:create', [
             'name' => 'Max Power',
             'email' => $admin->email,
-            '--pass' => "abcdef"
+            'pass' => "abcdef"
         ]);
 
         $resultAsText = Artisan::output();

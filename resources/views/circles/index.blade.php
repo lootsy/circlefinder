@@ -24,12 +24,12 @@
         
         @foreach($items as $item)
         <tr class="item-{{ $item->id }}">
-            <td class="align-middle"><a href="{{ route('circles.show', ['uuid' => $item->uuid]) }}">{{ $item->id }}</a></td>
-            <td class="align-middle"><a href="{{ route('circles.show', ['uuid' => $item->uuid]) }}">{{ $item->title }}</a></td>
+            <td class="align-middle">{!! $item->link($item->id) !!}</a></td>
+            <td class="align-middle">{!! $item->link($item->title) !!}</td>
             <td class="align-middle">{{ $item->completed ? 'Yes': 'No' }}</td>
             <td class="align-middle">{{ $item->memberships()->count() }} / {{ $item->limit }}</td>
             <td class="align-middle">{{ $item->type }}</td>
-            <td class="align-middle"><a href="{{ route('profile.show', $item->user->uuid) }}">{{ $item->user->name }}</a></td>
+            <td class="align-middle">{!! $item->user->link() !!}</td>
         </tr>
         @endforeach
     </table>

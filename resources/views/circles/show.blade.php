@@ -4,74 +4,33 @@
 
 @section('content')
 
-    <h1>@yield('title')</h1>
-    
-    <p>Title: {{ $item->title }}</p>
-    <p>Completed: {{ $item->completed ? 'Yes': 'No' }}</p>
-    <p>Limit: {{ $item->limit }}</p>
-    <p>Type: {{ $item->type }}</p>
-    <p>Begin: {{ $item->begin }}</p>
-    <p>Languages: {{ $item->languages->implode('title', ', ') }}</p>
-    <p>Owner: {{ $item->user->name }}</p>
-    <p>Members: {{ count($item->memberships) }}</p>
-
-    @if($item->full())
-        <p>Circle is full!</p>
-    @endif
+    <h1>{{ $item->goodTitle() }}</h1>
 
     @if($item->completed)
-        <p>Circle is completed!</p>
-    @endif
-
-    @if(count($item->memberships))
-        <h2>Memberships</h2>
-
-        <table class="table table-striped">
-            <tr>
-                <th>Name</th>
-                <th>Type (virtual/f2f)</th>
-                <th>Begin</th>
-                <th>Language</th>
-            </tr>
-            
-            @foreach($item->memberships as $memb)
-            <tr>
-                <td class="align-middle"><a href="{{ route('profile.show', ['uuid' => $memb->user->uuid]) }}">{{ $memb->user->name }}</a></td>
-                <td class="align-middle">{{ $memb->type }}</td>
-                <td class="align-middle">{{ $memb->begin }}</td>
-                <td class="align-middle">{{ $memb->languages->implode('title', ', ') }}</td>
-            </tr>
-            @endforeach
-        </table>
-    @endif
-
-    <h2>My membership</h2>
-
-    @if($item->joined($user))
-        <p>Type: {{ $membership->type }}</p>
-        <p>Begin: {{ $membership->begin }}</p>
-
-        <p><a href="{{ route('circles.membership.edit', ['uuid' => $item->uuid]) }}" class="btn btn-primary">Edit membership</a></p>
-
-        {!! Form::open(['route' => ['circles.leave', 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
-            {{ Form::submit('Leave circle', ['class' => 'btn btn-danger confirm']) }}
-        {!! Form::close() !!}
+        <div class="alert alert-warning">Circle is completed</div>
     @else
-        <p>You are not a member of {{ $item }}</p>
-        @if($item->joinable($user))
-            {!! Form::open(['route' => ['circles.join', 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
-                {{ Form::submit('Join circle', ['class' => 'btn btn-success']) }}
-            {!! Form::close() !!}
-        @else
-            <p>You can not join this circle.</p>
+        @if($item->full())
+            <div class="alert alert-warning">Circle is full</div>
         @endif
     @endif
 
-    <div class="border p-2 mt-4 mb-4">
-        <a href="{{ route('circles.index') }}" class="btn btn-secondary">Back</a>
+    <div class="mb-3">
+        @if($item->joined($user))
+            <a href="{{ route('circles.membership.edit', ['uuid' => $item->uuid]) }}" class="btn btn-secondary">Edit my membership</a>
+
+            {!! Form::open(['route' => ['circles.leave', 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
+                {{ Form::submit('Leave circle', ['class' => 'btn btn-danger confirm']) }}
+            {!! Form::close() !!}
+        @else
+            @if($item->joinable($user))
+                {!! Form::open(['route' => ['circles.join', 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
+                    {{ Form::submit('Join circle', ['class' => 'btn btn-success']) }}
+                {!! Form::close() !!}
+            @endif
+        @endif
 
         @can('update', $item)
-            <a href="{{ route('circles.edit', ['uuid' => $item->uuid]) }}" class="btn btn-primary">Edit circle</a>
+            <a href="{{ route('circles.edit', ['uuid' => $item->uuid]) }}" class="btn btn-secondary">Edit circle</a>
 
             {!! Form::open(['route' => ['circles.'.($item->completed ? 'uncomplete' : 'complete'), 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
                 {{ Form::submit($item->completed ? 'Uncomplete' : 'Complete', ['class' => 'btn btn-primary confirm']) }}
@@ -86,5 +45,55 @@
         @endcan
     </div>
 
+    <div class="card">
+        <h5 class="card-header">Members</h5>
+    
+        <div class="card-body">
+            
+
+            @if(count($item->memberships))        
+                <table class="table table-striped">
+                    <tr>
+                        <th>Name</th>
+                        <th>Type (virtual/f2f)</th>
+                        <th>Begin</th>
+                        <th>Language</th>
+                    </tr>
+                    
+                    @foreach($item->memberships as $memb)
+                    <tr>
+                        <td class="align-middle">{!! $memb->user->link() !!}</td>
+                        <td class="align-middle">{{ $memb->type }}</td>
+                        <td class="align-middle">{{ $memb->begin }}</td>
+                        <td class="align-middle">{{ $memb->languages->implode('title', ', ') }}</td>
+                    </tr>
+                    @endforeach
+                </table>
+            @else
+                <p>Currenly there are no members in the circle</p>
+            @endif
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <h5 class="card-header">Circle data</h5>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg col-12">
+                    <p>Completed: {{ $item->completed ? 'Yes': 'No' }}</p>
+                    <p>Limit: {{ $item->limit }}</p>
+                    <p>Type: {{ $item->type }}</p>
+                    <p>Begin: {{ $item->begin }}</p>
+                    <p>Languages: {{ $item->languages->implode('title', ', ') }}</p>
+                    <p>Owner: {{ $item->user->name }}</p>
+                </div>
+        
+                <div class="col-lg col-12">                   
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
