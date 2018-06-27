@@ -93,7 +93,6 @@ class CirclesTest extends TestCase
         $response = $this->actingAs($user)->post(route('circles.store'), [
             'type' => $faker->randomElement(config('circle.defaults.types')),
             'title' =>  $faker->catchPhrase,
-            'limit' => config('circle.defaults.limit'),
             'begin' => today(),
             'languages' => [
                 '0' => \App\Language::find(1)->code,
