@@ -12,10 +12,11 @@
 
     @include('inc.pagination')
 
-    <table class="table table-striped">
+    <table class="table table-striped table-bordered">
         <tr>
             <th>ID</th>
             <th>Title</th>
+            <th>Begin</th>
             <th>Completed</th>
             <th>Members</th>
             <th>Type (virtual/f2f)</th>
@@ -23,9 +24,10 @@
         </tr>
         
         @foreach($items as $item)
-        <tr class="item-{{ $item->id }}">
+        <tr class="item-{{ $item->id }} @if($item->joined($user)) font-weight-bold @endif">
             <td class="align-middle">{!! $item->link($item->id) !!}</a></td>
             <td class="align-middle">{!! $item->link($item->title) !!}</td>
+            <td class="align-middle">{{ $item->begin }}</td>
             <td class="align-middle">{{ $item->completed ? 'Yes': 'No' }}</td>
             <td class="align-middle">{{ $item->memberships()->count() }} / {{ $item->limit }}</td>
             <td class="align-middle">{{ $item->type }}</td>

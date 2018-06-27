@@ -194,9 +194,9 @@ class Circle extends Model
 
     public static function createAndModify($user, $request)
     {
-        $item = $user->circles()->create($request->all());
-
         $request->merge(['limit' => config('circle.defaults.limit')]);
+        
+        $item = $user->circles()->create($request->all());
 
         if($request->languages)
         {
