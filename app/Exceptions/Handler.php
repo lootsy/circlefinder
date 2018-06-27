@@ -8,6 +8,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Illuminate\Support\Facades\Log;
 
 class Handler extends ExceptionHandler
 {
@@ -52,6 +53,8 @@ class Handler extends ExceptionHandler
     {
         if(App::environment('local') == false)
         {
+            Log::emergency('Exception: ' . $exception->getMessage() . ' Url: ' . $request->path());
+
             if($exception instanceof AuthorizationException)
             {
                 return redirect(route('index'))->withErrors($exception->getMessage());
