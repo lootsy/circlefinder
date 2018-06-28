@@ -24,7 +24,7 @@ class CirclesTest extends TestCase
         Artisan::call('db:seed', ['--class' => 'LanguagesTableSeeder', '--env' => 'testing']);
     }
 
-    public function test_guest_cannot_access_circle()
+    public function testGuestCannotAccessCircle()
     {
         $response = $this->get(route('circles.index'));
         $response->assertStatus(302);
@@ -47,7 +47,7 @@ class CirclesTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-    public function test_can_list_circles()
+    public function testCanListCircles()
     {
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
@@ -58,7 +58,7 @@ class CirclesTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_user_can_show_circle()
+    public function testUserCanShowCircle()
     {
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
@@ -71,7 +71,7 @@ class CirclesTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_user_cannot_get_post_route()
+    public function testUserCannotGetPostRoute()
     {
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
@@ -82,7 +82,7 @@ class CirclesTest extends TestCase
         $response->assertSessionHasErrors();
     }
 
-    public function test_user_can_create_circle()
+    public function testUserCanCreateCircle()
     {
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
@@ -111,7 +111,7 @@ class CirclesTest extends TestCase
         $this->assertEquals(3, count($circle->languages));
     }
 
-    public function test_moderator_does_not_autojoin_circle()
+    public function testModeratorDoesNotAutojoinCircle()
     {
         $user = $this->fetchModerator();
         $faker = $this->fetchFaker();
@@ -133,7 +133,7 @@ class CirclesTest extends TestCase
         $this->assertFalse($circle->joined($user));
     }
 
-    public function test_some_user_cannot_edit_circle()
+    public function testSomeUserCannotEditCircle()
     {
         $user = $this->fetchUser();
         $user2 = $this->fetchUser();
@@ -145,7 +145,7 @@ class CirclesTest extends TestCase
         $response->assertSessionHasErrors();
     }
 
-    public function test_moderator_can_edit_circle()
+    public function testModeratorCanEditCircle()
     {
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
@@ -156,7 +156,7 @@ class CirclesTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_owner_can_edit_circle()
+    public function testOwnerCanEditCircle()
     {
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
@@ -166,7 +166,7 @@ class CirclesTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_owner_can_update_circle()
+    public function testOwnerCanUpdateCircle()
     {
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
@@ -204,7 +204,7 @@ class CirclesTest extends TestCase
         $this->assertEquals(0, count($circle->languages));
     }
 
-    public function test_owner_can_complete_circle()
+    public function testOwnerCanCompleteCircle()
     {
         $user = $this->fetchUser();
         $circle = $this->fetchCircle($user);
@@ -217,7 +217,7 @@ class CirclesTest extends TestCase
         $this->assertTrue($circle->refresh()->completed);
     }
 
-    public function test_user_cannot_complete_circle()
+    public function testUserCannotCompleteCircle()
     {
         $user = $this->fetchUser();
         $user2 = $this->fetchUser();
@@ -231,7 +231,7 @@ class CirclesTest extends TestCase
         $this->assertFalse($circle->refresh()->completed);
     }
 
-    public function test_owner_can_uncomplete_circle()
+    public function testOwnerCanUncompleteCircle()
     {
         $user = $this->fetchUser();
         $user2 = $this->fetchUser();
@@ -247,15 +247,14 @@ class CirclesTest extends TestCase
         $this->assertTrue($circle->refresh()->completed);
     }
 
-    public function test_user_cannot_join_full_circle()
+    public function testUserCannotJoinFullCircle()
     {
         $user = $this->fetchUser();
         $user2 = $this->fetchUser();
         $faker = $this->fetchFaker();
         $circle = $this->fetchCircle($user);
 
-        for($i = 0; $i < $circle->limit; $i++)
-        {
+        for ($i = 0; $i < $circle->limit; $i++) {
             $circle->joinWithDefaults($this->fetchUser());
         }
 
@@ -272,7 +271,7 @@ class CirclesTest extends TestCase
         ]);
     }
 
-    public function test_user_cannot_join_completed_circle()
+    public function testUserCannotJoinCompletedCircle()
     {
         $user = $this->fetchUser();
         $user2 = $this->fetchUser();
@@ -292,7 +291,7 @@ class CirclesTest extends TestCase
         ]);
     }
 
-    public function test_user_can_join_and_leave_circle()
+    public function testUserCanJoinAndLeaveCircle()
     {
         $user = $this->fetchUser();
         $user2 = $this->fetchUser();
@@ -320,10 +319,10 @@ class CirclesTest extends TestCase
         ]);
     }
 
-    public function test_user_cannot_delete_circle()
+    public function testUserCannotDeleteCircle()
     {
         $user = $this->fetchUser();
-        $user2 = $this->fetchUser();        
+        $user2 = $this->fetchUser();
         $circle = $this->fetchCircle($user);
 
         $response = $this->actingAs($user2)->delete(route('circles.destroy', ['uuid' => $circle->uuid]));
@@ -336,7 +335,7 @@ class CirclesTest extends TestCase
         ]);
     }
 
-    public function test_owner_can_delete_circle()
+    public function testOwnerCanDeleteCircle()
     {
         $user = $this->fetchUser();
         $user2 = $this->fetchUser();
@@ -360,6 +359,4 @@ class CirclesTest extends TestCase
         $response->assertStatus(302);
         $response->assertSessionHas('success');
     }
-
-
 }

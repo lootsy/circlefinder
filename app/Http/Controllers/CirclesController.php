@@ -17,10 +17,10 @@ class CirclesController extends Controller
         $model = \App\Circle::orderBy('id', 'desc');
         $model = $model->with(['memberships', 'users', 'user']);
         $items = $model->paginate($this->items_per_page);
-        
+
         return view('circles.index')->with([
             'items' => $items,
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
@@ -31,7 +31,7 @@ class CirclesController extends Controller
     }
 
     public function store(Request $request)
-    {        
+    {
         $this->authorize('create', \App\Circle::class);
 
         $this->validate($request, \App\Circle::validationRules());
@@ -41,40 +41,40 @@ class CirclesController extends Controller
         $item = \App\Circle::createAndModify($user, $request);
 
         return redirect()->route('circles.show', $item->uuid)->with([
-            'success' => sprintf('%s was created!', (string) $item)
+            'success' => sprintf('%s was created!', (string) $item),
         ]);
     }
 
     public function show($uuid, Request $request)
     {
         $item = \App\Circle::withUuid($uuid)->firstOrFail();
-        
+
         $this->authorize('view', $item);
 
         $user = auth()->user();
-        
+
         return view('circles.show')->with([
             'item' => $item,
             'user' => $user,
-            'membership' => $item->membershipOf($user)
+            'membership' => $item->membershipOf($user),
         ]);
     }
 
     public function edit($uuid, Request $request)
     {
         $item = \App\Circle::withUuid($uuid)->firstOrFail();
-        
+
         $this->authorize('update', $item);
 
         return view('circles.edit')->with([
-            'item' => $item
+            'item' => $item,
         ]);
     }
 
     public function update($uuid, Request $request)
     {
         $item = \App\Circle::withUuid($uuid)->firstOrFail();
-        
+
         $this->authorize('update', $item);
 
         $this->validate($request, \App\Circle::validationRules());
@@ -82,7 +82,7 @@ class CirclesController extends Controller
         $item->updateAndModify($request);
 
         return redirect()->route('circles.show', $item->uuid)->with([
-            'success' => sprintf('%s was updated!', (string) $item)
+            'success' => sprintf('%s was updated!', (string) $item),
         ]);
     }
 
@@ -92,19 +92,16 @@ class CirclesController extends Controller
 
         $user = auth()->user();
 
-        if($item->joinable($user))
-        {
+        if ($item->joinable($user)) {
             $item->joinWithDefaults($user);
-        }
-        else
-        {
+        } else {
             return redirect()->route('circles.show', $item->uuid)->withErrors(
                 sprintf('You cannot join %s', (string) $item)
             );
         }
 
         return redirect()->route('circles.membership.edit', $item->uuid)->with([
-            'success' => sprintf('You have joined %s!', (string) $item)
+            'success' => sprintf('You have joined %s!', (string) $item),
         ]);
     }
 
@@ -117,7 +114,7 @@ class CirclesController extends Controller
         $item->leave($user);
 
         return redirect()->route('circles.show', $item->uuid)->with([
-            'success' => sprintf('You have left %s!', (string) $item)
+            'success' => sprintf('You have left %s!', (string) $item),
         ]);
     }
 
@@ -127,10 +124,10 @@ class CirclesController extends Controller
 
         $this->authorize('complete', $item);
 
-        $item->complete(); 
+        $item->complete();
 
         return redirect()->route('circles.show', $item->uuid)->with([
-            'success' => sprintf('%s is completed!', (string) $item)
+            'success' => sprintf('%s is completed!', (string) $item),
         ]);
     }
 
@@ -143,7 +140,7 @@ class CirclesController extends Controller
         $item->uncomplete();
 
         return redirect()->route('circles.show', $item->uuid)->with([
-            'success' => sprintf('%s is not completed!', (string) $item)
+            'success' => sprintf('%s is not completed!', (string) $item),
         ]);
     }
 
@@ -153,19 +150,16 @@ class CirclesController extends Controller
 
         $this->authorize('delete', $item);
 
-        if($item->deletable())
-        {
+        if ($item->deletable()) {
             $item->delete();
-        }
-        else
-        {
+        } else {
             return redirect()->route('circles.show', $item->uuid)->withErrors(
                 sprintf('You cannot delete %s', (string) $item)
             );
         }
 
         return redirect()->route('circles.index')->with([
-            'success' => sprintf('%s is deleted!', (string) $item)
+            'success' => sprintf('%s is deleted!', (string) $item),
         ]);
     }
 }

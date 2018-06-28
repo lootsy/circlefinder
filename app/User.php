@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use \App\Traits\RandomId;
 
 class User extends Authenticatable
@@ -21,13 +21,13 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 
+        'name',
         'email',
         'password',
         'about',
         'language',
-        'location', 
-        'facebook_profile_url', 
+        'location',
+        'facebook_profile_url',
         'twitter_profile_url',
         'linkedin_profile_url',
         'yammer_profile_url',
@@ -48,14 +48,13 @@ class User extends Authenticatable
             'name' => 'required',
             'email' => 'required|unique:users,email', # the id has to be added in controller
             'roles' => 'exists:roles,id',
-            'facebook_profile_url' => 'nullable|url', 
+            'facebook_profile_url' => 'nullable|url',
             'twitter_profile_url' => 'nullable|url',
             'linkedin_profile_url' => 'nullable|url',
             'yammer_profile_url' => 'nullable|url',
         ];
 
-        if($except)
-        {
+        if ($except) {
             $rules = array_except($rules, $except);
         }
 
@@ -66,13 +65,12 @@ class User extends Authenticatable
     {
         parent::boot();
 
-        static::created(function($user) {
+        static::created(function ($user) {
             $user->generateUniqueId();
         });
 
-        static::deleting(function($user) {
-            if ($user->isForceDeleting())
-            {
+        static::deleting(function ($user) {
+            if ($user->isForceDeleting()) {
                 $user->roles()->detach();
             }
 
@@ -84,33 +82,26 @@ class User extends Authenticatable
 
     private function deleteCirclesOrChangeOwnership()
     {
-        foreach($this->circles as $circle)
-        {
+        foreach ($this->circles as $circle) {
             $members = $circle->users;
 
             # Check if the circle has members
-            if($members->count() > 0)
-            {
+            if ($members->count() > 0) {
                 # If the only member is the current user, delete the circle
-                if($members->count() == 1 && $members->first()->id == $this->id)
-                {
+                if ($members->count() == 1 && $members->first()->id == $this->id) {
                     $circle->delete();
                     continue;
                 }
 
                 # If there are more members, change the ownership
-                foreach($members as $member)
-                {
-                    if($member->id != $this->id)
-                    {
+                foreach ($members as $member) {
+                    if ($member->id != $this->id) {
                         $circle->user_id = $member->id;
                         $circle->save();
                         break;
                     }
                 }
-            }
-            else
-            {
+            } else {
                 # The circle has no members, so delete it
                 $circle->delete();
                 continue;
@@ -122,7 +113,7 @@ class User extends Authenticatable
     {
         return sprintf('User "%s"', $this->name);
     }
-    
+
     public function roles()
     {
         return $this->belongsToMany(\App\Role::class);

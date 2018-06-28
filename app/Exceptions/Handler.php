@@ -4,11 +4,11 @@ namespace App\Exceptions;
 
 use App;
 use Exception;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Access\AuthorizationException;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -39,6 +39,10 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        if ($this->shouldReport($exception)) {
+            Log::emergency($exception);
+        }
+
         parent::report($exception);
     }
 
@@ -51,18 +55,15 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if(App::environment('local') == false)
-        {
-            Log::emergency('Exception: ' . $exception->getMessage() . ' Url: ' . $request->path());
-
-            if($exception instanceof AuthorizationException)
-            {
-                return redirect(route('index'))->withErrors($exception->getMessage());
+        if (App::environment('local') == false) {
+            if ($exception instanceof AuthorizationException) {
+                return redirect(route('index'))
+                    ->withErrors($exception->getMessage());
             }
-    
-            if($exception instanceof MethodNotAllowedHttpException)
-            {
-                return redirect(route('index'))->withErrors('Ooops, something went wrong...');
+
+            if ($exception instanceof MethodNotAllowedHttpException) {
+                return redirect(route('index'))
+                    ->withErrors('Ooops, something went wrong...');
             }
         }
 
@@ -78,21 +79,18 @@ class Handler extends ExceptionHandler
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        if($request->expectsJson())
-        {
+        if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 
         $redirect_route = 'login';
         $guard = $exception->guards();
 
-        if(count($guard) < 1)
-        {
+        if (count($guard) < 1) {
             return redirect()->guest(route($redirect_route));
         }
 
-        if($guard[0] == 'admin')
-        {
+        if ($guard[0] == 'admin') {
             $redirect_route = 'admin.login';
         }
 

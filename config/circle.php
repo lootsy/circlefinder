@@ -3,9 +3,9 @@
 return [
     'defaults' => [
         'limit' => 5,
-        'types' => ['f2f', 'virtual', 'any']
+        'types' => ['f2f', 'virtual', 'any'],
     ],
     'listing' => [
-        'items_per_page' => 10
-    ]
+        'items_per_page' => 10,
+    ],
 ];

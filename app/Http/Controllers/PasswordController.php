@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-
 class PasswordController extends Controller
 {
     public function index()
@@ -27,14 +26,15 @@ class PasswordController extends Controller
 
         $user = auth()->user();
 
-        if (!(Hash::check($request->get('current_password'), $user->password)))
-        {
-            return redirect()->back()->withErrors("Provided password does not match with your current password");
+        if (!(Hash::check($request->get('current_password'), $user->password))) {
+            return redirect()->back()
+                    ->withErrors("Provided password does not match with your current password");
         }
 
         $user->password = Hash::make($request->password);
         $user->save();
-        
-        return redirect()->route('profile.show', $user->uuid)->with("success", "Your password was changed!");
+
+        return redirect()->route('profile.show', $user->uuid)
+                ->with("success", "Your password was changed!");
     }
 }

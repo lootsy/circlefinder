@@ -16,7 +16,7 @@ class CreateAdminTest extends TestCase
      * @group console
      *
      */
-    public function test_check_create_admin_short_password()
+    public function testCheckCreateAdminShortPassword()
     {
         $command = Artisan::call('admin:create', [
             'name' => 'value1',
@@ -33,7 +33,7 @@ class CreateAdminTest extends TestCase
      * @group console
      *
      */
-    public function test_check_create_admin()
+    public function testCheckCreateAdmin()
     {
         $command = Artisan::call('admin:create', [
             'name' => 'Max Power',
@@ -54,7 +54,7 @@ class CreateAdminTest extends TestCase
      * @group console
      *
      */
-    public function test_check_create_admin_already_exists()
+    public function testCheckCreateAdminAlreadyExists()
     {
         $admin = factory(\App\Admin::class)->create();
 

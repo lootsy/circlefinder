@@ -32,17 +32,15 @@ class Language extends Model
 
     public static function getListOfLanguages()
     {
-        return include(resource_path('lang/codes.php'));
+        return include resource_path('lang/codes.php');
     }
 
     protected static function boot()
     {
         parent::boot();
 
-        static::deleting(function($language)
-        {
-            if ($language->isForceDeleting())
-            {
+        static::deleting(function ($language) {
+            if ($language->isForceDeleting()) {
                 $language->memberships()->detach();
             }
         });

@@ -32,10 +32,9 @@ class CreateAdmin extends Command
         parent::__construct();
     }
 
-    private function validate_password($password)
+    private function validatePassword($password)
     {
-        if (strlen($password) < $this->min_pass_len)
-        {
+        if (strlen($password) < $this->min_pass_len) {
             $this->error(sprintf('The password shall be at least %s charachters long!', $this->min_pass_len));
             return false;
         }
@@ -54,22 +53,17 @@ class CreateAdmin extends Command
         $min_pass_len = 6;
         $existing_admin = \App\Admin::where('email', $this->argument('email'))->first();
 
-        if($existing_admin)
-        {
+        if ($existing_admin) {
             return $this->error('Admin with this email is already in the database!');
         }
 
         $pwd_from_cli = $this->argument('pass');
 
-        if($this->validate_password($pwd_from_cli) == false)
-        {
+        if ($this->validatePassword($pwd_from_cli) == false) {
             return -1;
-        }
-        else
-        {
+        } else {
             $password = $pwd_from_cli;
         }
-
 
         $admin = new \App\Admin();
         $admin->password = Hash::make($password);

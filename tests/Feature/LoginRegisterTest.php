@@ -10,10 +10,10 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class LoginRegisterTest extends TestCase
-{    
+{
     use DatabaseMigrations;
 
-    public function test_guest_sees_login_form()
+    public function testGuestSeesLoginForm()
     {
         $response = $this->get('/login');
         
