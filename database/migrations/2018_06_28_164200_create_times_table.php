@@ -13,17 +13,16 @@ class CreateTimesTable extends Migration
      */
     public function up()
     {
-        Schema::create('times', function (Blueprint $table) {
+        Schema::create('time_slots', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('membership_id')->unsigned();
-            $table->time('time');
-            $table->tinyInteger('monday');
-            $table->tinyInteger('tuesday');
-            $table->tinyInteger('wednesday');
-            $table->tinyInteger('thursday');
-            $table->tinyInteger('friday');
-            $table->tinyInteger('saturday');
-            $table->tinyInteger('sunday');
+            $table->string('monday');
+            $table->string('tuesday');
+            $table->string('wednesday');
+            $table->string('thursday');
+            $table->string('friday');
+            $table->string('saturday');
+            $table->string('sunday');
             $table->timestamps();
         });
     }
@@ -35,6 +34,6 @@ class CreateTimesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('times');
+        Schema::dropIfExists('time_slots');
     }
 }

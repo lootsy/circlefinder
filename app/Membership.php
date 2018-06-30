@@ -59,6 +59,11 @@ class Membership extends Model
         return $this->user->id == $user->id;
     }
 
+    public function timeSlot()
+    {
+        return $this->hasOne(\App\TimeSlot::class);
+    }
+
     public function updateAndModify($request)
     {
         $this->update($request->all());

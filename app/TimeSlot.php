@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Time extends Model
+class TimeSlot extends Model
 {
     protected $fillable = [
         'time',
@@ -15,6 +15,16 @@ class Time extends Model
         'friday',
         'saturday',
         'sunday'
+    ];
+
+    protected $casts = [
+        'monday' => 'array',
+        'tuesday' => 'array',
+        'wednesday' => 'array',
+        'thursday' => 'array',
+        'friday' => 'array',
+        'saturday' => 'array',
+        'sunday' => 'array'
     ];
 
     public static function validationRules($except = null)
