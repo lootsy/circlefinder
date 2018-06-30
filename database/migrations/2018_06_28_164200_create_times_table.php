@@ -25,6 +25,10 @@ class CreateTimesTable extends Migration
             $table->string('sunday');
             $table->timestamps();
         });
+
+        foreach (\App\Membership::all() as $membership) {
+            \App\TimeTable::findForMembership($membership);
+        }
     }
 
     /**

@@ -14,7 +14,7 @@ class TimeSlot extends Model
         'thursday',
         'friday',
         'saturday',
-        'sunday'
+        'sunday',
     ];
 
     protected $casts = [
@@ -24,7 +24,7 @@ class TimeSlot extends Model
         'thursday' => 'array',
         'friday' => 'array',
         'saturday' => 'array',
-        'sunday' => 'array'
+        'sunday' => 'array',
     ];
 
     public static function validationRules($except = null)
@@ -38,5 +38,16 @@ class TimeSlot extends Model
         }
 
         return $rules;
+    }
+
+    public function atTime($time)
+    {
+        foreach (\App\TimeTable::getDayList() as $day) {
+            if (is_array($this->$day) && in_array($time, $this->$day)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

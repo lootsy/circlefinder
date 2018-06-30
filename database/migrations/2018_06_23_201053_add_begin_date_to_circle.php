@@ -15,7 +15,7 @@ class AddBeginDateToCircle extends Migration
     {
         if(Schema::hasColumn('circles', 'begin') == false) {
             Schema::table('circles', function ($table) {
-                $table->date('begin')->after('limit');
+                $table->date('begin')->after('limit')->default(today());
             });
         }
     }

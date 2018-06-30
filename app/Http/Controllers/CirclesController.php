@@ -53,10 +53,13 @@ class CirclesController extends Controller
 
         $user = auth()->user();
 
+        $timeTable = \App\TimeTable::forCircle($item);
+
         return view('circles.show')->with([
             'item' => $item,
             'user' => $user,
             'membership' => $item->membershipOf($user),
+            'timeTable' => $timeTable,
         ]);
     }
 

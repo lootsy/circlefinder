@@ -30,7 +30,7 @@
                 <tr>
                     <td>{{ $time }}</td>
                     @foreach($timeTable->getDayList() as $day)
-                    <td>{{ Form::checkbox($day.'[]', $time) }}</td>
+                    <td>{{ Form::checkbox($day.'[]', $time, is_array($timeTable->timeSlot()->$day) && in_array($time, $timeTable->timeSlot()->$day)) }}</td>
                     @endforeach
                 </tr>
             @endforeach

@@ -10421,3 +10421,7 @@ a.text-dark:focus {
   table-layout: fixed;
 }
 
+.time-ok {
+  background: #a6fca6;
+}
+
