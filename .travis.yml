@@ -7,13 +7,13 @@ before_script:
   - cp .env.travis .env
   - mysql -e 'create database circlefinder_testing;'
   - composer self-update
-  - composer global require "squizlabs/php_codesniffer=*"
+  - composer require "squizlabs/php_codesniffer=*"
   - composer install --no-interaction
   - php artisan key:generate
   - php artisan migrate
 
 script:
-  - phpcs
+  - vendor/bin/phpcs
   - vendor/bin/phpunit
 
 services:
