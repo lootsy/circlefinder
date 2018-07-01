@@ -12,14 +12,14 @@ class AdminLoginTest extends TestCase
     use DatabaseMigrations;
 
 
-    public function test_guest_sees_login_form()
+    public function testGuestSeesLoginForm()
     {
         $response = $this->get('/admin/login');
         
         $response->assertStatus(200);
     }
 
-    public function test_guest_can_not_login()
+    public function testGuestCanNotLogin()
     {
         $response = $this->get('/admin');
         
@@ -28,7 +28,7 @@ class AdminLoginTest extends TestCase
         $response->assertRedirect('/admin/login');
     }
 
-    public function test_admin_login_redicrects_to_dashboard()
+    public function testAdminLoginRedicrectsToDashboard()
     {
         $admin = factory(\App\Admin::class)->create();
 
@@ -39,7 +39,7 @@ class AdminLoginTest extends TestCase
         $response->assertRedirect('/admin');
     }
     
-    public function test_user_can_not_use_dashboard()
+    public function testUserCanNotUseDashboard()
     {
         $user = factory(\App\User::class)->create();
 
@@ -48,7 +48,7 @@ class AdminLoginTest extends TestCase
         $response->assertRedirect('/admin/login');
     }
 
-    public function test_admin_can_login()
+    public function testAdminCanLogin()
     {
         $admin = factory(\App\Admin::class)->create();
 
@@ -57,7 +57,7 @@ class AdminLoginTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_admin_redirects_to_dashboard()
+    public function testAdminRedirectsToDashboard()
     {
         $admin = factory(\App\Admin::class)->create();
 
@@ -73,7 +73,7 @@ class AdminLoginTest extends TestCase
         $this->assertAuthenticatedAs($admin, 'admin');
     }
 
-    public function test_admin_can_logout()
+    public function testAdminCanLogout()
     {
         $admin = factory(\App\Admin::class)->create();
 
@@ -82,7 +82,7 @@ class AdminLoginTest extends TestCase
         $response->assertRedirect('/admin/login');
     }
 
-    public function test_admin_can_post_logout()
+    public function testAdminCanPostLogout()
     {
         $admin = factory(\App\Admin::class)->create();
 
@@ -91,7 +91,7 @@ class AdminLoginTest extends TestCase
         $response->assertRedirect('/admin/login');
     }
 
-    public function test_guest_cannot_login()
+    public function testUserCannotLoginWrongPass()
     {
         $params = [
             'email' => 'fake@mail.boo',

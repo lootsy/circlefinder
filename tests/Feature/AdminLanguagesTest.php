@@ -2,12 +2,9 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 use Tests\Traits\UsersAdmins;
-use Illuminate\Support\Facades\Hash;
 
 /**
  * @group languages
@@ -17,7 +14,7 @@ class AdminLanguagesTest extends TestCase
     use DatabaseMigrations;
     use UsersAdmins;
 
-    public function test_guest_cannot_acess_languages()
+    public function testGuestCannotAcessLanguages()
     {
         $response = $this->get(route('admin.languages.index'));
         $response->assertStatus(302);
@@ -30,7 +27,7 @@ class AdminLanguagesTest extends TestCase
         $response = $this->get(route('admin.languages.create'));
         $response->assertStatus(302);
         $response->assertRedirect('/admin/login');
-        
+
         $response = $this->get(route('admin.languages.edit', ['id' => 5]));
         $response->assertStatus(302);
         $response->assertRedirect('/admin/login');
@@ -48,59 +45,58 @@ class AdminLanguagesTest extends TestCase
         $response->assertRedirect('/admin/login');
     }
 
-    public function test_get_languages_index()
+    public function testGetLanguagesIndex()
     {
         $admin = $this->fetchAdmin();
 
         $response = $this->actingAs($admin, 'admin')->get(route('admin.languages.index'));
-        
+
         $response->assertStatus(200);
     }
 
-
-    public function test_create_language()
+    public function testCreateLanguage()
     {
         $admin = $this->fetchAdmin();
 
         $response = $this->actingAs($admin, 'admin')
-                         ->get(route('admin.languages.create'));
+            ->get(route('admin.languages.create'));
 
         $response->assertStatus(200);
     }
 
-    public function test_show_language()
-    {
-        $admin = $this->fetchAdmin();
-        $language = $this->fetchLanguage();
-
-        $response = $this->actingAs($admin, 'admin')
-                         ->get(route('admin.languages.show', ['id' => 5]));
-
-        $response->assertStatus(404);
-
-        $response = $this->actingAs($admin, 'admin')
-                         ->get(route('admin.languages.show', ['id' => $language->id]));
-
-        $response->assertStatus(200);
-    }
-
-    public function test_edit_language()
+    public function testShowLanguage()
     {
         $admin = $this->fetchAdmin();
         $language = $this->fetchLanguage();
 
         $response = $this->actingAs($admin, 'admin')
-                         ->get(route('admin.languages.edit', ['id' => 5]));
+            ->get(route('admin.languages.show', ['id' => 5]));
 
         $response->assertStatus(404);
 
         $response = $this->actingAs($admin, 'admin')
-                         ->get(route('admin.languages.edit', ['id' => $language->id]));
+            ->get(route('admin.languages.show', ['id' => $language->id]));
 
         $response->assertStatus(200);
     }
 
-    public function test_store_language()
+    public function testEditLanguage()
+    {
+        $admin = $this->fetchAdmin();
+        $language = $this->fetchLanguage();
+
+        $response = $this->actingAs($admin, 'admin')
+            ->get(route('admin.languages.edit', ['id' => 5]));
+
+        $response->assertStatus(404);
+
+        $response = $this->actingAs($admin, 'admin')
+            ->get(route('admin.languages.edit', ['id' => $language->id]));
+
+        $response->assertStatus(200);
+    }
+
+    public function testStoreLanguage()
     {
         $admin = $this->fetchAdmin();
         $faker = $this->fetchFaker();
@@ -109,10 +105,10 @@ class AdminLanguagesTest extends TestCase
         $new_title = "Language" . $new_code;
 
         $response = $this->actingAs($admin, 'admin')
-                         ->post(route('admin.languages.store'), [
-            'code' => $new_code,
-            'title' => $new_title
-        ]);
+            ->post(route('admin.languages.store'), [
+                'code' => $new_code,
+                'title' => $new_title,
+            ]);
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
@@ -122,8 +118,7 @@ class AdminLanguagesTest extends TestCase
         $this->assertEquals($language->title, $new_title);
     }
 
-
-    public function test_update_language()
+    public function testUpdateLanguage()
     {
         $admin = $this->fetchAdmin();
         $language = $this->fetchLanguage();
@@ -133,17 +128,17 @@ class AdminLanguagesTest extends TestCase
         $new_title = "Language" . $new_code;
 
         $response = $this->actingAs($admin, 'admin')
-                         ->put(route('admin.languages.update', ['id' => $language->id]), [
-            'code' => $new_code,
-            'title' => $new_title
-        ]);
+            ->put(route('admin.languages.update', ['id' => $language->id]), [
+                'code' => $new_code,
+                'title' => $new_title,
+            ]);
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
 
         $language = $this->fetchLanguage($language->id);
 
-        $this->assertEquals($language->code, $new_code);           
+        $this->assertEquals($language->code, $new_code);
         $this->assertEquals($language->title, $new_title);
     }
 }

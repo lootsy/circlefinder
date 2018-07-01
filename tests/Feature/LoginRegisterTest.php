@@ -20,7 +20,7 @@ class LoginRegisterTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_guest_home_redirects_to_login()
+    public function testGuestHomeRedirectsToLogin()
     {
         $response = $this->get(route('home'));
         
@@ -29,7 +29,7 @@ class LoginRegisterTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-    public function test_guest_cannot_login()
+    public function testGuestCannotLogin()
     {
         $params = [
             'email' => 'fake@mail.boo',
@@ -43,7 +43,7 @@ class LoginRegisterTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_guest_can_register()
+    public function testGuestCanRegister()
     {
         $user_data = [
             'name' => 'Test Testman',
@@ -67,7 +67,7 @@ class LoginRegisterTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
-    public function test_guest_cannot_register_if_registered()
+    public function testGuestCannotRegisterIfRegistered()
     {
         $user = factory(\App\User::class)->create();
 
@@ -87,7 +87,7 @@ class LoginRegisterTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_user_can_login()
+    public function testUserCanLogin()
     {
         $user = factory(\App\User::class)->create();
 
@@ -101,7 +101,7 @@ class LoginRegisterTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
-    public function test_user_cannot_login_wrong_pass()
+    public function testUserCannotLoginWrongPass()
     {
         $user = factory(\App\User::class)->create();
 
@@ -115,7 +115,7 @@ class LoginRegisterTest extends TestCase
         $this->assertGuest();
     }
     
-    public function test_user_can_logout()
+    public function testUserCanLogout()
     {
         $user = factory(\App\User::class)->create();
 
@@ -126,7 +126,7 @@ class LoginRegisterTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_admin_login_redicrects_to_dashboard()
+    public function testAdminLoginRedicrectsToDashboard()
     {
         $user = factory(\App\User::class)->create();
 
@@ -137,14 +137,14 @@ class LoginRegisterTest extends TestCase
         $response->assertRedirect(route('home'));
     }
 
-    public function test_guest_can_see_reset_password()
+    public function testGuestCanSeeResetPassword()
     {
         $response = $this->get('/password/reset');
         
         $response->assertStatus(200);
     }
 
-    public function test_guest_can_reset_password()
+    public function testGuestCanResetPassword()
     {
         # TODO: Perform the complete test
         $response = $this->get('/password/reset/abcdefg');
