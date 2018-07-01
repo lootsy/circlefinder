@@ -9,15 +9,13 @@
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 if (App::environment('production')) {
     URL::forceScheme('https');
 }
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('index');
+Route::get('/', 'GuestController@index')->name('index');
 
 Auth::routes();
 
@@ -25,39 +23,38 @@ Auth::routes();
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/home', 'HomeController@index')->name('home');
 
-
 Route::group(['prefix' => 'profile', 'middleware' => 'auth',
-                'as' => 'profile.'], function() {
-    
-    Route::get('/', 'ProfileController@index')->name('index');
-    Route::get('/edit', 'ProfileController@edit')->name('edit');
-    Route::put('/update', 'ProfileController@update')->name('update');
-    
-    Route::group(['prefix' => 'password', 'as' => 'password.'], function() {
-        Route::get('/', 'PasswordController@index')->name('index');
-        Route::get('/edit', 'PasswordController@edit')->name('edit');
-        Route::put('/update', 'PasswordController@update')->name('update');
+    'as' => 'profile.'], function () {
+
+        Route::get('/', 'ProfileController@index')->name('index');
+        Route::get('/edit', 'ProfileController@edit')->name('edit');
+        Route::put('/update', 'ProfileController@update')->name('update');
+
+        Route::group(['prefix' => 'password', 'as' => 'password.'], function () {
+            Route::get('/', 'PasswordController@index')->name('index');
+            Route::get('/edit', 'PasswordController@edit')->name('edit');
+            Route::put('/update', 'PasswordController@update')->name('update');
+        });
+
+        Route::group(['prefix' => 'avatar', 'as' => 'avatar.'], function () {
+            Route::get('/', 'AvatarController@index')->name('index');
+            Route::get('/edit', 'AvatarController@edit')->name('edit');
+            Route::put('/update', 'AvatarController@update')->name('update');
+            Route::get('/download/{uuid}.jpg', 'AvatarController@download')->name('download');
+        });
+
+        Route::get('/{uuid}', 'ProfileController@show')->name('show');
     });
 
-    Route::group(['prefix' => 'avatar', 'as' => 'avatar.'], function() {
-        Route::get('/', 'AvatarController@index')->name('index');
-        Route::get('/edit', 'AvatarController@edit')->name('edit');
-        Route::put('/update', 'AvatarController@update')->name('update');
-        Route::get('/download/{uuid}.jpg', 'AvatarController@download')->name('download');
-    });
-
-    Route::get('/{uuid}', 'ProfileController@show')->name('show');
-});
-
-Route::group(['prefix' => '/circles', 'as' => 'circles.', 'middleware' => 'auth'], function() {
-    Route::group(['prefix' => '/{uuid}/membership', 'as' => 'membership.'], function($circle_uuid) {
+Route::group(['prefix' => '/circles', 'as' => 'circles.', 'middleware' => 'auth'], function () {
+    Route::group(['prefix' => '/{uuid}/membership', 'as' => 'membership.'], function ($circle_uuid) {
         Route::get('/edit', 'MembershipController@edit')->name('edit');
-        Route::put('/update', 'MembershipController@update')->name('update');        
+        Route::put('/update', 'MembershipController@update')->name('update');
     });
 
     Route::get('/', 'CirclesController@index')->name('index');
     Route::get('/search', 'CirclesController@search')->name('search');
-    
+
     Route::get('/create', 'CirclesController@create')->name('create');
     Route::post('/store', 'CirclesController@store')->name('store');
     Route::get('/{uuid}', 'CirclesController@show')->name('show');
@@ -70,40 +67,38 @@ Route::group(['prefix' => '/circles', 'as' => 'circles.', 'middleware' => 'auth'
     Route::post('/{uuid}/leave', 'CirclesController@leave')->name('leave');
 });
 
-
-
 # Restricted Admin URLs
 Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin',
-                'namespace' => 'Admin', 'as' => 'admin.'], function() {
-                    
-    Route::get('/', 'DashboardController@index')->name('dashboard');
-    
-    Route::group(['prefix' => 'users', 'as' => 'users.'], function() {
-        Route::post('/{user}/restore', 'UsersController@restore')->name('restore');
-        Route::delete('/{user}/forcedelete', 'UsersController@forceDelete')->name('forcedelete');
-        Route::get('/trash', 'UsersController@trash')->name('trash');
-    });
-    Route::resource('users', 'UsersController');
+    'namespace' => 'Admin', 'as' => 'admin.'], function () {
 
-    Route::group(['prefix' => 'roles', 'as' => 'roles.'], function() {
-        Route::post('/{role}/restore', 'RolesController@restore')->name('restore');
-        Route::delete('/{role}/forcedelete', 'RolesController@forceDelete')->name('forcedelete');
-        Route::get('/trash', 'RolesController@trash')->name('trash');
-    });
-    Route::resource('roles', 'RolesController');
+        Route::get('/', 'DashboardController@index')->name('dashboard');
 
-    Route::group(['prefix' => 'languages', 'as' => 'languages.'], function() {
-        Route::post('/{role}/restore', 'LanguagesController@restore')->name('restore');
-        Route::delete('/{role}/forcedelete', 'LanguagesController@forceDelete')->name('forcedelete');
-        Route::get('/trash', 'LanguagesController@trash')->name('trash');
-    });
-    Route::resource('languages', 'LanguagesController');
+        Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
+            Route::post('/{user}/restore', 'UsersController@restore')->name('restore');
+            Route::delete('/{user}/forcedelete', 'UsersController@forceDelete')->name('forcedelete');
+            Route::get('/trash', 'UsersController@trash')->name('trash');
+        });
+        Route::resource('users', 'UsersController');
 
-    Route::resource('circles', 'CirclesController')->only(['index', 'show']);
-});
+        Route::group(['prefix' => 'roles', 'as' => 'roles.'], function () {
+            Route::post('/{role}/restore', 'RolesController@restore')->name('restore');
+            Route::delete('/{role}/forcedelete', 'RolesController@forceDelete')->name('forcedelete');
+            Route::get('/trash', 'RolesController@trash')->name('trash');
+        });
+        Route::resource('roles', 'RolesController');
+
+        Route::group(['prefix' => 'languages', 'as' => 'languages.'], function () {
+            Route::post('/{role}/restore', 'LanguagesController@restore')->name('restore');
+            Route::delete('/{role}/forcedelete', 'LanguagesController@forceDelete')->name('forcedelete');
+            Route::get('/trash', 'LanguagesController@trash')->name('trash');
+        });
+        Route::resource('languages', 'LanguagesController');
+
+        Route::resource('circles', 'CirclesController')->only(['index', 'show']);
+    });
 
 # Admin Login URLs
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function() {
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function () {
     Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
     Route::post('/login', 'Auth\LoginController@login')->name('login.submit');
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');

@@ -22,25 +22,20 @@ trait ResourceCrud
 
     public function setupCrud()
     {
-        if($this->viewFolder)
-        {
-            if(!$this->viewIndex)
-            {
+        if ($this->viewFolder) {
+            if (!$this->viewIndex) {
                 $this->viewIndex = sprintf('%s.index', $this->viewFolder);
             }
 
-            if(!$this->viewCreate)
-            {    
+            if (!$this->viewCreate) {
                 $this->viewCreate = sprintf('%s.create', $this->viewFolder);
             }
 
-            if(!$this->viewShow)
-            {
+            if (!$this->viewShow) {
                 $this->viewShow = sprintf('%s.show', $this->viewFolder);
             }
-            
-            if(!$this->viewEdit)
-            {
+
+            if (!$this->viewEdit) {
                 $this->viewEdit = sprintf('%s.edit', $this->viewFolder);
             }
         }
@@ -54,15 +49,13 @@ trait ResourceCrud
         assert($this->viewEdit != '');
     }
 
-
     protected function findOrAbort($id)
     {
         $resource = null;
 
         $resource = $this->model::withTrashed()->find($id);
 
-        if(!$resource)
-        {
+        if (!$resource) {
             abort(404, 'Resource not found');
         }
 
@@ -71,12 +64,9 @@ trait ResourceCrud
 
     public function getBackRoute($item)
     {
-        if($item->trashed())
-        {
+        if ($item->trashed()) {
             return $this->trashRoute;
-        }
-        else
-        {
+        } else {
             return $this->indexRoute;
         }
     }
@@ -85,34 +75,30 @@ trait ResourceCrud
     {
         $model = $this->model::orderBy('id', 'desc');
 
-        if($this->listWith)
-        {
+        if ($this->listWith) {
             $model = $model->with($this->listWith);
         }
 
         $items = $model->paginate($this->items_per_page);
-        
+
         return view($this->viewIndex)->with([
-            'items' => $items
+            'items' => $items,
         ]);
     }
-
 
     public function trash()
     {
         $items = $this->model::onlyTrashed()->orderBy('id', 'desc')->paginate($this->items_per_page);
 
         return view($this->viewIndex)->with([
-            'items' => $items
+            'items' => $items,
         ]);
     }
-
 
     public function create()
     {
         return view($this->viewCreate);
     }
-
 
     public function edit($id)
     {
@@ -121,7 +107,6 @@ trait ResourceCrud
         return view($this->viewEdit)->with(compact('item'));
     }
 
-
     public function show($id)
     {
         $item = $this->findOrAbort($id);
@@ -129,26 +114,22 @@ trait ResourceCrud
         return view($this->viewShow)->with(compact('item'));
     }
 
-
     public function store(Request $request)
     {
         $this->validate($request, $this->validationRules);
 
         $item = $this->model::create($request->all());
-        
+
         return redirect()->route($this->getBackRoute($item))->with([
-            'success' => sprintf('New %s was created!', $item)
+            'success' => sprintf('New %s was created!', $item),
         ]);
     }
 
-
     public function update(Request $request, $id)
     {
-        foreach($this->validationRuleIdSuffix as $rule)
-        {
-            if(key_exists($rule, $this->validationRules))
-            {
-                $this->validationRules[$rule] .= ','.$id;
+        foreach ($this->validationRuleIdSuffix as $rule) {
+            if (key_exists($rule, $this->validationRules)) {
+                $this->validationRules[$rule] .= ',' . $id;
             }
         }
 
@@ -159,11 +140,10 @@ trait ResourceCrud
         $item->update($request->all());
 
         return redirect()->route($this->getBackRoute($item))->with([
-            'success' => sprintf('The %s was updated!', $item)
+            'success' => sprintf('The %s was updated!', $item),
         ]);
     }
 
-    
     public function destroy($id)
     {
         $item = $this->findOrAbort($id);
@@ -171,10 +151,9 @@ trait ResourceCrud
         $item->delete();
 
         return redirect()->route($this->getBackRoute($item))->with([
-            'success' => sprintf('The %s was trashed!', $item)
+            'success' => sprintf('The %s was trashed!', $item),
         ]);
     }
-
 
     public function restore($id)
     {
@@ -183,10 +162,9 @@ trait ResourceCrud
         $item->restore();
 
         return redirect()->route($this->getBackRoute($item))->with([
-            'success' => sprintf('The %s was restored!', $item)
+            'success' => sprintf('The %s was restored!', $item),
         ]);
     }
-
 
     public function forceDelete($id)
     {
@@ -195,7 +173,7 @@ trait ResourceCrud
         $item->forceDelete();
 
         return redirect()->route($this->getBackRoute($item))->with([
-            'success' => sprintf('The %s was deleted!', $item)
+            'success' => sprintf('The %s was deleted!', $item),
         ]);
     }
 }

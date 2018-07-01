@@ -10,7 +10,7 @@ class Circle extends Model
     use RandomId;
 
     protected $fillable = [
-        'type', 
+        'type',
         'title',
         'limit',
         'description',
@@ -24,13 +24,12 @@ class Circle extends Model
     public static function validationRules($except = null)
     {
         $rules = [
-            'type' => 'required|in:'.implode(',', config('circle.defaults.types')),
+            'type' => 'required|in:' . implode(',', config('circle.defaults.types')),
             'begin' => 'required|date',
             'languages' => 'exists:languages,code',
         ];
 
-        if($except)
-        {
+        if ($except) {
             $rules = array_except($rules, $except);
         }
 
@@ -46,11 +45,11 @@ class Circle extends Model
     {
         parent::boot();
 
-        static::created(function($circle) {
+        static::created(function ($circle) {
             $circle->generateUniqueId();
         });
 
-        static::deleting(function($circle) {
+        static::deleting(function ($circle) {
             $circle->languages()->detach();
 
             $circle->memberships()->delete();
@@ -84,32 +83,25 @@ class Circle extends Model
 
     public function deletable()
     {
-        if($this->memberships()->count() > 0)
-        {
+        if ($this->memberships()->count() > 0) {
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
 
     public function full()
     {
-        if($this->memberships()->count() >= $this->limit)
-        {
+        if ($this->memberships()->count() >= $this->limit) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
     public function joinable($user = null)
     {
-        if($user && $this->joined($user))
-        {
+        if ($user && $this->joined($user)) {
             return false;
         }
 
@@ -118,20 +110,16 @@ class Circle extends Model
 
     public function joined($user)
     {
-        if(\App\Membership::where(['circle_id' => $this->id, 'user_id' => $user->id])->count() > 0)
-        {
+        if (\App\Membership::where(['circle_id' => $this->id, 'user_id' => $user->id])->count() > 0) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
     public function join($membership_data, $user)
     {
-        if($this->joinable($user) == false)
-        {
+        if ($this->joinable($user) == false) {
             return null;
         }
 
@@ -140,14 +128,12 @@ class Circle extends Model
         $membership->user_id = $user->id;
         $membership->circle_id = $this->id;
         $membership->save();
-        
-        if(key_exists('languages', $membership_data))
-        {
+
+        if (key_exists('languages', $membership_data)) {
             $membership->languages()->attach($membership_data['languages']);
         }
 
-        if($this->memberships()->count() >= $this->limit)
-        {
+        if ($this->memberships()->count() >= $this->limit) {
             $this->complete();
         }
 
@@ -168,9 +154,8 @@ class Circle extends Model
     public function leave($user)
     {
         $memberships = \App\Membership::where(['circle_id' => $this->id, 'user_id' => $user->id]);
-        
-        if($memberships->count() > 0)
-        {
+
+        if ($memberships->count() > 0) {
             $memberships->first()->delete();
         }
     }
@@ -195,17 +180,15 @@ class Circle extends Model
     public static function createAndModify($user, $request)
     {
         $request->merge(['limit' => config('circle.defaults.limit')]);
-        
+
         $item = $user->circles()->create($request->all());
 
-        if($request->languages)
-        {
+        if ($request->languages) {
             $languages = \App\Language::whereIn('code', array_values($request->languages))->get();
             $item->languages()->attach($languages);
         }
 
-        if($user->moderator() == false)
-        {
+        if ($user->moderator() == false) {
             $item->joinWithDefaults($user);
         }
 
@@ -216,13 +199,10 @@ class Circle extends Model
     {
         $this->update($request->all());
 
-        if($request->languages)
-        {
+        if ($request->languages) {
             $languages = \App\Language::whereIn('code', array_values($request->languages))->get();
             $this->languages()->sync($languages);
-        }
-        else
-        {
+        } else {
             $this->languages()->detach();
         }
     }
@@ -231,8 +211,7 @@ class Circle extends Model
     {
         $link_title = $title ? $title : (string) $this;
 
-        if($class)
-        {
+        if ($class) {
             $class = sprintf(' class="%s"', $class);
         }
 
@@ -243,12 +222,9 @@ class Circle extends Model
 
     public function goodTitle()
     {
-        if($this->title)
-        {
+        if ($this->title) {
             return $this->title . ' (' . $this . ')';
-        }
-        else
-        {
+        } else {
             return (string) $this;
         }
     }

@@ -2,12 +2,9 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 use Tests\Traits\UsersAdmins;
-
 
 /**
  * @group admin.circles
@@ -17,7 +14,7 @@ class AdminCirclesTest extends TestCase
     use DatabaseMigrations;
     use UsersAdmins;
 
-    public function test_guest_cannot_access_circles()
+    public function testGuestCannotAccessCircles()
     {
         $response = $this->get(route('admin.circles.index'));
         $response->assertStatus(302);
@@ -28,7 +25,7 @@ class AdminCirclesTest extends TestCase
         $response->assertRedirect('/admin/login');
     }
 
-    public function test_admin_can_list_circles()
+    public function testAdminCanListCircles()
     {
         $admin = $this->fetchAdmin();
         $user = $this->fetchUser();
@@ -40,7 +37,7 @@ class AdminCirclesTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_admin_can_show_circle()
+    public function testAdminCanShowCircle()
     {
         $admin = $this->fetchAdmin();
         $user = $this->fetchUser();
@@ -50,5 +47,5 @@ class AdminCirclesTest extends TestCase
         $response = $this->actingAs($admin, 'admin')->get(route('admin.circles.show', ['id' => $circle->id]));
 
         $response->assertStatus(200);
-    }    
+    }
 }

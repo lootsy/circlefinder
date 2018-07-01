@@ -1,17 +1,19 @@
 language: php
 
 php:
-  - 7.2
+  - 7.1
 
 before_script:
   - cp .env.travis .env
   - mysql -e 'create database circlefinder_testing;'
   - composer self-update
+  - composer require "squizlabs/php_codesniffer=*"
   - composer install --no-interaction
   - php artisan key:generate
   - php artisan migrate
 
 script:
+  - vendor/bin/phpcs --ignore=index.php
   - vendor/bin/phpunit
 
 services:
@@ -21,3 +23,7 @@ cache:
   directories:
     - node_modules
     - vendor
+
+notifications:
+  email:
+    on_success: never

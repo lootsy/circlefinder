@@ -2,15 +2,12 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\Traits\UsersAdmins;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-
+use Tests\TestCase;
+use Tests\Traits\UsersAdmins;
 
 /**
  * @group profile
@@ -20,7 +17,7 @@ class ProfileTest extends TestCase
     use DatabaseMigrations;
     use UsersAdmins;
 
-    public function test_guest_cannot_acess_profile()
+    public function testGuestCannotAcessProfile()
     {
         $response = $this->get(route('profile.index'));
         $response->assertStatus(302);
@@ -32,7 +29,7 @@ class ProfileTest extends TestCase
         $response->assertRedirect('/login');
     }
 
-    public function test_user_can_access_own_profile()
+    public function testUserCanAccessOwnProfile()
     {
         $user = $this->fetchUser();
 
@@ -50,7 +47,7 @@ class ProfileTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_user_can_access_some_profile()
+    public function testUserCanAccessSomeProfile()
     {
         $user = $this->fetchUser();
         $userB = $this->fetchUser();
@@ -59,7 +56,7 @@ class ProfileTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_user_can_update_profile()
+    public function testUserCanUpdateProfile()
     {
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
@@ -69,11 +66,11 @@ class ProfileTest extends TestCase
         $new_about = $faker->text;
 
         $response = $this->actingAs($user)
-                            ->put(route('profile.update'), [
-                                'name' => $new_name,
-                                'email' => $new_mail,
-                                'about' => $new_about,
-                            ]);
+            ->put(route('profile.update'), [
+                'name' => $new_name,
+                'email' => $new_mail,
+                'about' => $new_about,
+            ]);
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
@@ -81,19 +78,19 @@ class ProfileTest extends TestCase
         $this->assertEquals($user->name, $new_name);
         $this->assertEquals($user->email, $new_mail);
         $this->assertEquals($user->about, $new_about);
-        
+
         # Check if the same email is accepter by the validator
         $response = $this->actingAs($user)
-                ->put(route('profile.update'), [
-                    'name' => $new_name,
-                    'email' => $user->email
-                ]);
+            ->put(route('profile.update'), [
+                'name' => $new_name,
+                'email' => $user->email,
+            ]);
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
     }
 
-    public function test_user_can_update_password()
+    public function testUserCanUpdatePassword()
     {
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
@@ -101,19 +98,19 @@ class ProfileTest extends TestCase
         $new_pass = $faker->password;
 
         $response = $this->actingAs($user)
-                            ->put(route('profile.password.update'), [
-                                'current_password' => 'secret',
-                                'password' => $new_pass,
-                                'password_confirmation' => $new_pass,
-                            ]);
-        
+            ->put(route('profile.password.update'), [
+                'current_password' => 'secret',
+                'password' => $new_pass,
+                'password_confirmation' => $new_pass,
+            ]);
+
         $response->assertStatus(302);
         $response->assertSessionHas('success');
 
         $this->assertTrue(Hash::check($new_pass, $user->password));
     }
 
-    public function test_user_cannot_update_with_wrong_password()
+    public function testUserCannotUpdateWithWrongPassword()
     {
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
@@ -121,31 +118,31 @@ class ProfileTest extends TestCase
         $new_pass = $faker->password;
 
         $response = $this->actingAs($user)
-                            ->put(route('profile.password.update'), [
-                                'current_password' => 'blabla',
-                                'password' => $new_pass,
-                                'password_confirmation' => $new_pass,
-                            ]);
+            ->put(route('profile.password.update'), [
+                'current_password' => 'blabla',
+                'password' => $new_pass,
+                'password_confirmation' => $new_pass,
+            ]);
 
         $response->assertStatus(302);
         $response->assertSessionHasErrors();
     }
 
-    public function test_user_cannot_upload_non_image()
+    public function testUserCannotUploadNonImage()
     {
         $user = $this->fetchUser();
 
         Storage::fake('avatars');
 
         $response = $this->actingAs($user)->put(route('profile.avatar.update'), [
-            'avatar' => UploadedFile::fake()->create('document.pdf', 256)
+            'avatar' => UploadedFile::fake()->create('document.pdf', 256),
         ]);
 
         $response->assertStatus(302);
         $response->assertSessionHasErrors();
     }
 
-    public function test_user_can_upload_new_avatar()
+    public function testUserCanUploadNewAvatar()
     {
         $user = $this->fetchUser();
 
@@ -154,7 +151,7 @@ class ProfileTest extends TestCase
         $min_upload_size = config('userprofile.avatar.min_upload_size');
 
         $response = $this->actingAs($user)->put(route('profile.avatar.update'), [
-            'avatar' => UploadedFile::fake()->image('avatar.jpeg', $min_upload_size, $min_upload_size)
+            'avatar' => UploadedFile::fake()->image('avatar.jpeg', $min_upload_size, $min_upload_size),
         ]);
 
         $this->assertFalse(is_null($user->avatar));
@@ -166,7 +163,7 @@ class ProfileTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_user_can_convert_new_avatar()
+    public function testUserCanConvertNewAvatar()
     {
         $user = $this->fetchUser();
 
@@ -175,7 +172,7 @@ class ProfileTest extends TestCase
         $min_upload_size = config('userprofile.avatar.min_upload_size');
 
         $response = $this->actingAs($user)->put(route('profile.avatar.update'), [
-            'avatar' => UploadedFile::fake()->image('avatar.jpeg', $min_upload_size, $min_upload_size)
+            'avatar' => UploadedFile::fake()->image('avatar.jpeg', $min_upload_size, $min_upload_size),
         ]);
 
         Storage::disk('fakedisk')->assertExists('avatars/' . $user->avatar);
@@ -184,17 +181,17 @@ class ProfileTest extends TestCase
         $response->assertSessionHas('success');
     }
 
-    public function test_user_has_to_use_image_as_avatar()
+    public function testUserHasToUseImageAsAvatar()
     {
         $user = $this->fetchUser();
 
         Storage::persistentFake('fakedisk');
 
         $response = $this->actingAs($user)->put(route('profile.avatar.update'), [
-            'avatar' => UploadedFile::fake()->create('document.jpg', 256)
+            'avatar' => UploadedFile::fake()->create('document.jpg', 256),
         ]);
 
         $response->assertStatus(302);
         $response->assertSessionHasErrors();
-    }    
+    }
 }

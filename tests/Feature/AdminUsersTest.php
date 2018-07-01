@@ -2,13 +2,10 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\Traits\UsersAdmins;
 use Illuminate\Support\Facades\Hash;
-
+use Tests\TestCase;
+use Tests\Traits\UsersAdmins;
 
 /**
  * @group users
@@ -17,8 +14,8 @@ class AdminUsersTest extends TestCase
 {
     use DatabaseMigrations;
     use UsersAdmins;
-    
-    public function test_guest_cannot_acess_users()
+
+    public function testGuestCannotAcessUsers()
     {
         $response = $this->get(route('admin.users.index'));
         $response->assertStatus(302);
@@ -31,7 +28,7 @@ class AdminUsersTest extends TestCase
         $response = $this->get(route('admin.users.create'));
         $response->assertStatus(302);
         $response->assertRedirect('/admin/login');
-        
+
         $response = $this->get(route('admin.users.edit', ['id' => 5]));
         $response->assertStatus(302);
         $response->assertRedirect('/admin/login');
@@ -49,51 +46,51 @@ class AdminUsersTest extends TestCase
         $response->assertRedirect('/admin/login');
     }
 
-    public function test_get_users_index()
+    public function testGetUsersIndex()
     {
         $admin = $this->fetchAdmin();
 
         $response = $this->actingAs($admin, 'admin')->get(route('admin.users.index'));
-        
+
         $response->assertStatus(200);
     }
 
-    public function test_get_users_trash()
+    public function testGetUsersTrash()
     {
         $admin = $this->fetchAdmin();
 
         $response = $this->actingAs($admin, 'admin')->get(route('admin.users.trash'));
-        
+
         $response->assertStatus(200);
     }
 
-    public function test_create_user()
+    public function testCreateUser()
     {
         $admin = $this->fetchAdmin();
 
         $response = $this->actingAs($admin, 'admin')
-                         ->get(route('admin.users.create'));
+            ->get(route('admin.users.create'));
 
         $response->assertStatus(200);
     }
 
-    public function test_edit_user()
+    public function testEditUser()
     {
         $admin = $this->fetchAdmin();
         $user = $this->fetchUser();
 
         $response = $this->actingAs($admin, 'admin')
-                         ->get(route('admin.users.edit', ['id' => 5]));
+            ->get(route('admin.users.edit', ['id' => 5]));
 
         $response->assertStatus(404);
 
         $response = $this->actingAs($admin, 'admin')
-                         ->get(route('admin.users.edit', ['id' => $user->id]));
+            ->get(route('admin.users.edit', ['id' => $user->id]));
 
         $response->assertStatus(200);
     }
 
-    public function test_store_user()
+    public function testStoreUser()
     {
         $admin = $this->fetchAdmin();
         $faker = $this->fetchFaker();
@@ -103,24 +100,23 @@ class AdminUsersTest extends TestCase
         $new_name = $faker->name;
 
         $response = $this->actingAs($admin, 'admin')
-                         ->post(route('admin.users.store'), [
-            'name' => $new_name,
-            'email' => $new_mail,
-            'password' => $new_password
-        ]);
+            ->post(route('admin.users.store'), [
+                'name' => $new_name,
+                'email' => $new_mail,
+                'password' => $new_password,
+            ]);
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
 
         $user = \App\User::where('email', $new_mail)->get()->first();
 
-        $this->assertEquals($user->name, $new_name);       
+        $this->assertEquals($user->name, $new_name);
         $this->assertEquals($user->email, $new_mail);
-        $this->assertTrue(Hash::check($new_password, $user->password));           
+        $this->assertTrue(Hash::check($new_password, $user->password));
     }
 
-
-    public function test_store_user_no_password()
+    public function testStoreUserNoPassword()
     {
         $admin = $this->fetchAdmin();
         $faker = $this->fetchFaker();
@@ -129,17 +125,16 @@ class AdminUsersTest extends TestCase
         $new_name = $faker->name;
 
         $response = $this->actingAs($admin, 'admin')
-                         ->post(route('admin.users.store'), [
-            'name' => $new_name,
-            'email' => $new_mail
-        ]);
+            ->post(route('admin.users.store'), [
+                'name' => $new_name,
+                'email' => $new_mail,
+            ]);
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
     }
 
-
-    public function test_update_user()
+    public function testUpdateUser()
     {
         $admin = $this->fetchAdmin();
         $user = $this->fetchUser();
@@ -150,23 +145,23 @@ class AdminUsersTest extends TestCase
         $new_name = $faker->name;
 
         $response = $this->actingAs($admin, 'admin')
-                         ->put(route('admin.users.update', ['id' => $user->id]), [
-            'name' => $new_name,
-            'email' => $new_mail,
-            'password' => $new_password
-        ]);
+            ->put(route('admin.users.update', ['id' => $user->id]), [
+                'name' => $new_name,
+                'email' => $new_mail,
+                'password' => $new_password,
+            ]);
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
 
         $user = $this->fetchUser($user->id);
 
-        $this->assertEquals($user->name, $new_name);           
+        $this->assertEquals($user->name, $new_name);
         $this->assertEquals($user->email, $new_mail);
-        $this->assertTrue(Hash::check($new_password, $user->password));           
+        $this->assertTrue(Hash::check($new_password, $user->password));
     }
 
-    public function test_update_user_same_mail()
+    public function testUpdateUserSameMail()
     {
         $admin = $this->fetchAdmin();
         $user = $this->fetchUser();
@@ -175,10 +170,10 @@ class AdminUsersTest extends TestCase
         $new_name = $faker->name;
 
         $response = $this->actingAs($admin, 'admin')
-                         ->put(route('admin.users.update', ['id' => $user->id]), [
-            'name' => $new_name,
-            'email' => $user->email
-        ]);
+            ->put(route('admin.users.update', ['id' => $user->id]), [
+                'name' => $new_name,
+                'email' => $user->email,
+            ]);
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
@@ -188,7 +183,7 @@ class AdminUsersTest extends TestCase
         $this->assertEquals($user->name, $new_name);
     }
 
-    public function test_update_user_no_new_pass()
+    public function testUpdateUserNoNewPass()
     {
         $admin = $this->fetchAdmin();
         $user = $this->fetchUser();
@@ -200,26 +195,26 @@ class AdminUsersTest extends TestCase
         $old_password = $user->password;
 
         $response = $this->actingAs($admin, 'admin')
-                         ->put(route('admin.users.update', ['id' => $user->id]), [
-            'name' => $new_name,
-            'email' => $new_mail
-        ]);
+            ->put(route('admin.users.update', ['id' => $user->id]), [
+                'name' => $new_name,
+                'email' => $new_mail,
+            ]);
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
 
         $user = $this->fetchUser($user->id);
 
-        $this->assertEquals($old_password, $user->password);           
+        $this->assertEquals($old_password, $user->password);
     }
 
-    public function test_soft_delete_user()
+    public function testSoftDeleteUser()
     {
         $admin = $this->fetchAdmin();
         $user = $this->fetchUser();
 
         $response = $this->actingAs($admin, 'admin')
-                         ->delete(route('admin.users.destroy', ['id' => $user->id]));
+            ->delete(route('admin.users.destroy', ['id' => $user->id]));
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
@@ -227,14 +222,14 @@ class AdminUsersTest extends TestCase
         $this->assertSoftDeleted('users', [
             'email' => $user->email,
             'name' => $user->name,
-            'password' => $user->password
+            'password' => $user->password,
         ]);
 
         $user = $this->fetchUser($user->id);
         $this->assertTrue(is_null($user));
     }
 
-    public function test_soft_restore_user()
+    public function testSoftRestoreUser()
     {
         $admin = $this->fetchAdmin();
         $user = $this->fetchUser();
@@ -244,11 +239,11 @@ class AdminUsersTest extends TestCase
         $this->assertSoftDeleted('users', [
             'email' => $user->email,
             'name' => $user->name,
-            'password' => $user->password
+            'password' => $user->password,
         ]);
 
         $response = $this->actingAs($admin, 'admin')
-                         ->post(route('admin.users.restore', ['id' => $user->id]));
+            ->post(route('admin.users.restore', ['id' => $user->id]));
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
@@ -258,7 +253,7 @@ class AdminUsersTest extends TestCase
         $this->assertEquals($restored_user->email, $user->email);
     }
 
-    public function test_force_delete_user()
+    public function testForceDeleteUser()
     {
         $admin = $this->fetchAdmin();
         $user = $this->fetchUser();
@@ -268,11 +263,11 @@ class AdminUsersTest extends TestCase
         $this->assertSoftDeleted('users', [
             'email' => $user->email,
             'name' => $user->name,
-            'password' => $user->password
+            'password' => $user->password,
         ]);
 
         $response = $this->actingAs($admin, 'admin')
-                         ->delete(route('admin.users.forcedelete', ['id' => $user->id]));
+            ->delete(route('admin.users.forcedelete', ['id' => $user->id]));
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
@@ -282,28 +277,27 @@ class AdminUsersTest extends TestCase
         $this->assertTrue(is_null($restored_user));
     }
 
-
-    public function test_update_user_roles()
+    public function testUpdateUserRoles()
     {
         $admin = $this->fetchAdmin();
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
 
         $faker->seed(1234);
-        
+
         $roles = factory(\App\Role::class, 10)->create();
 
         $response = $this->actingAs($admin, 'admin')
-                         ->put(route('admin.users.update', ['id' => $user->id]), [
-            'name' => $user->name,
-            'email' => $user->email,
-            'roles' => [
-                '4' => $roles[0]->id,
-                '6' => $roles[1]->id,
-                '8' => $roles[2]->id,
-                '9' => $roles[3]->id,
-            ]
-        ]);
+            ->put(route('admin.users.update', ['id' => $user->id]), [
+                'name' => $user->name,
+                'email' => $user->email,
+                'roles' => [
+                    '4' => $roles[0]->id,
+                    '6' => $roles[1]->id,
+                    '8' => $roles[2]->id,
+                    '9' => $roles[3]->id,
+                ],
+            ]);
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
@@ -311,7 +305,7 @@ class AdminUsersTest extends TestCase
         $this->assertEquals(4, count($user->roles));
     }
 
-    public function test_detach_user_roles()
+    public function testDetachUserRoles()
     {
         $admin = $this->fetchAdmin();
         $user = $this->fetchUser();
@@ -322,12 +316,12 @@ class AdminUsersTest extends TestCase
         $user->roles()->attach($roles);
 
         $response = $this->actingAs($admin, 'admin')
-                         ->put(route('admin.users.update', ['id' => $user->id]), [
-            'name' => $user->name,
-            'email' => $user->email,
-            'roles' => [
-            ]
-        ]);
+            ->put(route('admin.users.update', ['id' => $user->id]), [
+                'name' => $user->name,
+                'email' => $user->email,
+                'roles' => [
+                ],
+            ]);
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
@@ -335,20 +329,20 @@ class AdminUsersTest extends TestCase
         $this->assertEquals(0, count($user->roles));
     }
 
-    public function test_wrong_user_roles()
+    public function testWrongUserRoles()
     {
         $admin = $this->fetchAdmin();
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
 
         $response = $this->actingAs($admin, 'admin')
-                         ->put(route('admin.users.update', ['id' => $user->id]), [
-            'name' => $user->name,
-            'email' => $user->email,
-            'roles' => [
-                '9' => 100,
-            ]
-        ]);
+            ->put(route('admin.users.update', ['id' => $user->id]), [
+                'name' => $user->name,
+                'email' => $user->email,
+                'roles' => [
+                    '9' => 100,
+                ],
+            ]);
 
         $response->assertStatus(302);
         $response->assertSessionHasErrors();

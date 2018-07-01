@@ -1,6 +1,5 @@
 <?php
 
-
 return array
 (
     "de" => "German",

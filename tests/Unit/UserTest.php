@@ -2,12 +2,10 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Traits\UsersAdmins;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Hash;
+use Tests\TestCase;
+use Tests\Traits\UsersAdmins;
 
 /**
  * @group user
@@ -17,7 +15,7 @@ class UserTest extends TestCase
     use DatabaseMigrations;
     use UsersAdmins;
 
-    public function test_generate_uuid()
+    public function testGenerateUuid()
     {
         $faker = $this->fetchFaker();
         $user = new \App\User();
@@ -45,7 +43,7 @@ class UserTest extends TestCase
         $this->assertEquals($user->id, $u->id);
     }
 
-    public function test_validation_rules()
+    public function testValidationRules()
     {
         $rules = \App\User::validationRules();
         $rules2 = \App\User::validationRules(['email']);
@@ -53,18 +51,18 @@ class UserTest extends TestCase
         $this->assertTrue(count($rules) > 0);
 
         $this->assertTrue(key_exists('email', $rules));
-        
+
         $this->assertFalse(key_exists('email', $rules2));
     }
 
-    public function test_get_new_avatar_filename()
+    public function testGetNewAvatarFilename()
     {
         $user = factory(\App\User::class)->create();
 
         $this->assertTrue(strlen($user->newAvatarFileName()) > 0);
     }
 
-    public function test_get_link_to_user_profile()
+    public function testGetLinkToUserProfile()
     {
         $user = $this->fetchUser();
 

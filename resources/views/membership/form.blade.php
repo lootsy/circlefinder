@@ -3,20 +3,47 @@
     <div class="row">
         <div class="col-lg col-12">
             <div class="form-group">
-                {{ Form::label('type', 'Type') }}
-                {{ Form::select('type', array_combine(config('circle.defaults.types'), config('circle.defaults.types')), null, ['class' => 'form-control']) }}
+                {{ Form::label('begin', 'Begin') }}
+                {{ Form::date('begin', isset($item) ? null : today(), ['class' => 'form-control']) }}
             </div>
         </div>
 
         <div class="col-lg col-12">
             <div class="form-group">
-                {{ Form::label('begin', 'Begin') }}
-                {{ Form::date('begin', isset($item) ? null : today(), ['class' => 'form-control']) }}
+                {{ Form::label('type', 'Type') }}
+                {{ Form::select('type', array_combine(config('circle.defaults.types'), config('circle.defaults.types')), null, ['class' => 'form-control']) }}
             </div>
         </div>
     </div>
 
-    @include('inc.form-languages')
+    <div class="row">
+        <div class="col-6">
+            <h2>Time schedule</h2>
+
+            <table class="table table-sm table-striped table-bordered time-schedule">
+                <tr>
+                    <th>Time</th>
+                    @foreach($timeTable->getDayList(true) as $day)
+                    <th>{{ $day }}</th>
+                    @endforeach
+                </tr>
+            @foreach($timeTable->getTimeList() as $time)
+                <tr>
+                    <td>{{ $time }}:00</td>
+                    @foreach($timeTable->getDayList() as $day)
+                    <td class="check {{ (is_array($timeTable->timeSlot()->$day) && in_array($time, $timeTable->timeSlot()->$day)) ? ' checked' : '' }}">
+                        {{ Form::checkbox($day.'[]', $time, is_array($timeTable->timeSlot()->$day) && in_array($time, $timeTable->timeSlot()->$day)) }}
+                    </td>
+                    @endforeach
+                </tr>
+            @endforeach
+            </table>
+        </div>
+
+        <div class="col-6">
+            @include('inc.form-languages')
+        </div>
+    </div>
 
     {{ Form::submit('Save', ['class' => 'btn btn-primary']) }}
     

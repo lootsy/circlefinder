@@ -7,19 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 class Membership extends Model
 {
     protected $fillable = [
-        'type', 
+        'type',
         'begin',
     ];
 
     public static function validationRules($except = null)
     {
         $rules = [
-            'type' => 'required|in:'.implode(',', config('circle.defaults.types')),
-            'begin' => 'required|date'
+            'type' => 'required|in:' . implode(',', config('circle.defaults.types')),
+            'begin' => 'required|date',
         ];
 
-        if($except)
-        {
+        if ($except) {
             $rules = array_except($rules, $except);
         }
 
@@ -40,9 +39,9 @@ class Membership extends Model
     {
         parent::boot();
 
-        static::deleting(function($membership)
-        {
+        static::deleting(function ($membership) {
             $membership->languages()->detach();
+            $membership->timeSlot()->delete();
         });
     }
 
@@ -61,17 +60,19 @@ class Membership extends Model
         return $this->user->id == $user->id;
     }
 
+    public function timeSlot()
+    {
+        return $this->hasOne(\App\TimeSlot::class);
+    }
+
     public function updateAndModify($request)
     {
         $this->update($request->all());
 
-        if($request->languages)
-        {
+        if ($request->languages) {
             $languages = \App\Language::whereIn('code', array_values($request->languages))->get();
             $this->languages()->sync($languages);
-        }
-        else
-        {
+        } else {
             $this->languages()->detach();
         }
     }

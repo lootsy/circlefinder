@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
@@ -17,9 +16,10 @@ class AvatarController extends Controller
     public function edit(Request $request)
     {
         $user = auth()->user();
+
         return view('profile.avatar.edit')->with([
             'user' => $user,
-            'min_upload_size' => config('userprofile.avatar.min_upload_size')
+            'min_upload_size' => config('userprofile.avatar.min_upload_size'),
         ]);
     }
 
@@ -29,39 +29,37 @@ class AvatarController extends Controller
         $max_upload_file = config('userprofile.avatar.max_upload_file');
 
         $request->validate([
-            'avatar' => sprintf('required|image|max:%d|dimensions:min_width=%d,min_height=%d', $max_upload_file, 
-                                            $min_upload_size, $min_upload_size)
+            'avatar' => sprintf(
+                'required|image|max:%d|dimensions:min_width=%d,min_height=%d',
+                $max_upload_file,
+                $min_upload_size,
+                $min_upload_size
+            ),
         ]);
 
         $user = auth()->user();
 
-        if($request->hasFile('avatar'))
-        {
+        if ($request->hasFile('avatar')) {
             $newFileName = $user->newAvatarFileName();
 
             $image = null;
 
-            try
-            {
+            try {
                 $image = Image::make($request->file('avatar'));
-            }
-            catch(\Intervention\Image\Exception\NotReadableException $ex)
-            {
+            } catch (\Intervention\Image\Exception\NotReadableException $ex) {
                 return redirect()->back()->withErrors("The provided file cannot be used as avatar");
             }
 
-            Storage::put('avatars_origin/'.$newFileName, (string) $image->encode('jpg'));
+            Storage::put('avatars_origin/' . $newFileName, (string) $image->encode('jpg'));
 
             $image->fit(config('userprofile.avatar.size'));
 
-            Storage::put('avatars/'.$newFileName, (string) $image->encode('jpg'));
-            
+            Storage::put('avatars/' . $newFileName, (string) $image->encode('jpg'));
+
             $user->avatar = $newFileName;
 
             $user->save();
-        }
-        else
-        {
+        } else {
             return redirect()->back()->withErrors("You have to choose a file for upload");
         }
 

@@ -12,3 +12,29 @@
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
+
+.time-schedule {
+  table-layout: fixed;
+
+  td.check {
+
+    text-align: center;
+    
+    input {
+      display: none;
+    }
+
+    &:hover {
+      background: #fbfca6;
+    }
+  }
+
+  td.checked {
+    background: #a6fca6;
+  }
+}
+
+.time-ok {
+  background: #a6fca6;
+}
+

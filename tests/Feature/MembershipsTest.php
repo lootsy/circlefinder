@@ -24,14 +24,14 @@ class MembershipsTest extends TestCase
         Artisan::call('db:seed', ['--class' => 'LanguagesTableSeeder', '--env' => 'testing']);
     }
 
-    public function test_guest_cannot_access_membership()
+    public function testGuestCannotAccessMembership()
     {
         $response = $this->get(route('circles.membership.edit', ['circle_uuid' => '1234']));
         $response->assertStatus(302);
         $response->assertRedirect('/login');
     }
 
-    public function test_user_can_edit_own_membership()
+    public function testUserCanEditOwnMembership()
     {
         $user = $this->fetchUser();
         $user2 = $this->fetchUser();
@@ -47,7 +47,7 @@ class MembershipsTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_user_can_update_own_membership()
+    public function testUserCanUpdateOwnMembership()
     {
         $user = $this->fetchUser();
         $user2 = $this->fetchUser();

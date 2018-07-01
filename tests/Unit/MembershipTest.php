@@ -2,11 +2,9 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Traits\UsersAdmins;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
+use Tests\Traits\UsersAdmins;
 
 /**
  * @group membership
@@ -19,33 +17,33 @@ class MembershipTest extends TestCase
     private function fetchMembership($data, $user)
     {
         $membership = new \App\Membership;
-        
+
         $membership->fill($data);
-        
+
         $membership->circle_id = 0;
         $membership->user_id = $user->id;
-        
+
         $membership->save();
 
         return $membership;
     }
 
-    public function test_create_new_membership()
+    public function testCreateNewMembership()
     {
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
 
         $data = [
             'type' => 'any',
-            'begin' => $faker->date
+            'begin' => $faker->date,
         ];
 
         $membership = $this->fetchMembership($data, $user);
         $membership = $this->fetchMembership($data, $user);
         $membership = $this->fetchMembership($data, $user);
-        
+
         $this->assertDatabaseHas('memberships', [
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
 
         $this->assertEquals(3, count($user->memberships));
@@ -55,30 +53,30 @@ class MembershipTest extends TestCase
         $this->assertEquals($data['begin'], $membership->begin);
     }
 
-    public function test_removing_user_removes_memberships()
+    public function testRemovingUserRemovesMemberships()
     {
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
 
         $data = [
             'type' => 'any',
-            'begin' => $faker->date
+            'begin' => $faker->date,
         ];
 
         $membership = $this->fetchMembership($data, $user);
 
         $this->assertDatabaseHas('memberships', [
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
 
         $user->delete();
 
         $this->assertDatabaseMissing('memberships', [
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
     }
 
-    public function test_attach_detach_language_to_membership()
+    public function testAttachDetachLanguageToMembership()
     {
         $user = $this->fetchUser();
         $faker = $this->fetchFaker();
@@ -88,7 +86,7 @@ class MembershipTest extends TestCase
 
         $data = [
             'type' => 'any',
-            'begin' => $faker->date
+            'begin' => $faker->date,
         ];
 
         $membership = $this->fetchMembership($data, $user);
@@ -97,25 +95,25 @@ class MembershipTest extends TestCase
         $membership->languages()->attach($lang2);
 
         $this->assertDatabaseHas('language_membership', [
-            'membership_id' => $membership->id
+            'membership_id' => $membership->id,
         ]);
 
         $this->assertDatabaseHas('language_membership', [
-            'language_id' => $lang->id
+            'language_id' => $lang->id,
         ]);
 
         $this->assertDatabaseHas('language_membership', [
-            'language_id' => $lang2->id
+            'language_id' => $lang2->id,
         ]);
 
         $membership->languages()->detach();
 
         $this->assertDatabaseMissing('language_membership', [
-            'membership_id' => $membership->id
+            'membership_id' => $membership->id,
         ]);
     }
 
-    public function test_validation_rules()
+    public function testValidationRules()
     {
         $rules = \App\Membership::validationRules();
         $rules2 = \App\Membership::validationRules(['type']);
@@ -123,7 +121,7 @@ class MembershipTest extends TestCase
         $this->assertTrue(count($rules) > 0);
 
         $this->assertTrue(key_exists('type', $rules));
-        
+
         $this->assertFalse(key_exists('type', $rules2));
     }
 }

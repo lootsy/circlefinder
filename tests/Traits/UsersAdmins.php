@@ -13,12 +13,9 @@ trait UsersAdmins
 
     private function fetchUser($id = null)
     {
-        if($id == null)
-        {
+        if ($id == null) {
             return factory(\App\User::class)->create();
-        }
-        else
-        {
+        } else {
             return \App\User::find($id);
         }
     }
@@ -30,12 +27,9 @@ trait UsersAdmins
 
     private function fetchRole($id = null)
     {
-        if($id == null)
-        {
+        if ($id == null) {
             return factory(\App\Role::class)->create();
-        }
-        else
-        {
+        } else {
             return \App\Role::find($id);
         }
     }
@@ -43,12 +37,12 @@ trait UsersAdmins
     public function fetchModerator()
     {
         $user = $this->fetchUser();
-        
+
         $role = \App\Role::firstOrCreate([
             'name' => 'moderator',
-            'title' => 'Moderator'
+            'title' => 'Moderator',
         ]);
-        
+
         $user->roles()->attach($role);
 
         return $user;
@@ -56,12 +50,9 @@ trait UsersAdmins
 
     private function fetchLanguage($id = null)
     {
-        if($id == null)
-        {
+        if ($id == null) {
             return factory(\App\Language::class)->create();
-        }
-        else
-        {
+        } else {
             return \App\Language::find($id);
         }
     }
@@ -72,9 +63,9 @@ trait UsersAdmins
 
         $data = [
             'type' => $faker->randomElement(config('circle.defaults.types')),
-            'title' =>  $faker->catchPhrase,
+            'title' => $faker->catchPhrase,
             'limit' => config('circle.defaults.limit'),
-            'begin' => today()
+            'begin' => today(),
         ];
 
         return $owner->circles()->create($data);

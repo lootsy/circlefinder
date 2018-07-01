@@ -8,9 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * Source: https://github.com/DevMarketer/multiauth_tutorial/blob/master/app/Http/Controllers/Auth/AdminLoginController.php
+ * Source: http://leogo.es/3u8k4
  */
-
 class LoginController extends Controller
 {
     /*
@@ -22,7 +21,7 @@ class LoginController extends Controller
     | redirecting them to your home screen. The controller uses a trait
     | to conveniently provide its functionality to your applications.
     |
-    */
+     */
 
     use AuthenticatesUsers;
 
@@ -52,19 +51,21 @@ class LoginController extends Controller
     {
         # TODO: Move the validation to the model or policy
         $this->validate($request, [
-            'email'   => 'required|email',
-            'password' => 'required|min:6'
+            'email' => 'required|email',
+            'password' => 'required|min:6',
         ]);
 
-        if (Auth::guard('admin')->attempt(['email' => $request->email, 
-                        'password' => $request->password], $request->remember))
-        {
+        if (Auth::guard('admin')->attempt(
+            ['email' => $request->email,
+                'password' => $request->password],
+            $request->remember
+        )) {
             return redirect()->intended(route('admin.dashboard'));
         }
 
         return redirect()->back()
-                        ->withInput($request->only('email', 'remember'))
-                        ->withErrors(['message' => 'Wrong username or password!']);
+            ->withInput($request->only('email', 'remember'))
+            ->withErrors(['message' => 'Wrong username or password!']);
     }
 
     public function logout()

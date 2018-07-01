@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\Admin\Traits\ResourceCrud;
-use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
@@ -29,54 +28,44 @@ class UsersController extends Controller
     {
         $this->validate($request, $this->validationRules);
 
-        if(strlen($request->password) > 0)
-        {
+        if (strlen($request->password) > 0) {
             $request->merge(['password' => Hash::make($request->password)]);
-        }
-        else
-        {
+        } else {
             $request->merge(['password' => Hash::make(str_random(15))]);
         }
 
         $item = $this->model::create($request->all());
-        
+
         return redirect()->route($this->getBackRoute($item))->with([
-            'success' => sprintf('New %s was created!', $item)
+            'success' => sprintf('New %s was created!', $item),
         ]);
     }
 
-    
     public function update(Request $request, $id)
     {
         # Ignore the user id during the email validation
-        $this->validationRules['email'] .= ','.$id;
+        $this->validationRules['email'] .= ',' . $id;
 
         $this->validate($request, $this->validationRules);
 
         $item = $this->findOrAbort($id);
 
-        if(strlen($request->password) > 0)
-        {
+        if (strlen($request->password) > 0) {
             $request->merge(['password' => Hash::make($request->password)]);
-        }
-        else
-        {
+        } else {
             $request->merge(['password' => $item->password]);
         }
 
-        if($request->roles)
-        {
+        if ($request->roles) {
             $item->roles()->sync(array_values($request->roles));
-        }
-        else
-        {
+        } else {
             $item->roles()->detach();
         }
 
         $item->update($request->all());
 
         return redirect()->route($this->getBackRoute($item))->with([
-            'success' => sprintf('The %s was updated!', $item)
+            'success' => sprintf('The %s was updated!', $item),
         ]);
     }
 }

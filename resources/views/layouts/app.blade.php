@@ -10,11 +10,8 @@
 
     <title>@yield('title') | {{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -78,5 +75,9 @@
             <p>Created by <a href="https://twitter.com/leonidlezner">@@leonidlezner</a> - <a href="https://github.com/leonidlezner/circlefinder">Source at Github</a></p>
         </footer>
     </div>
+
+    <!-- Scripts -->
+    <script src="{{ mix('js/app.js') }}" defer></script>
+
 </body>
 </html>

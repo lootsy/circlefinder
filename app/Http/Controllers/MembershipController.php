@@ -26,8 +26,11 @@ class MembershipController extends Controller
 
         $this->authorize('update', $item);
 
+        $timeTable = \App\TimeTable::findForMembership($item);
+
         return view('membership.edit')->with([
-            'item' => $item
+            'item' => $item,
+            'timeTable' => $timeTable
         ]);
     }
 
@@ -38,6 +41,8 @@ class MembershipController extends Controller
         $this->authorize('update', $item);
 
         $this->validate($request, \App\Membership::validationRules());
+
+        $timeTable = \App\TimeTable::updateOrCreateForMembership($item, $request->all());
 
         $item->updateAndModify($request);
 

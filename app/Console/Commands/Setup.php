@@ -36,9 +36,9 @@ class Setup extends Command
     {
         \App\Role::firstOrCreate([
             'name' => 'moderator',
-            'title' => 'Moderator'
+            'title' => 'Moderator',
         ]);
-        
+
         $this->info('New Role "moderator" created');
 
         return true;
@@ -48,13 +48,11 @@ class Setup extends Command
     {
         $list = \App\Language::getListOfLanguages();
 
-        foreach($list as $code => $title)
-        {
-            if(\App\Language::where('code', $code)->count() == 0)
-            {
+        foreach ($list as $code => $title) {
+            if (\App\Language::where('code', $code)->count() == 0) {
                 \App\Language::create([
                     'code' => $code,
-                    'title' => $title
+                    'title' => $title,
                 ]);
             }
         }
@@ -75,13 +73,11 @@ class Setup extends Command
         $this->info('Refreshing version...');
         Artisan::call('version:refresh');
 
-        if($this->createModeratorRole() == false)
-        {
+        if ($this->createModeratorRole() == false) {
             return;
         }
 
-        if($this->createLanguages() == false)
-        {
+        if ($this->createLanguages() == false) {
             return;
         }
     }

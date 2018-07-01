@@ -19,7 +19,7 @@ class Role extends Model
     {
         return sprintf('Role "%s"', $this->title);
     }
-    
+
     public function users()
     {
         return $this->belongsToMany(\App\User::class);
@@ -29,9 +29,8 @@ class Role extends Model
     {
         parent::boot();
 
-        static::deleting(function($role) {
-            if ($role->isForceDeleting())
-            {
+        static::deleting(function ($role) {
+            if ($role->isForceDeleting()) {
                 $role->users()->detach();
             }
         });

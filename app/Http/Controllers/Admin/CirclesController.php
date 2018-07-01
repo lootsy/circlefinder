@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Admin\Traits\ResourceCrud;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 
 class CirclesController extends Controller
 {
@@ -17,18 +14,18 @@ class CirclesController extends Controller
         $model = \App\Circle::orderBy('id', 'desc');
         $model = $model->with(['memberships', 'users', 'user']);
         $items = $model->paginate($this->items_per_page);
-        
+
         return view('admin.circles.index')->with([
-            'items' => $items
+            'items' => $items,
         ]);
     }
 
     public function show($id, Request $request)
     {
         $item = \App\Circle::findOrFail($id);
-        
+
         return view('admin.circles.show')->with([
-            'item' => $item
+            'item' => $item,
         ]);
     }
 }
