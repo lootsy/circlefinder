@@ -15,9 +15,7 @@ if (App::environment('production')) {
     URL::forceScheme('https');
 }
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('index');
+Route::get('/', 'GuestController@index')->name('index');
 
 Auth::routes();
 
