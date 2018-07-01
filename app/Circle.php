@@ -137,6 +137,8 @@ class Circle extends Model
             $this->complete();
         }
 
+        \App\TimeTable::findForMembership($membership);
+
         return $membership;
     }
 

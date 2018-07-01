@@ -39,7 +39,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
-        if ($this->shouldReport($exception)) {
+        if (App::environment('staging') || App::environment('production')) {
             Log::emergency($exception);
         }
 
