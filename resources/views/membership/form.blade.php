@@ -19,6 +19,7 @@
     <div class="row">
         <div class="col-6">
             <h2>Time schedule</h2>
+
             <table class="table table-sm table-striped table-bordered time-schedule">
                 <tr>
                     <th>Time</th>
@@ -28,14 +29,17 @@
                 </tr>
             @foreach($timeTable->getTimeList() as $time)
                 <tr>
-                    <td>{{ $time }}</td>
+                    <td>{{ $time }}:00</td>
                     @foreach($timeTable->getDayList() as $day)
-                    <td>{{ Form::checkbox($day.'[]', $time, is_array($timeTable->timeSlot()->$day) && in_array($time, $timeTable->timeSlot()->$day)) }}</td>
+                    <td class="check {{ (is_array($timeTable->timeSlot()->$day) && in_array($time, $timeTable->timeSlot()->$day)) ? ' checked' : '' }}">
+                        {{ Form::checkbox($day.'[]', $time, is_array($timeTable->timeSlot()->$day) && in_array($time, $timeTable->timeSlot()->$day)) }}
+                    </td>
                     @endforeach
                 </tr>
             @endforeach
             </table>
         </div>
+
         <div class="col-6">
             @include('inc.form-languages')
         </div>

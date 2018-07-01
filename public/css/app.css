@@ -10421,6 +10421,22 @@ a.text-dark:focus {
   table-layout: fixed;
 }
 
+.time-schedule td.check {
+  text-align: center;
+}
+
+.time-schedule td.check input {
+  display: none;
+}
+
+.time-schedule td.check:hover {
+  background: #fbfca6;
+}
+
+.time-schedule td.checked {
+  background: #a6fca6;
+}
+
 .time-ok {
   background: #a6fca6;
 }

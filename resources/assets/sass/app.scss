@@ -15,8 +15,26 @@
 
 .time-schedule {
   table-layout: fixed;
+
+  td.check {
+
+    text-align: center;
+    
+    input {
+      display: none;
+    }
+
+    &:hover {
+      background: #fbfca6;
+    }
+  }
+
+  td.checked {
+    background: #a6fca6;
+  }
 }
 
 .time-ok {
   background: #a6fca6;
 }
+
