@@ -102,6 +102,8 @@ class TimeTable
 
         $timeTable->timeSlots[] = $timeSlot;
 
+        $timeTable->memberships[] = $membership;
+
         return $timeTable;
     }
 

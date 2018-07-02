@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <h1>{{ $item->goodTitle() }}</h1>
+    <h1>{{ good_title($item) }}</h1>
 
     @if($item->completed)
         <div class="alert alert-warning">Circle is completed</div>

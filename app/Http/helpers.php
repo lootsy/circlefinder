@@ -25,9 +25,16 @@ if (!function_exists('translate_type')) {
 }
 
 if (!function_exists('list_languages')) {
-    function list_languages($languages)
+    function list_languages($languages, $limit = 0)
     {
-        return $languages->sortBy('code')->implode('title', ', ');
+        $count = $languages->count();
+        $list = $languages->sortBy('code');
+
+        if ($limit > 0 && $limit < $count) {
+            $list = $list->slice(0, $limit);
+        }
+
+        return $list->implode('title', ', ') . ($limit && ($limit < $count) ? ', ...' : '');
     }
 }
 
@@ -63,5 +70,16 @@ if (!function_exists('circle_state')) {
         }
 
         return sprintf('Open (%d / %d)', $circle->memberships()->count(), $circle->limit);
+    }
+}
+
+if (!function_exists('good_title')) {
+    function good_title($item)
+    {
+        if ($item->title) {
+            return $item->title . ' (' . $item . ')';
+        } else {
+            return (string) $item;
+        }
     }
 }

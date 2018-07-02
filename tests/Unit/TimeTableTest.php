@@ -91,6 +91,11 @@ class TimeTableTest extends TestCase
         $this->assertDatabaseMissing('time_slots', [
             'membership_id' => $membership->id
         ]);
+
+        $this->assertEquals($timeTable->memberships()[0], $membership);
+
+        $this->assertTrue($timeTable->atTime(6));
+        $this->assertFalse($timeTable->atTime(4));
     }
 
     public function testGetTableForCircle()

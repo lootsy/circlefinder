@@ -16,7 +16,7 @@
         <tr>
             <th>Name</th>
             <th>Begin</th>
-            <th>State</th>
+            <th>Status</th>
             <th>Type (virtual/f2f)</th>
         </tr>
         
