@@ -28,5 +28,7 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register('Barryvdh\Debugbar\ServiceProvider');
             $this->app->bind('Debugbar', Barryvdh\Debugbar\Facade::class);
         }
+
+        setlocale(LC_TIME, config('app.locale'));
     }
 }

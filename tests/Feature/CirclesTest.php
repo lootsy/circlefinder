@@ -122,7 +122,10 @@ class CirclesTest extends TestCase
         $response = $this->actingAs($user)->post(route('circles.store'), [
             'type' => $faker->randomElement(config('circle.defaults.types')),
             'title' =>  $faker->catchPhrase,
-            'begin' => today()
+            'begin' => today(),
+            'languages' => [
+                '0' => \App\Language::find(1)->code
+            ]
         ]);
 
         $response->assertStatus(302);
@@ -194,6 +197,9 @@ class CirclesTest extends TestCase
             'title' =>  $faker->catchPhrase,
             'description' => $faker->text,
             'begin' => today(),
+            'languages' => [
+                '0' => \App\Language::find(1)->code
+            ]
         ]);
 
         $response->assertStatus(302);
@@ -201,7 +207,7 @@ class CirclesTest extends TestCase
 
         $circle = $circle->refresh();
 
-        $this->assertEquals(0, count($circle->languages));
+        $this->assertEquals(1, count($circle->languages));
     }
 
     public function testOwnerCanCompleteCircle()

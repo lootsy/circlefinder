@@ -9,6 +9,8 @@ class Circle extends Model
 {
     use RandomId;
 
+    protected $dates = ['begin'];
+
     protected $fillable = [
         'type',
         'title',
@@ -26,7 +28,7 @@ class Circle extends Model
         $rules = [
             'type' => 'required|in:' . implode(',', config('circle.defaults.types')),
             'begin' => 'required|date',
-            'languages' => 'exists:languages,code',
+            'languages' => 'required|exists:languages,code',
         ];
 
         if ($except) {

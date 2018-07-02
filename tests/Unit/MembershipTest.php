@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 use Tests\Traits\UsersAdmins;
+use Carbon\Carbon;
 
 /**
  * @group membership
@@ -50,7 +51,7 @@ class MembershipTest extends TestCase
 
         $this->assertEquals($user->id, $membership->user->id);
         $this->assertEquals($data['type'], $membership->type);
-        $this->assertEquals($data['begin'], $membership->begin);
+        $this->assertEquals(new Carbon($data['begin']), $membership->begin);
     }
 
     public function testRemovingUserRemovesMemberships()

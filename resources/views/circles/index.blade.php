@@ -17,8 +17,7 @@
             <th>ID</th>
             <th>Title</th>
             <th>Begin</th>
-            <th>Completed</th>
-            <th>Members</th>
+            <th>State</th>
             <th>Type (virtual/f2f)</th>
             <th>Owner</th>
         </tr>
@@ -27,10 +26,9 @@
         <tr class="item-{{ $item->id }} @if($item->joined($user)) font-weight-bold @endif">
             <td class="align-middle">{!! $item->link($item->id) !!}</a></td>
             <td class="align-middle">{!! $item->link($item->title) !!}</td>
-            <td class="align-middle">{{ $item->begin }}</td>
-            <td class="align-middle">{{ $item->completed ? 'Yes': 'No' }}</td>
-            <td class="align-middle">{{ $item->memberships()->count() }} / {{ $item->limit }}</td>
-            <td class="align-middle">{{ $item->type }}</td>
+            <td class="align-middle">{{ format_date($item->begin) }}</td>
+            <td class="align-middle">{{ circle_state($item) }}</td>
+            <td class="align-middle">{{ translate_type($item->type) }}</td>
             <td class="align-middle">{!! $item->user->link() !!}</td>
         </tr>
         @endforeach
