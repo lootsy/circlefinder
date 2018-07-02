@@ -23,7 +23,7 @@ Auth::routes();
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('login/facebook', 'Auth\LoginController@redirectToFacebook');
+Route::get('login/facebook', 'Auth\LoginController@redirectToFacebook')->name('login.facebook');
 Route::get('login/facebook/callback', 'Auth\LoginController@getFacebookCallback');
 
 Route::group(['prefix' => 'profile', 'middleware' => 'auth',
