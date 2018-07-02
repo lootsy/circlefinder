@@ -7,6 +7,7 @@ use Auth;
 use \App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -67,6 +68,7 @@ class LoginController extends Controller
                 $user->name = $data->user['name'];
                 $user->email = $data->email;
                 $user->provider_id = $data->user['id'];
+                $user->password = Hash::make(str_random(25));
 
                 $user->save();
             }
