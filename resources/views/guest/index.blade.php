@@ -8,24 +8,24 @@
         
     @if(count($items) > 0)
 
+    <p>Join existing circles or create a new one!</p>
+
     <h2>Our newest circles</h2>
 
     <table class="table table-striped table-bordered">
         <tr>
             <th>Name</th>
             <th>Begin</th>
-            <th>Completed</th>
-            <th>Members</th>
+            <th>Status</th>
             <th>Type (virtual/f2f)</th>
         </tr>
         
         @foreach($items as $item)
         <tr>
             <td class="align-middle">{!! $item->link('Circle '.$item->id) !!}</a></td>
-            <td class="align-middle">{{ $item->begin }}</td>
-            <td class="align-middle">{{ $item->completed ? 'Yes': 'No' }}</td>
-            <td class="align-middle">{{ $item->memberships()->count() }} / {{ $item->limit }}</td>
-            <td class="align-middle">{{ $item->type }}</td>
+            <td class="align-middle">{{ format_date($item->begin) }}</td>
+            <td class="align-middle">{{ circle_state($item) }}</td>
+            <td class="align-middle">{{ translate_type($item->type) }}</td>
         </tr>
         @endforeach
     </table>

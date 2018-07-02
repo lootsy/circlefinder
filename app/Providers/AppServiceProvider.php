@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +24,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if ($this->app->environment('production') == false) {
+            $this->app->register('Barryvdh\Debugbar\ServiceProvider');
+            $this->app->bind('Debugbar', Barryvdh\Debugbar\Facade::class);
+        }
+
+        setlocale(LC_TIME, config('app.locale'));
     }
 }

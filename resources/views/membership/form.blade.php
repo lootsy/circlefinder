@@ -4,14 +4,14 @@
         <div class="col-lg col-12">
             <div class="form-group">
                 {{ Form::label('begin', 'Begin') }}
-                {{ Form::date('begin', isset($item) ? null : today(), ['class' => 'form-control']) }}
+                {{ Form::date('begin', isset($item) ? $item->begin->format('Y-m-d') : today(), ['class' => 'form-control']) }}
             </div>
         </div>
 
         <div class="col-lg col-12">
             <div class="form-group">
                 {{ Form::label('type', 'Type') }}
-                {{ Form::select('type', array_combine(config('circle.defaults.types'), config('circle.defaults.types')), null, ['class' => 'form-control']) }}
+                {{ Form::select('type', list_of_types(), null, ['class' => 'form-control']) }}
             </div>
         </div>
     </div>

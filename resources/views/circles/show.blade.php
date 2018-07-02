@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <h1>{{ $item->goodTitle() }}</h1>
+    <h1>{{ good_title($item) }}</h1>
 
     @if($item->completed)
         <div class="alert alert-warning">Circle is completed</div>
@@ -28,24 +28,48 @@
                 {!! Form::close() !!}
             @endif
         @endif
-
-        @can('update', $item)
-            <a href="{{ route('circles.edit', ['uuid' => $item->uuid]) }}" class="btn btn-secondary">Edit circle</a>
-
-            {!! Form::open(['route' => ['circles.'.($item->completed ? 'uncomplete' : 'complete'), 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
-                {{ Form::submit($item->completed ? 'Uncomplete' : 'Complete', ['class' => 'btn btn-primary confirm']) }}
-            {!! Form::close() !!}
-
-            @if($item->deletable())
-            {!! Form::open(['route' => ['circles.destroy', 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
-                {{ Form::hidden('_method', 'DELETE') }}
-                {{ Form::submit('Delete circle', ['class' => 'btn btn-danger confirm']) }}
-            {!! Form::close() !!}
-            @endif
-        @endcan
     </div>
 
+
     <div class="card">
+        <h5 class="card-header">Circle data</h5>
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg col-12">
+                    <p>Type: {{ translate_type($item->type) }}</p>
+                    <p>Begin: {{ format_date($item->begin) }}</p>
+                    @if($item->description)
+                    <p>Description: {{ $item->description }}</p>
+                    @endif
+                </div>
+        
+                <div class="col-lg col-12">                   
+                    <p>Languages: {{ list_languages($item->languages) }}</p>
+                    <p>Owner: {!! $item->user->link() !!}</p>
+                </div>
+            </div>
+
+            @can('update', $item)
+                <div class="">
+                    <a href="{{ route('circles.edit', ['uuid' => $item->uuid]) }}" class="btn btn-secondary">Edit circle</a>
+        
+                    {!! Form::open(['route' => ['circles.'.($item->completed ? 'uncomplete' : 'complete'), 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
+                        {{ Form::submit($item->completed ? 'Uncomplete' : 'Complete', ['class' => 'btn btn-primary confirm']) }}
+                    {!! Form::close() !!}
+        
+                    @if($item->deletable())
+                    {!! Form::open(['route' => ['circles.destroy', 'uuid' => $item->uuid], 'class' => 'd-inline-block']) !!}
+                        {{ Form::hidden('_method', 'DELETE') }}
+                        {{ Form::submit('Delete circle', ['class' => 'btn btn-danger confirm']) }}
+                    {!! Form::close() !!}
+                    @endif
+                </div>
+            @endcan
+        </div>
+    </div>
+
+    <div class="card mt-4">
         <h5 class="card-header">Members</h5>
     
         <div class="card-body">
@@ -63,9 +87,9 @@
                     @foreach($item->memberships as $memb)
                     <tr>
                         <td class="align-middle">{!! $memb->user->link() !!}</td>
-                        <td class="align-middle">{{ $memb->type }}</td>
-                        <td class="align-middle">{{ $memb->begin }}</td>
-                        <td class="align-middle">{{ $memb->languages->implode('title', ', ') }}</td>
+                        <td class="align-middle">{{ translate_type($memb->type) }}</td>
+                        <td class="align-middle">{{ format_date($memb->begin) }}</td>
+                        <td class="align-middle">{{ list_languages($memb->languages) }}</td>
                     </tr>
                     @endforeach
 
@@ -123,22 +147,5 @@
     </div>
     @endif
 
-    <div class="card mt-4">
-        <h5 class="card-header">Circle data</h5>
-
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg col-12">
-                    <p>Type: {{ $item->type }}</p>
-                    <p>Begin: {{ $item->begin }}</p>
-                </div>
-        
-                <div class="col-lg col-12">                   
-                    <p>Languages: {{ $item->languages->implode('title', ', ') }}</p>
-                    <p>Owner: {!! $item->user->link() !!}</p>
-                </div>
-            </div>
-        </div>
-    </div>
 
 @endsection

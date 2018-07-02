@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use App;
 use Exception;
+use Request;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -18,7 +19,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //
+        \Illuminate\Auth\AuthenticationException::class,
     ];
 
     /**
@@ -39,8 +40,11 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
-        if ($this->shouldReport($exception)) {
-            Log::emergency($exception);
+        if (App::environment('staging') || App::environment('production')) {
+            Log::emergency($exception->getMessage(), [
+                'url' => Request::url(),
+                'input' => Request::all()
+            ]);
         }
 
         parent::report($exception);

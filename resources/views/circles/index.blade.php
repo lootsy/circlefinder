@@ -6,7 +6,7 @@
 
     <h1>@yield('title')</h1>
 
-    <a href="{{ route('circles.create') }}" class="btn btn-success mb-4">New</a>
+    <a href="{{ route('circles.create') }}" class="btn btn-success mb-4">New circle</a>
         
     @if(count($items) > 0)
 
@@ -14,24 +14,22 @@
 
     <table class="table table-striped table-bordered">
         <tr>
-            <th>ID</th>
+            <th>Circle</th>
             <th>Title</th>
             <th>Begin</th>
-            <th>Completed</th>
-            <th>Members</th>
+            <th>Status</th>
             <th>Type (virtual/f2f)</th>
-            <th>Owner</th>
+            <th>Language</th>
         </tr>
         
         @foreach($items as $item)
         <tr class="item-{{ $item->id }} @if($item->joined($user)) font-weight-bold @endif">
             <td class="align-middle">{!! $item->link($item->id) !!}</a></td>
             <td class="align-middle">{!! $item->link($item->title) !!}</td>
-            <td class="align-middle">{{ $item->begin }}</td>
-            <td class="align-middle">{{ $item->completed ? 'Yes': 'No' }}</td>
-            <td class="align-middle">{{ $item->memberships()->count() }} / {{ $item->limit }}</td>
-            <td class="align-middle">{{ $item->type }}</td>
-            <td class="align-middle">{!! $item->user->link() !!}</td>
+            <td class="align-middle">{{ format_date($item->begin) }}</td>
+            <td class="align-middle">{{ circle_state($item) }}</td>
+            <td class="align-middle">{{ translate_type($item->type) }}</td>
+            <td class="align-middle">{{ list_languages($item->languages, 3)}}</td>
         </tr>
         @endforeach
     </table>

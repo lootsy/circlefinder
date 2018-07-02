@@ -9,6 +9,8 @@ class Circle extends Model
 {
     use RandomId;
 
+    protected $dates = ['begin'];
+
     protected $fillable = [
         'type',
         'title',
@@ -26,7 +28,7 @@ class Circle extends Model
         $rules = [
             'type' => 'required|in:' . implode(',', config('circle.defaults.types')),
             'begin' => 'required|date',
-            'languages' => 'exists:languages,code',
+            'languages' => 'required|exists:languages,code',
         ];
 
         if ($except) {
@@ -137,6 +139,8 @@ class Circle extends Model
             $this->complete();
         }
 
+        \App\TimeTable::findForMembership($membership);
+
         return $membership;
     }
 
@@ -199,12 +203,9 @@ class Circle extends Model
     {
         $this->update($request->all());
 
-        if ($request->languages) {
-            $languages = \App\Language::whereIn('code', array_values($request->languages))->get();
-            $this->languages()->sync($languages);
-        } else {
-            $this->languages()->detach();
-        }
+        $languages = \App\Language::whereIn('code', array_values($request->languages))->get();
+
+        $this->languages()->sync($languages);
     }
 
     public function link($title = null, $class = null)
@@ -218,14 +219,5 @@ class Circle extends Model
         $link = sprintf('<a href="%s"%s>%s</a>', route('circles.show', ['uuid' => $this->uuid]), $class, $link_title);
 
         return $link;
-    }
-
-    public function goodTitle()
-    {
-        if ($this->title) {
-            return $this->title . ' (' . $this . ')';
-        } else {
-            return (string) $this;
-        }
     }
 }

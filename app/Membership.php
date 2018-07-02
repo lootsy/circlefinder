@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Membership extends Model
 {
+    protected $dates = ['begin'];
+
     protected $fillable = [
         'type',
         'begin',

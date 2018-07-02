@@ -8,6 +8,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Traits\UsersAdmins;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
+/**
+ * @group timeslot
+ */
 class TimeSlotTest extends TestCase
 {
     use DatabaseMigrations;
@@ -58,5 +61,8 @@ class TimeSlotTest extends TestCase
         ]);
 
         $this->assertEquals($timeslot->monday, $membership->timeSlot->monday);
+
+        $this->assertTrue($timeslot->atTime(6));
+        $this->assertFalse($timeslot->atTime(4));
     }
 }

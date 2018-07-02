@@ -52,24 +52,29 @@ class TimeTable
         return $this->memberships;
     }
 
-    public static function findForMembership($membership)
+    private function timeSlotForMembership($membership)
     {
-        $timeTable = new \App\TimeTable;
-
         $timeSlot = $membership->timeSlot;
 
         if (is_null($timeSlot)) {
             $timeSlot = new \App\TimeSlot;
             $timeSlot->membership_id = $membership->id;
 
-            foreach ($timeTable->getDayList() as $day) {
+            foreach ($this->getDayList() as $day) {
                 $timeSlot->$day = 0;
             }
 
             $timeSlot->save();
         }
 
-        $timeTable->timeSlots[] = $timeSlot;
+        return $timeSlot;
+    }
+
+    public static function findForMembership($membership)
+    {
+        $timeTable = new \App\TimeTable;
+
+        $timeTable->timeSlots[] = $timeTable->timeSlotForMembership($membership);
 
         return $timeTable;
     }
@@ -97,6 +102,8 @@ class TimeTable
 
         $timeTable->timeSlots[] = $timeSlot;
 
+        $timeTable->memberships[] = $membership;
+
         return $timeTable;
     }
 
@@ -113,7 +120,7 @@ class TimeTable
         $timeTable->memberships = $memberships;
 
         foreach ($memberships as $membership) {
-            $timeTable->timeSlots[] = $membership->timeSlot;
+            $timeTable->timeSlots[] = $timeTable->timeSlotForMembership($membership);
         }
 
         return $timeTable;
