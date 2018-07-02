@@ -128,6 +128,27 @@ class ProfileTest extends TestCase
         $response->assertSessionHasErrors();
     }
 
+    public function testExtUserCannotChangePassword()
+    {
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+
+        $user->no_password = true;
+        $user->save();
+
+        $new_pass = $faker->password;
+
+        $response = $this->actingAs($user)
+            ->put(route('profile.password.update'), [
+                'current_password' => 'secret',
+                'password' => $new_pass,
+                'password_confirmation' => $new_pass,
+            ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors();
+    }
+
     public function testUserCannotUploadNonImage()
     {
         $user = $this->fetchUser();

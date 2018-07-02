@@ -69,6 +69,7 @@ class LoginController extends Controller
                 $user->email = $data->email;
                 $user->provider_id = $data->user['id'];
                 $user->password = Hash::make(str_random(25));
+                $user->no_password = true;
 
                 $user->save();
             }
