@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 use Intervention\Image\Facades\Image;
 
 class AvatarController extends Controller
@@ -50,10 +51,6 @@ class AvatarController extends Controller
                 return redirect()->back()->withErrors("The provided file cannot be used as avatar");
             }
 
-            Storage::put('avatars_origin/' . $newFileName, (string) $image->encode('jpg'));
-
-            $image->fit(config('userprofile.avatar.size'));
-
             Storage::put('avatars/' . $newFileName, (string) $image->encode('jpg'));
 
             $user->avatar = $newFileName;
@@ -66,9 +63,19 @@ class AvatarController extends Controller
         return redirect()->route('profile.show', $user->uuid)->with("success", "Your avatar was changed!");
     }
 
-    public function download($uuid)
+    public function downloadResized($w, $h, $uuid)
     {
         $user = \App\User::withUuid($uuid)->firstOrFail();
-        return Storage::download('avatars/' . $user->avatar);
+
+        $img = Image::cache(function ($image) use ($user, $w, $h) {
+            return $image->make(Storage::get('avatars/'.$user->avatar))->fit($w, $h);
+        });
+
+        return Response::make($img, 200, array('Content-Type' => 'image/jpg'));
+    }
+
+    public function download($uuid)
+    {
+        return $this->downloadResized(config('userprofile.avatar.size'), config('userprofile.avatar.size'), $uuid);
     }
 }

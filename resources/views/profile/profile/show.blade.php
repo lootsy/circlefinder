@@ -28,7 +28,7 @@
 
             <div class="col-4">
                 <div class="mb-4">
-                    <img src="{{ route('profile.avatar.download', ['uuid' => $item->uuid]) }}" alt="{{ $item->name }}" />
+                    {!! user_avatar($item) !!}
                 </div>
 
                 <h5 class="card-title">Social profiles</h5>
