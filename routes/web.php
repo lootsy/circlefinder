@@ -15,12 +15,13 @@ if (App::environment('production')) {
     URL::forceScheme('https');
 }
 
-Route::get('/', 'GuestController@index')->name('index');
-
 Auth::routes();
+Route::get('login/facebook', 'Auth\LoginController@redirectToFacebook')->name('login.facebook');
+Route::get('login/facebook/callback', 'Auth\LoginController@getFacebookCallback');
+Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
 # Let the logout be accessible via a GET request
-Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
+Route::get('/', 'GuestController@index')->name('index');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['prefix' => 'profile', 'middleware' => 'auth',
@@ -40,6 +41,7 @@ Route::group(['prefix' => 'profile', 'middleware' => 'auth',
             Route::get('/', 'AvatarController@index')->name('index');
             Route::get('/edit', 'AvatarController@edit')->name('edit');
             Route::put('/update', 'AvatarController@update')->name('update');
+            Route::get('/download/{w}_{h}_{uuid}.jpg', 'AvatarController@downloadResized')->name('download.resized');
             Route::get('/download/{uuid}.jpg', 'AvatarController@download')->name('download');
         });
 

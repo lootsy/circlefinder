@@ -1,5 +1,7 @@
 <?php
 
+use Intervention\Image\Facades\Image;
+
 if (!function_exists('is_trash')) {
     function is_trash_route()
     {
@@ -69,7 +71,7 @@ if (!function_exists('circle_state')) {
             return _('Full');
         }
 
-        return sprintf('Open (%d / %d)', $circle->memberships()->count(), $circle->limit);
+        return _('Open');
     }
 }
 
@@ -81,5 +83,39 @@ if (!function_exists('good_title')) {
         } else {
             return (string) $item;
         }
+    }
+}
+
+if (!function_exists('user_picture')) {
+    function user_avatar($user, $size = null, $only_url = false)
+    {
+        $placeholder = 'no_avatar.jpeg';
+        $image_url = '';
+
+        if ($size == null) {
+            $size = config('userprofile.avatar.size');
+        }
+
+        if ($user->avatar) {
+            $image_url = route('profile.avatar.download.resized', ['uuid' => $user->uuid, 'w' => $size, 'h' => $size]);
+        } else {
+            $new_file_path = sprintf('images/%d_%d_%s', $size, $size, $placeholder);
+
+            if (Storage::disk('public')->exists($new_file_path) == false) {
+                $image = Image::make(resource_path('assets/images/' . $placeholder));
+    
+                $image->resize($size, $size);
+                
+                Storage::disk('public')->put($new_file_path, (string) $image->encode('jpg'));
+            }
+
+            $image_url = url(sprintf('images/%d_%d_%s', $size, $size, $placeholder));
+        }
+
+        if ($only_url) {
+            return $image_url;
+        }
+
+        return sprintf('<img src="%s" alt="%s" />', $image_url, $user->name);
     }
 }

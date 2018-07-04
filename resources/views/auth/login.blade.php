@@ -12,7 +12,10 @@
                 <div class="card-body row">
                     <div class="col-12 col-lg-4 mb-4 mb-lg-0">
                         <h3>Create a new account</h3>
-                        <a href="{{ route('register') }}" class="btn btn-primary">Sign up</a>
+                        <p><a href="{{ route('register') }}" class="btn btn-success">Sign up</a></p>
+
+                        <h3>Use a social profile</h3>
+                        <p><a href="{{ route('login.facebook') }}" class="btn btn-primary">Login with Facebook</a></p>
                     </div>
 
                     <div class="col-12 col-lg-8">

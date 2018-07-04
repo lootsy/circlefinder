@@ -31,6 +31,7 @@ class User extends Authenticatable
         'twitter_profile_url',
         'linkedin_profile_url',
         'yammer_profile_url',
+        'provider_id'
     ];
 
     /**

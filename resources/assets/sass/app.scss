@@ -38,3 +38,11 @@
   background: #a6fca6;
 }
 
+span.avatar {
+  display: inline-block;
+  margin-right: 5px;
+  
+  img {
+    border-radius: 50%;
+  }
+}

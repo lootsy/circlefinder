@@ -14,6 +14,13 @@ class PasswordController extends Controller
 
     public function edit(Request $request)
     {
+        $user = auth()->user();
+
+        if ($user->no_password == true) {
+            return redirect()->route('home')
+                ->withErrors("You can not change password");
+        }
+
         return view('profile.password.edit');
     }
 
@@ -26,15 +33,20 @@ class PasswordController extends Controller
 
         $user = auth()->user();
 
+        if ($user->no_password == true) {
+            return redirect()->route('home')
+                ->withErrors("You can not change password");
+        }
+
         if (!(Hash::check($request->get('current_password'), $user->password))) {
             return redirect()->back()
-                    ->withErrors("Provided password does not match with your current password");
+                ->withErrors("Provided password does not match with your current password");
         }
 
         $user->password = Hash::make($request->password);
         $user->save();
 
         return redirect()->route('profile.show', $user->uuid)
-                ->with("success", "Your password was changed!");
+            ->with("success", "Your password was changed!");
     }
 }

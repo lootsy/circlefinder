@@ -17,6 +17,7 @@
         <tr>
             <th>ID</th>
             <th>Name</th>
+            <td>No passw.</td>
             <th>Roles</th>
             <th>Action</th>
         </tr>
@@ -25,6 +26,7 @@
         <tr class="item-{{ $item->id }}">
             <td class="align-middle">{{ $item->id }}</td>
             <td class="align-middle"><a href="{{ route('admin.users.show', ['id' => $item->id]) }}">{{ $item->name }}</a></td>
+            <td class="align-middle">{{ $item->no_password ? 'Yes' : 'No' }}</td>
             <td class="align-middle">{{ $item->roles->implode('title', ', ') }}</td>
             <td>@include('admin.inc.res-action', ['item' => $item, 'route_prefix' => 'admin.users.'])</td>
         </tr>
