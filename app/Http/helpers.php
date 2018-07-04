@@ -71,7 +71,7 @@ if (!function_exists('circle_state')) {
             return _('Full');
         }
 
-        return sprintf('Open (%d / %d)', $circle->memberships()->count(), $circle->limit);
+        return _('Open');
     }
 }
 

@@ -70,7 +70,9 @@ class Circle extends Model
 
     public function membershipOf($user)
     {
-        return \App\Membership::where(['circle_id' => $this->id, 'user_id' => $user->id])->first();
+        return $this->memberships->first(function ($value, $key) use ($user) {
+            return $value->user->id == $user->id;
+        });
     }
 
     public function user()
@@ -85,7 +87,9 @@ class Circle extends Model
 
     public function deletable()
     {
-        if ($this->memberships()->count() > 0) {
+        $count = count($this->memberships) ? count($this->memberships) : $this->memberships()->count();
+
+        if ($count > 0) {
             return false;
         } else {
             return true;
@@ -94,7 +98,9 @@ class Circle extends Model
 
     public function full()
     {
-        if ($this->memberships()->count() >= $this->limit) {
+        $count = count($this->memberships) ? count($this->memberships) : $this->memberships()->count();
+
+        if ($count >= $this->limit) {
             return true;
         } else {
             return false;
@@ -112,7 +118,11 @@ class Circle extends Model
 
     public function joined($user)
     {
-        if (\App\Membership::where(['circle_id' => $this->id, 'user_id' => $user->id])->count() > 0) {
+        if (count($this->users) < 1) {
+            $this->load('users');
+        }
+
+        if ($this->users->contains($user)) {
             return true;
         } else {
             return false;
