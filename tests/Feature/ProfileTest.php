@@ -53,6 +53,9 @@ class ProfileTest extends TestCase
         $userB = $this->fetchUser();
 
         $response = $this->actingAs($user)->get(route('profile.show', ['uuid' => $userB->uuid]));
+
+        file_put_contents('./response.html', $response->content());
+        
         $response->assertStatus(200);
     }
 

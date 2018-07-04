@@ -99,14 +99,14 @@ if (!function_exists('user_picture')) {
         if ($user->avatar) {
             $image_url = route('profile.avatar.download.resized', ['uuid' => $user->uuid, 'w' => $size, 'h' => $size]);
         } else {
-            $new_file_path = sprintf('public/images/%d_%d_%s', $size, $size, $placeholder);
+            $new_file_path = sprintf('images/%d_%d_%s', $size, $size, $placeholder);
 
-            if (Storage::exists($new_file_path) == false) {
+            if (Storage::disk('public')->exists($new_file_path) == false) {
                 $image = Image::make(resource_path('assets/images/' . $placeholder));
     
                 $image->resize($size, $size);
                 
-                Storage::put($new_file_path, (string) $image->encode('jpg'));
+                Storage::disk('public')->put($new_file_path, (string) $image->encode('jpg'));
             }
 
             $image_url = url(sprintf('images/%d_%d_%s', $size, $size, $placeholder));
