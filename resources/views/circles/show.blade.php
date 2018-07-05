@@ -86,7 +86,7 @@
                     
                     @foreach($item->memberships as $memb)
                     <tr>
-                        <td class="align-middle"><span class="avatar">{!! $memb->user->link(user_avatar($item->user, 40)) !!}</span> {!! $memb->user->link() !!}</td>
+                        <td class="align-middle"><span class="avatar">{!! $memb->user->link(user_avatar($memb->user, 40)) !!}</span> {!! $memb->user->link() !!}</td>
                         <td class="align-middle">{{ translate_type($memb->type) }}</td>
                         <td class="align-middle">{{ format_date($memb->begin) }}</td>
                         <td class="align-middle">{{ list_languages($memb->languages) }}</td>
