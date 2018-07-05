@@ -6,6 +6,7 @@ class TimeTable
 {
     private $timeSlots = array();
     private $memberships = null;
+    private $checks = array();
 
     public function getTimeList()
     {
@@ -37,7 +38,7 @@ class TimeTable
         ];
     }
 
-    public function timeSlot()
+    public function timeSlot($membership = null)
     {
         return count($this->timeSlots) ? $this->timeSlots[0] : null;
     }
@@ -123,6 +124,8 @@ class TimeTable
             $timeTable->timeSlots[] = $timeTable->timeSlotForMembership($membership);
         }
 
+        $timeTable->generateCheckCounts();
+
         return $timeTable;
     }
 
@@ -135,5 +138,35 @@ class TimeTable
         }
 
         return false;
+    }
+
+    private function generateCheckCounts()
+    {
+        foreach ($this->timeSlots as $timeSlot) {
+            foreach ($this->getDayList() as $day) {
+                if (is_array($timeSlot->$day)) {
+                    if (in_array($day, $this->checks) == false) {
+                        $this->checks[$day] = array();
+                    }
+
+                    foreach ($timeSlot->$day as $time) {
+                        if (in_array($time, $this->checks[$day]) == false) {
+                            $this->checks[$day][$time] = 1;
+                        } else {
+                            $this->checks[$day][$time]++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function checksAt($day, $time)
+    {
+        if (key_exists($day, $this->checks) && key_exists($time, $this->checks[$day])) {
+            return $this->checks[$day][$time];
+        } else {
+            return 0;
+        }
     }
 }
