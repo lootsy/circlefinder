@@ -28,25 +28,27 @@
 
             <div class="col-4">
                 <div class="mb-4">
-                    {!! user_avatar($item) !!}
+                    <a href="{{ route('profile.avatar.edit') }}">{!! user_avatar($item) !!}</a>
                 </div>
 
                 <h5 class="card-title">Social profiles</h5>
-                @if($item->facebook_profile_url)
-                <li><a href="{{ $item->facebook_profile_url }}">Facebook</a></li>
-                @endif
+                <ul>
+                    @if($item->facebook_profile_url)
+                    <li><a href="{{ $item->facebook_profile_url }}">Facebook</a></li>
+                    @endif
 
-                @if($item->twitter_profile_url)
-                <li><a href="{{ $item->twitter_profile_url }}">Twitter</a></li>
-                @endif
+                    @if($item->twitter_profile_url)
+                    <li><a href="{{ $item->twitter_profile_url }}">Twitter</a></li>
+                    @endif
 
-                @if($item->yammer_profile_url)
-                <li><a href="{{ $item->yammer_profile_url }}">Yammer</a></li>
-                @endif
+                    @if($item->yammer_profile_url)
+                    <li><a href="{{ $item->yammer_profile_url }}">Yammer</a></li>
+                    @endif
 
-                @if($item->linkedin_profile_url)
-                <li><a href="{{ $item->linkedin_profile_url }}">LinkedIn</a></li>
-                @endif
+                    @if($item->linkedin_profile_url)
+                    <li><a href="{{ $item->linkedin_profile_url }}">LinkedIn</a></li>
+                    @endif
+                </ul>
             </div>
 
         </div>

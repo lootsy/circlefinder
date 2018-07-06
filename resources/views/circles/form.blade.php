@@ -4,26 +4,32 @@
     {!! Form::open(['route' => 'circles.store']) !!}
 @endif
 
-    <div class="form-group">
-        {{ Form::label('type', 'Type') }}
-        {{ Form::select('type', list_of_types(), null, ['class' => 'form-control']) }}
-    </div>
+    <div class="row mb-4">
+        <div class="col-12 col-lg-6">
+            <div class="form-group">
+                {{ Form::label('type', 'Type', ['class' => 'required']) }}
+                {{ Form::select('type', list_of_types(), null, ['class' => 'form-control']) }}
+            </div>
 
-    <div class="form-group">
-        {{ Form::label('begin', 'Begin') }}
-        {{ Form::date('begin', isset($item) ? $item->begin->format('Y-m-d') : today(), ['class' => 'form-control']) }}
-    </div>
+            <div class="form-group">
+                {{ Form::label('begin', 'Begin', ['class' => 'required']) }}
+                {{ Form::date('begin', isset($item) ? $item->begin->format('Y-m-d') : today(), ['class' => 'form-control']) }}
+            </div>
 
-    @include('inc.form-languages')
+            @include('inc.form-languages')
+        </div>
 
-    <div class="form-group">
-        {{ Form::label('title', 'Title') }}
-        {{ Form::text('title', null, ['class' => 'form-control']) }}
-    </div>
+        <div class="col-12 col-lg-6">
+            <div class="form-group">
+                {{ Form::label('title', 'Title') }}
+                {{ Form::text('title', null, ['class' => 'form-control']) }}
+            </div>
 
-    <div class="form-group">
-        {{ Form::label('description', 'Description') }}
-        {{ Form::textarea('description', null, ['class' => 'form-control']) }}
+            <div class="form-group">
+                {{ Form::label('description', 'Description') }}
+                {{ Form::textarea('description', null, ['class' => 'form-control']) }}
+            </div>
+        </div>
     </div>
 
     @if(isset($item))

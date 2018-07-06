@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class TimeSlot extends Model
 {
+    public function membership()
+    {
+        return $this->belongsTo(\App\Membership::class);
+    }
+
     protected $fillable = [
         'time',
         'monday',

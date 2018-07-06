@@ -71,7 +71,7 @@ if (!function_exists('circle_state')) {
             return _('Full');
         }
 
-        return _('Open');
+        return _('Open (' . count($circle->memberships) . '/' . $circle->limit . ')');
     }
 }
 
@@ -91,6 +91,7 @@ if (!function_exists('user_picture')) {
     {
         $placeholder = 'no_avatar.jpeg';
         $image_url = '';
+        $retina_image_url = '';
 
         if ($size == null) {
             $size = config('userprofile.avatar.size');
@@ -98,24 +99,29 @@ if (!function_exists('user_picture')) {
 
         if ($user->avatar) {
             $image_url = route('profile.avatar.download.resized', ['uuid' => $user->uuid, 'w' => $size, 'h' => $size]);
+            $retina_image_url = route(
+                'profile.avatar.download.resized',
+                ['uuid' => $user->uuid, 'w' => $size * 2, 'h' => $size * 2]
+            );
         } else {
-            $new_file_path = sprintf('images/%d_%d_%s', $size, $size, $placeholder);
+            foreach ([$size, $size * 2] as $s) {
+                $new_file_path = sprintf('images/%d_%d_%s', $s, $s, $placeholder);
 
-            if (Storage::disk('public')->exists($new_file_path) == false) {
-                $image = Image::make(resource_path('assets/images/' . $placeholder));
-    
-                $image->resize($size, $size);
-                
-                Storage::disk('public')->put($new_file_path, (string) $image->encode('jpg'));
+                if (Storage::disk('public')->exists($new_file_path) == false) {
+                    $image = Image::make(resource_path('assets/images/' . $placeholder));
+                    $image->resize($s, $s);
+                    Storage::disk('public')->put($new_file_path, (string) $image->encode('jpg'));
+                }
             }
 
             $image_url = url(sprintf('images/%d_%d_%s', $size, $size, $placeholder));
+            $retina_image_url = url(sprintf('images/%d_%d_%s', $size * 2, $size * 2, $placeholder));
         }
 
         if ($only_url) {
             return $image_url;
         }
 
-        return sprintf('<img src="%s" alt="%s" />', $image_url, $user->name);
+        return sprintf('<img src="%s" srcset="%s 2x" alt="%s" />', $image_url, $retina_image_url, $user->name);
     }
 }

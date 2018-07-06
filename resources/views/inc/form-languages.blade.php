@@ -1,5 +1,5 @@
 @if(\App\Language::count())
-<h2>Languages</h2>
+<h2 class="required">Languages</h2>
 <ul class="form-check">
     @foreach(\App\Language::orderBy('code')->get() as $language)
     <li>

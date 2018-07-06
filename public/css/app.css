@@ -1,4 +1,6 @@
-@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);/*!
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);@charset "UTF-8";
+
+/*!
  * Bootstrap v4.1.1 (https://getbootstrap.com/)
  * Copyright 2011-2018 The Bootstrap Authors
  * Copyright 2011-2018 Twitter, Inc.
@@ -10417,12 +10419,32 @@ a.text-dark:focus {
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
+.navbar-brand small {
+  color: #fff;
+  background: #d88212;
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+
+form .required:after {
+  content: "*";
+  color: red;
+}
+
 .time-schedule {
   table-layout: fixed;
 }
 
 .time-schedule td.check {
   text-align: center;
+  position: relative;
+}
+
+.time-schedule td.check small {
+  position: absolute;
+  left: 4px;
+  top: 0;
+  color: #999;
 }
 
 .time-schedule td.check input {
@@ -10433,8 +10455,28 @@ a.text-dark:focus {
   background: #fbfca6;
 }
 
+.time-schedule td.check:after {
+  content: "\2716\FE0F";
+}
+
+.time-schedule td.checks {
+  background-image: repeating-linear-gradient(45deg, #bcf5bc, #bcf5bc 5px, #e3f1e3 5px, #e3f1e3 10px);
+}
+
+.time-schedule td.checks small {
+  color: #000;
+}
+
+.time-schedule td.time {
+  white-space: nowrap;
+}
+
 .time-schedule td.checked {
-  background: #a6fca6;
+  background: #8ff78f;
+}
+
+.time-schedule td.checked:after {
+  content: "\2705";
 }
 
 .time-ok {

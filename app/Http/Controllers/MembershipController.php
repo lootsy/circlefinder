@@ -26,7 +26,9 @@ class MembershipController extends Controller
 
         $this->authorize('update', $item);
 
-        $timeTable = \App\TimeTable::findForMembership($item);
+        $timeTable = \App\TimeTable::forCircle($circle);
+
+        #$timeTable = \App\TimeTable::findForMembership($item);
 
         return view('membership.edit')->with([
             'item' => $item,

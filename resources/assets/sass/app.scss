@@ -13,12 +13,35 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
+.navbar-brand {
+  small {
+    color: #fff;
+    background: #d88212;
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
+}
+
+form {
+  .required:after {
+    content: "*";
+    color: red;
+  }
+}
+
 .time-schedule {
   table-layout: fixed;
 
   td.check {
-
     text-align: center;
+    position: relative;
+
+    small {
+      position: absolute;
+      left: 4px;
+      top: 0;
+      color: #999;
+    }
     
     input {
       display: none;
@@ -27,10 +50,30 @@
     &:hover {
       background: #fbfca6;
     }
+
+    &:after {
+      content: "✖️"
+    }
+  }
+
+  td.checks {
+    background-image: repeating-linear-gradient(45deg, #bcf5bc, #bcf5bc 5px, #e3f1e3 5px, #e3f1e3 10px);
+
+    small {
+      color: #000;
+    }
+  }
+
+  td.time {
+    white-space: nowrap;
   }
 
   td.checked {
-    background: #a6fca6;
+    background: #8ff78f;
+
+    &:after {
+      content: "✅"
+    }
   }
 }
 

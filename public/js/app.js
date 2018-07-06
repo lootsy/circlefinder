@@ -47315,23 +47315,14 @@ $(document).on('mousedown mouseup', function (event) {
 
 $('td.check').on('click', function (event) {
     $(this).find('input').prop('checked', !$(this).find('input').prop('checked')).change();
-}).each(function () {
-    var value = $(this).find('input').prop('checked');
-    if (value) {
-        $(this).append('<span class="icon">✅</span>');
-    } else {
-        $(this).append('<span class="icon">✖️</span>');
-    }
 }).find('input[type="checkbox"]').on('change', function () {
     var parent = $(this).parent('td');
     var value = $(this).prop('checked');
 
     if (value) {
         parent.addClass('checked');
-        parent.find('.icon').text('✅');
     } else {
         parent.removeClass('checked');
-        parent.find('.icon').text('✖️');
     }
 });
 

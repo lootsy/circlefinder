@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\Event' => [
             'App\Listeners\EventListener',
         ],
+        'Illuminate\Auth\Events\PasswordReset' => [
+            'App\Listeners\PasswordResetListener',
+        ]
     ];
 
     /**
@@ -26,7 +29,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        //
     }
 }

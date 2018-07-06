@@ -13,7 +13,7 @@
             <h2>Current avatar</h2>
 
             <div class="mb-4 mt-4">
-                <img src="{{ route('profile.avatar.download', ['uuid' => $user->uuid]) }}" alt="{{ $user->name }}" />
+                {!! user_avatar($user) !!}
             </div>
 
             <h2>Upload new avatar</h2>
