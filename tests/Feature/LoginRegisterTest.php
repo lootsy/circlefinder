@@ -8,10 +8,17 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\Traits\UsersAdmins;
+use Socialite;
+use Mockery;
 
+/**
+ * @group login
+ */
 class LoginRegisterTest extends TestCase
 {
     use DatabaseMigrations;
+    use UsersAdmins;
 
     public function testGuestSeesLoginForm()
     {
@@ -143,12 +150,97 @@ class LoginRegisterTest extends TestCase
         
         $response->assertStatus(200);
     }
-
-    public function testGuestCanResetPassword()
+    
+    public function testRedirectToFacebook()
     {
-        # TODO: Perform the complete test
-        $response = $this->get('/password/reset/abcdefg');
+        $response = $this->get('/login/facebook');
+        $response->assertStatus(302);
+    }
+
+    public function testLoginWithFacebookNewUser()
+    {
+        $faker = $this->fetchFaker();
+
+        $email = $faker->email;
+
+        $abstractUser = Mockery::mock('Laravel\Socialite\Two\User');
+
+        $abstractUser->shouldReceive('getId')
+            ->andReturn($faker->randomNumber)
+            ->shouldReceive('getEmail')
+            ->andReturn($email)
+            ->shouldReceive('getName')
+            ->andReturn($faker->name);
+
+        Socialite::shouldReceive('driver->user')->andReturn($abstractUser);
+
+        $response = $this->get('/login/facebook/callback');
+                
+        $response->assertStatus(302);
+
+        $this->assertDatabaseHas('users', [
+            'email' => $email
+        ]);
+    }
+
+    public function testLoginWithFacebookExistingMail()
+    {
+        $faker = $this->fetchFaker();
+        $user = $this->fetchUser();
+
+        $email = $user->email;
+        $id = $faker->randomNumber;
+
+        $abstractUser = Mockery::mock('Laravel\Socialite\Two\User');
+
+        $abstractUser->shouldReceive('getId')
+            ->andReturn($id)
+            ->shouldReceive('getEmail')
+            ->andReturn($email)
+            ->shouldReceive('getName')
+            ->andReturn($faker->name);
+
+        Socialite::shouldReceive('driver->user')->andReturn($abstractUser);
+
+        $response = $this->get('/login/facebook/callback');
         
-        $response->assertStatus(200);
+        $response->assertStatus(302);
+
+        $this->assertDatabaseHas('users', [
+            'provider_id' => $id
+        ]);
+    }
+
+    public function testLoginWithFacebookExistingId()
+    {
+        $faker = $this->fetchFaker();
+        $user = $this->fetchUser();
+
+        $old_email = $user->email;
+        $email = $faker->email;
+        $id = $faker->randomNumber;
+
+        $user->provider_id = $id;
+        $user->save();
+
+        $abstractUser = Mockery::mock('Laravel\Socialite\Two\User');
+
+        $abstractUser->shouldReceive('getId')
+            ->andReturn($id)
+            ->shouldReceive('getEmail')
+            ->andReturn($email)
+            ->shouldReceive('getName')
+            ->andReturn($faker->name);
+
+        Socialite::shouldReceive('driver->user')->andReturn($abstractUser);
+
+        $response = $this->get('/login/facebook/callback');
+        
+        $response->assertStatus(302);
+
+        $this->assertDatabaseHas('users', [
+            'provider_id' => $id,
+            'email' => $old_email
+        ]);
     }
 }

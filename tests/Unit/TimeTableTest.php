@@ -121,5 +121,9 @@ class TimeTableTest extends TestCase
         $timeTable = \App\TimeTable::forCircle($circle);
 
         $this->assertEquals(3, count($timeTable->timeSlots()));
+
+        $this->assertEquals(3, $timeTable->checksAt('monday', 2));
+        $this->assertEquals(3, $timeTable->checksAt('wednesday', 7));
+        $this->assertEquals(0, $timeTable->checksAt('friday', 7));
     }
 }

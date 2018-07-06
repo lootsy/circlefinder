@@ -14,12 +14,12 @@
 
 
             <div class="form-group">
-                {{ Form::label('name', 'Name') }}
+                {{ Form::label('name', 'Name', ['class' => 'required']) }}
                 {{ Form::text('name', null, ['class' => 'form-control']) }}
             </div>
 
             <div class="form-group">
-                {{ Form::label('email', 'E-Mail') }}
+                {{ Form::label('email', 'E-Mail', ['class' => 'required']) }}
                 {{ Form::email('email', null, ['class' => 'form-control']) }}
             </div>
 

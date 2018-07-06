@@ -99,7 +99,10 @@ if (!function_exists('user_picture')) {
 
         if ($user->avatar) {
             $image_url = route('profile.avatar.download.resized', ['uuid' => $user->uuid, 'w' => $size, 'h' => $size]);
-            $retina_image_url = route('profile.avatar.download.resized', ['uuid' => $user->uuid, 'w' => $size * 2, 'h' => $size * 2]);
+            $retina_image_url = route(
+                'profile.avatar.download.resized',
+                ['uuid' => $user->uuid, 'w' => $size * 2, 'h' => $size * 2]
+            );
         } else {
             foreach ([$size, $size * 2] as $s) {
                 $new_file_path = sprintf('images/%d_%d_%s', $s, $s, $placeholder);

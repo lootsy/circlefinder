@@ -48,26 +48,26 @@ class LoginController extends Controller
 
     public function getFacebookCallback()
     {
-        $data = Socialite::with('facebook')->user();
+        $data = Socialite::driver('facebook')->user();
 
-        $user = User::where('email', $data->email)->first();
+        $user = User::where('email', $data->getEmail())->first();
 
         if (!is_null($user)) {
             Auth::login($user);
             
-            $user->name = $data->user['name'];
-            $user->provider_id = $data->user['id'];
+            $user->name = $data->getName();
+            $user->provider_id = $data->getId();
 
             $user->save();
         } else {
-            $user = User::where('provider_id', $data->user['id'])->first();
+            $user = User::where('provider_id', $data->getId())->first();
 
             if (is_null($user)) {
                 $user = new User();
                 
-                $user->name = $data->user['name'];
-                $user->email = $data->email;
-                $user->provider_id = $data->user['id'];
+                $user->name = $data->getName();
+                $user->email = $data->getEmail();
+                $user->provider_id = $data->getId();
                 $user->password = Hash::make(str_random(25));
                 $user->no_password = true;
 
