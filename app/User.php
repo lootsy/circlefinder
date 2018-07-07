@@ -26,7 +26,7 @@ class User extends Authenticatable
         'password',
         'about',
         'language',
-        'location',
+        'city_id',
         'facebook_profile_url',
         'twitter_profile_url',
         'linkedin_profile_url',

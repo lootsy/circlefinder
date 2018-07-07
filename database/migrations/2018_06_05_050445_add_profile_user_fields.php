@@ -15,8 +15,8 @@ class AddProfileUserFields extends Migration
     {
         Schema::table('users', function ($table) {
             $table->text('about')->after('email')->nullable();
-            $table->text('language')->after('about')->nullable();
-            $table->text('location')->after('language')->nullable();
+            $table->integer('language_id')->unsigned()->after('about')->nullable();
+            $table->integer('city_id')->unsigned()->after('language')->nullable();
             $table->string('facebook_profile_url')->after('about')->nullable();
             $table->string('twitter_profile_url')->after('about')->nullable();
             $table->string('linkedin_profile_url')->after('about')->nullable();
@@ -34,8 +34,8 @@ class AddProfileUserFields extends Migration
         Schema::table('users', function ($table) {
             $table->dropColumn([
                 'about', 
-                'language', 
-                'location', 
+                'language_id', 
+                'city_id', 
                 'facebook_profile_url', 
                 'twitter_profile_url',
                 'linkedin_profile_url',

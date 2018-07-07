@@ -125,3 +125,18 @@ if (!function_exists('user_picture')) {
         return sprintf('<img src="%s" srcset="%s 2x" alt="%s" />', $image_url, $retina_image_url, $user->name);
     }
 }
+
+if (!function_exists('list_of_countries')) {
+    function list_of_countries()
+    {
+        $fullList = [];
+
+        $countries = \App\Country::orderBy('name_common')->get();
+
+        foreach ($countries as $country) {
+            $fullList[$country->id] = $country->name_common;
+        }
+
+        return $fullList;
+    }
+}
