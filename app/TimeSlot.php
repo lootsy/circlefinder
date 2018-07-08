@@ -82,6 +82,10 @@ class TimeSlot extends Model
 
     private function getFromUtc($attribute_name)
     {
+        if (is_null($this->attributes[$attribute_name])) {
+            return 0;
+        }
+
         $value  = json_decode($this->attributes[$attribute_name]);
 
         if (is_array($value)) {

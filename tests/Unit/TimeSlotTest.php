@@ -42,7 +42,7 @@ class TimeSlotTest extends TestCase
 
         $membership = $this->fetchMembership($data, $user);
 
-        $timeslot = new \App\TimeSlot;
+        $timeslot = $membership->timeSlot;
 
         $timeslot->monday = [5, 6, 7];
         $timeslot->tuesday = 0;
@@ -51,8 +51,6 @@ class TimeSlotTest extends TestCase
         $timeslot->friday = 0;
         $timeslot->saturday = 0;
         $timeslot->sunday = 0;
-
-        $timeslot->membership_id = $membership->id;
 
         $timeslot->save();
 
@@ -78,7 +76,7 @@ class TimeSlotTest extends TestCase
 
         $membership = $this->fetchMembership($data, $user);
 
-        $timeslot = new \App\TimeSlot;
+        $timeslot = $membership->timeSlot;
 
         $timeslot->setTimeOffset(3);
 
@@ -90,7 +88,6 @@ class TimeSlotTest extends TestCase
         $timeslot->saturday = 0;
         $timeslot->sunday = 0;
 
-        $timeslot->membership_id = $membership->id;
         $timeslot->save();
 
         $this->assertDatabaseHas('time_slots', [
@@ -102,7 +99,7 @@ class TimeSlotTest extends TestCase
 
         $timeslot = \App\TimeSlot::where('membership_id', 1)->first();
 
-        $this->assertEquals($timeslot->monday, [7, 9, 11]);
+        $this->assertEquals([7, 9, 11], $timeslot->monday);
 
         $timeslot->setTimeOffset(3);
 

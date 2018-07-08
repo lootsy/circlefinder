@@ -5,8 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use \App\Traits\RandomId;
 use \App\Traits\NeedsValidation;
+use \App\Traits\RandomId;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -28,12 +29,13 @@ class User extends Authenticatable
         'password',
         'about',
         'language_id',
-        'city_id',
+        'location',
         'facebook_profile_url',
         'twitter_profile_url',
         'linkedin_profile_url',
         'yammer_profile_url',
-        'provider_id'
+        'provider_id',
+        'timezone',
     ];
 
     /**
@@ -159,6 +161,11 @@ class User extends Authenticatable
 
     public function getTimeOffsetAttribute()
     {
-        return 0;
+        $time = Carbon::now();
+
+        $dtUser = Carbon::create($time->year, $time->month, $time->day, $time->hour, 0, 0, $this->timezone);
+        $dtUtc = Carbon::create($time->year, $time->month, $time->day, $time->hour, 0, 0, 'UTC');
+
+        return $dtUser->diffInHours($dtUtc);
     }
 }

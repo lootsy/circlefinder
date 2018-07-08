@@ -71,8 +71,6 @@ class TimeTableTest extends TestCase
 
         $membership = $this->fetchMembership($user);
 
-        $this->assertTrue(is_null($membership->timeSlot));
-
         $timeTable = $this->fetchTimeTable($membership);
 
         $membership = $membership->refresh();

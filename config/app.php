@@ -165,6 +165,8 @@ return [
         Intervention\Image\ImageServiceProvider::class,
 
         Laravel\Socialite\SocialiteServiceProvider::class,
+
+        Jackiedo\Timezonelist\TimezonelistServiceProvider::class,
     ],
 
     /*

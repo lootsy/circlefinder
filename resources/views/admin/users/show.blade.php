@@ -7,6 +7,8 @@
     <h2>User data</h2>
     <p>Name: {{ $item->name }}</p>
     <p>E-Mail: {{ $item->email }}</p>
+    <p>Timezone: {{ $item->timezone }}</p>
+    <p>UTC Time offset: {{ $item->time_offset }}</p>
     <p>UUID: <a href="{{ route('profile.show', ['uuid' => $item->uuid]) }}">{{  $item->uuid }}</a></p>
 
     @if(count($item->roles))
