@@ -11,6 +11,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\Traits\UsersAdmins;
 use Socialite;
 use Mockery;
+use Illuminate\Auth\Events\PasswordReset;
 
 /**
  * @group login
@@ -56,7 +57,8 @@ class LoginRegisterTest extends TestCase
             'name' => 'Test Testman',
             'email' => 'test@testing.com',
             'password' => 'secret',
-            'password_confirmation' => 'secret'
+            'password_confirmation' => 'secret',
+            'timezone' => 'Europe/Berlin'
         ];
 
         $response = $this->post('/register', $user_data);
@@ -64,7 +66,8 @@ class LoginRegisterTest extends TestCase
         $response->assertStatus(302);
 
         $this->assertDatabaseHas('users', [
-            'email' => $user_data['email']
+            'email' => $user_data['email'],
+            'timezone' => 'Europe/Berlin'
         ]);
 
         $this->assertAuthenticated();
@@ -147,7 +150,9 @@ class LoginRegisterTest extends TestCase
     public function testGuestCanSeeResetPassword()
     {
         $response = $this->get('/password/reset');
-        
+        $response->assertStatus(200);
+
+        $response = $this->get('/password/reset/abcdef');
         $response->assertStatus(200);
     }
     
@@ -231,7 +236,7 @@ class LoginRegisterTest extends TestCase
             ->andReturn($email)
             ->shouldReceive('getName')
             ->andReturn($faker->name);
-
+        
         Socialite::shouldReceive('driver->user')->andReturn($abstractUser);
 
         $response = $this->get('/login/facebook/callback');
@@ -242,5 +247,18 @@ class LoginRegisterTest extends TestCase
             'provider_id' => $id,
             'email' => $old_email
         ]);
+    }
+
+    public function testSetHasPasswordOnReset()
+    {
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+
+        $user->no_password = true;
+        $user->save();
+        
+        event(new PasswordReset($user));
+
+        $this->assertFalse($user->no_password);
     }
 }

@@ -17,6 +17,8 @@
             </div>
 
             @include('inc.form-languages')
+
+            @include('inc.form-location')
         </div>
 
         <div class="col-12 col-lg-6">

@@ -24,8 +24,8 @@
         
         @foreach($items as $item)
         <tr class="item-{{ $item->id }} @if($item->joined($user)) font-weight-bold @endif">
-            <td class="align-middle">{!! $item->link($item->id) !!}</a></td>
-            <td class="align-middle">{!! $item->link($item->title) !!}</td>
+            <td class="align-middle">{!! $item->link($item->id) !!}</td>
+            <td class="align-middle">{!! $item->link($item->title) !!} <div><small>{{ $item->location }}</small></div></td>
             <td class="align-middle">{{ format_date($item->begin) }}</td>
             <td class="align-middle">{{ circle_state($item) }}</td>
             <td class="align-middle">{{ translate_type($item->type) }}</td>

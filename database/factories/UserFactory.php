@@ -24,5 +24,6 @@ $factory->define(App\User::class, function (Faker $faker) {
         'facebook_profile_url' => $faker->url,
         'yammer_profile_url' => $faker->url,
         'linkedin_profile_url' => $faker->url,
+        'timezone' => $faker->timezone,
     ];
 });

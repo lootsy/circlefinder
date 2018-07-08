@@ -31,9 +31,9 @@
                 <tr>
                     <td class="time">{{ $time }}:00</td>
                     @foreach($timeTable->getDayList() as $day)
-                    <td class="check {{ $timeTable->checksAt($day, $time) ? 'checks' : 'no-checks' }} {{ (is_array($item->timeSlot->$day) && in_array($time, $item->timeSlot->$day)) ? ' checked' : '' }}">
+                    <td class="check {{ $timeTable->checksAt($day, $time) ? 'checks' : 'no-checks' }} {{ (is_array($timeSlot->$day) && in_array($time, $timeSlot->$day)) ? ' checked' : '' }}">
                         <small>{{ $timeTable->checksAt($day, $time) }}</small>
-                        {{ Form::checkbox($day.'[]', $time, is_array($item->timeSlot->$day) && in_array($time, $item->timeSlot->$day)) }}
+                        {{ Form::checkbox($day.'[]', $time, is_array($timeSlot->$day) && in_array($time, $timeSlot->$day)) }}
                     </td>
                     @endforeach
                 </tr>

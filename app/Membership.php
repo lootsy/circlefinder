@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use \App\Traits\NeedsValidation;
 
 class Membership extends Model
 {
+    use NeedsValidation;
+    
     protected $dates = ['begin'];
 
     protected $fillable = [
@@ -40,6 +43,10 @@ class Membership extends Model
     protected static function boot()
     {
         parent::boot();
+
+        static::created(function ($membership) {
+            $membership->timeSlot()->create();
+        });
 
         static::deleting(function ($membership) {
             $membership->languages()->detach();

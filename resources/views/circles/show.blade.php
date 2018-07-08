@@ -45,6 +45,9 @@
                 </div>
         
                 <div class="col-lg col-12">
+                    @if($item->location)
+                    <p>Location: {{ $item->location }}</p>
+                    @endif
                     <p>Languages: {{ list_languages($item->languages) }}</p>
                     <p>Owner: {!! $item->user->link() !!}</p>
                 </div>

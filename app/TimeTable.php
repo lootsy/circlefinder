@@ -53,43 +53,13 @@ class TimeTable
         return $this->memberships;
     }
 
-    private function timeSlotForMembership($membership)
-    {
-        $timeSlot = $membership->timeSlot;
-
-        if (is_null($timeSlot)) {
-            $timeSlot = new \App\TimeSlot;
-            $timeSlot->membership_id = $membership->id;
-
-            foreach ($this->getDayList() as $day) {
-                $timeSlot->$day = 0;
-            }
-
-            $timeSlot->save();
-        }
-
-        return $timeSlot;
-    }
-
-    public static function findForMembership($membership)
-    {
-        $timeTable = new \App\TimeTable;
-
-        $timeTable->timeSlots[] = $timeTable->timeSlotForMembership($membership);
-
-        return $timeTable;
-    }
-
-    public static function updateOrCreateForMembership($membership, $request_data)
+    public static function updateOrCreateForMembership($membership, $request_data, $current_user)
     {
         $timeTable = new \App\TimeTable;
 
         $timeSlot = $membership->timeSlot;
 
-        if (is_null($timeSlot)) {
-            $timeSlot = new \App\TimeSlot;
-            $timeSlot->membership_id = $membership->id;
-        }
+        $timeSlot->setTimeOffset($current_user->time_offset);
 
         foreach ($timeTable->getDayList() as $day) {
             if (key_exists($day, $request_data)) {
@@ -108,7 +78,7 @@ class TimeTable
         return $timeTable;
     }
 
-    public static function forCircle($circle)
+    public static function forCircle($circle, $current_user)
     {
         $timeTable = new \App\TimeTable;
 
@@ -121,7 +91,11 @@ class TimeTable
         $timeTable->memberships = $memberships;
 
         foreach ($memberships as $membership) {
-            $timeTable->timeSlots[] = $timeTable->timeSlotForMembership($membership);
+            $slot = $membership->timeSlot;
+
+            $slot->setTimeOffset($current_user->time_offset);
+            
+            $timeTable->timeSlots[] = $slot;
         }
 
         $timeTable->generateCheckCounts();

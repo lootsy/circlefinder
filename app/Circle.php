@@ -4,10 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use \App\Traits\RandomId;
+use \App\Traits\NeedsValidation;
 
 class Circle extends Model
 {
     use RandomId;
+    use NeedsValidation;
 
     protected $dates = ['begin'];
 
@@ -17,6 +19,7 @@ class Circle extends Model
         'limit',
         'description',
         'begin',
+        'location',
     ];
 
     protected $casts = [
@@ -148,8 +151,6 @@ class Circle extends Model
         if ($this->memberships()->count() >= $this->limit) {
             $this->complete();
         }
-
-        \App\TimeTable::findForMembership($membership);
 
         return $membership;
     }

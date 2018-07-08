@@ -20,6 +20,11 @@
     </div>
 
     <div class="form-group">
+        {{ Form::label('timezone', 'Timezone', ['class' => 'required']) }}
+        {!! Timezonelist::create('timezone', old('timezone', isset($item) ? $item->timezone : null), ['class'=>'form-control']) !!}
+    </div>
+
+    <div class="form-group">
         {{ Form::label('twitter_profile_url', 'Twitter') }}
         {{ Form::text('twitter_profile_url', null, ['class' => 'form-control']) }}
     </div>
