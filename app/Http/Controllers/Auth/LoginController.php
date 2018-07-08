@@ -70,7 +70,7 @@ class LoginController extends Controller
                 $user->name = $data->getName();
                 $user->email = $data->getEmail();
                 $user->provider_id = $data->getId();
-                $user->timezone = $data->getTimezone();
+                $user->timezone = $data->timezone;
                 $user->password = Hash::make(str_random(25));
                 $user->no_password = true;
 
