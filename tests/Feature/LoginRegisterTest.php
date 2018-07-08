@@ -175,11 +175,9 @@ class LoginRegisterTest extends TestCase
             ->shouldReceive('getEmail')
             ->andReturn($email)
             ->shouldReceive('getName')
-            ->andReturn($faker->name)
-            ->shouldReceive('getTimezone')
-            ->andReturn($faker->timezone);
+            ->andReturn($faker->name);
 
-        Socialite::shouldReceive('driver->fields->user')->andReturn($abstractUser);
+        Socialite::shouldReceive('driver->user')->andReturn($abstractUser);
 
         $response = $this->get('/login/facebook/callback');
                 
@@ -205,11 +203,9 @@ class LoginRegisterTest extends TestCase
             ->shouldReceive('getEmail')
             ->andReturn($email)
             ->shouldReceive('getName')
-            ->andReturn($faker->name)
-            ->shouldReceive('getTimezone')
-            ->andReturn($faker->timezone);
+            ->andReturn($faker->name);
 
-        Socialite::shouldReceive('driver->fields->user')->andReturn($abstractUser);
+        Socialite::shouldReceive('driver->user')->andReturn($abstractUser);
 
         $response = $this->get('/login/facebook/callback');
         
@@ -239,11 +235,9 @@ class LoginRegisterTest extends TestCase
             ->shouldReceive('getEmail')
             ->andReturn($email)
             ->shouldReceive('getName')
-            ->andReturn($faker->name)
-            ->shouldReceive('getTimezone')
-            ->andReturn($faker->timezone);
+            ->andReturn($faker->name);
         
-        Socialite::shouldReceive('driver->fields->user')->andReturn($abstractUser);
+        Socialite::shouldReceive('driver->user')->andReturn($abstractUser);
 
         $response = $this->get('/login/facebook/callback');
         

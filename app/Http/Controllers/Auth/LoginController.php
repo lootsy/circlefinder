@@ -48,9 +48,7 @@ class LoginController extends Controller
 
     public function getFacebookCallback()
     {
-        $data = Socialite::driver('facebook')->fields([
-            'name', 'email', 'gender', 'verified', 'link', 'timezone'
-        ])->user();
+        $data = Socialite::driver('facebook')->user();
 
         $user = User::where('email', $data->getEmail())->first();
 
@@ -70,7 +68,7 @@ class LoginController extends Controller
                 $user->name = $data->getName();
                 $user->email = $data->getEmail();
                 $user->provider_id = $data->getId();
-                $user->timezone = $data->timezone;
+                $user->timezone = '';
                 $user->password = Hash::make(str_random(25));
                 $user->no_password = true;
 
