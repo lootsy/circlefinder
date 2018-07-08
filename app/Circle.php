@@ -19,6 +19,7 @@ class Circle extends Model
         'limit',
         'description',
         'begin',
+        'location',
     ];
 
     protected $casts = [
