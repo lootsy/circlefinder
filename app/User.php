@@ -161,11 +161,15 @@ class User extends Authenticatable
 
     public function getTimeOffsetAttribute()
     {
-        $time = Carbon::now();
-
-        $dtUser = Carbon::create($time->year, $time->month, $time->day, $time->hour, 0, 0, $this->timezone);
-        $dtUtc = Carbon::create($time->year, $time->month, $time->day, $time->hour, 0, 0, 'UTC');
-
-        return $dtUser->diffInHours($dtUtc);
+        if ($this->timezone) {
+            $time = Carbon::now();
+    
+            $dtUser = Carbon::create($time->year, $time->month, $time->day, $time->hour, 0, 0, $this->timezone);
+            $dtUtc = Carbon::create($time->year, $time->month, $time->day, $time->hour, 0, 0, 'UTC');
+    
+            return $dtUser->diffInHours($dtUtc, false);
+        } else {
+            return 0;
+        }
     }
 }

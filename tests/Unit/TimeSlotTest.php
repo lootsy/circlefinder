@@ -74,11 +74,13 @@ class TimeSlotTest extends TestCase
             'begin' => $faker->date
         ];
 
+        $offset = $user->time_offset;
+
         $membership = $this->fetchMembership($data, $user);
 
         $timeslot = $membership->timeSlot;
 
-        $timeslot->setTimeOffset(3);
+        $timeslot->setTimeOffset($offset);
 
         $timeslot->monday = [10, 12, 14];
         $timeslot->tuesday = [4, 5, 6];
@@ -92,16 +94,21 @@ class TimeSlotTest extends TestCase
 
         $this->assertDatabaseHas('time_slots', [
             'membership_id' => 1,
-            'monday' => json_encode([7, 9, 11]),
-            'tuesday' => json_encode([1, 2, 3]),
+            'monday' => json_encode([10 - $offset, 12 - $offset, 14 - $offset]),
+            'tuesday' => json_encode([4 - $offset, 5 - $offset, 6 - $offset]),
             'wednesday' => 0
         ]);
 
         $timeslot = \App\TimeSlot::where('membership_id', 1)->first();
 
-        $this->assertEquals([7, 9, 11], $timeslot->monday);
+        $user->timezone = '';
+        $user->save();
+ 
+        $timeslot->setTimeOffset($user->time_offset);
 
-        $timeslot->setTimeOffset(3);
+        $this->assertEquals([10 - $offset, 12 - $offset, 14 - $offset], $timeslot->monday);
+
+        $timeslot->setTimeOffset($offset);
 
         $this->assertEquals($timeslot->monday, [10, 12, 14]);
         $this->assertEquals($timeslot->wednesday, 0);

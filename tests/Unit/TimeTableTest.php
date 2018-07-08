@@ -40,9 +40,12 @@ class TimeTableTest extends TestCase
     private function fetchTimeTable($membership)
     {
         $user = $this->fetchUser();
+        
+        $user->timezone = 'UTC';
+        $user->save();
 
         $timeTable = \App\TimeTable::updateOrCreateForMembership($membership, [
-            'monday' => [1,2,3],
+            'monday' => [1, 2, 3],
             'tuesday' => 0,
             'wednesday' => [5, 6, 7, 8, 9, 10],
             'thursday' => 0,
@@ -100,8 +103,13 @@ class TimeTableTest extends TestCase
         $user2 = $this->fetchUser();
         $user3 = $this->fetchUser();
 
-        $faker = $this->fetchFaker();
+        $user1->timezone = 'America/Barbados';
+        $user1->save();
 
+        $offset = $user1->time_offset;
+        $this->assertEquals(-4, $offset);
+
+        $faker = $this->fetchFaker();
         $circle = $this->fetchCircle($user1);
 
         $membership1 = $this->fetchMembership($user1, $circle);
@@ -118,8 +126,8 @@ class TimeTableTest extends TestCase
 
         $this->assertEquals(3, count($timeTable->timeSlots()));
 
-        $this->assertEquals(3, $timeTable->checksAt('monday', 2));
-        $this->assertEquals(3, $timeTable->checksAt('wednesday', 7));
-        $this->assertEquals(0, $timeTable->checksAt('friday', 7));
+        $this->assertEquals(3, $timeTable->checksAt('monday', 2 + $offset));
+        $this->assertEquals(3, $timeTable->checksAt('wednesday', 7 + $offset));
+        $this->assertEquals(0, $timeTable->checksAt('friday', 7 + $offset));
     }
 }

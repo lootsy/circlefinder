@@ -23,25 +23,36 @@ const app = new Vue({
 });
 */
 
-var mouseDown = false;
+$(function() {
 
-$(document).on('mousedown mouseup', function(event) {
-    if(event.type == 'mousedown') {
-        mouseDown = true;
-    } else {
-        mouseDown = false;
-    }
-});
+    var mouseDown = false;
 
-$('td.check').on('click', function(event) {
-    $(this).find('input').prop('checked', !$(this).find('input').prop('checked')).change();
-}).find('input[type="checkbox"]').on('change', function() {
-    var parent = $(this).parent('td');
-    var value = $(this).prop('checked');
-
-    if(value) {
-        parent.addClass('checked');
-    } else {
-        parent.removeClass('checked');
+    $(document).on('mousedown mouseup', function(event) {
+        if(event.type == 'mousedown') {
+            mouseDown = true;
+        } else {
+            mouseDown = false;
+        }
+    });
+    
+    $('td.check').on('click', function(event) {
+        $(this).find('input').prop('checked', !$(this).find('input').prop('checked')).change();
+    }).find('input[type="checkbox"]').on('change', function() {
+        var parent = $(this).parent('td');
+        var value = $(this).prop('checked');
+    
+        if(value) {
+            parent.addClass('checked');
+        } else {
+            parent.removeClass('checked');
+        }
+    });
+    
+    var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    
+    var tzElement = $('select[name=timezone]');
+    
+    if(tzElement.val() == 'GMT') {
+        tzElement.val(timeZone);
     }
 });

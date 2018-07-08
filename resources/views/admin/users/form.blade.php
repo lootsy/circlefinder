@@ -21,7 +21,7 @@
 
     <div class="form-group">
         {{ Form::label('timezone', 'Timezone', ['class' => 'required']) }}
-        {!! Timezonelist::create('timezone', old('timezone', $item->timezone), ['class'=>'form-control']) !!}
+        {!! Timezonelist::create('timezone', old('timezone', isset($item) ? $item->timezone : null), ['class'=>'form-control']) !!}
     </div>
 
     <div class="form-group">
