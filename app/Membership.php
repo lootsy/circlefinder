@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use \App\Traits\NeedsValidation;
 
 class Membership extends Model
 {
+    use NeedsValidation;
+    
     protected $dates = ['begin'];
 
     protected $fillable = [

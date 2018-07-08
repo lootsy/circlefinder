@@ -59,7 +59,7 @@ class TimeTableTest extends TestCase
 
         $membership = $this->fetchMembership($user);
 
-        $timeTable = \App\TimeTable::findForMembership($membership);
+        \App\TimeTable::createSlotForMembership($membership);
 
         $membership = $membership->refresh();
 
@@ -118,7 +118,7 @@ class TimeTableTest extends TestCase
 
         $membership1 = $membership1->refresh();
 
-        $timeTable = \App\TimeTable::forCircle($circle);
+        $timeTable = \App\TimeTable::forCircle($circle, $user1);
 
         $this->assertEquals(3, count($timeTable->timeSlots()));
 

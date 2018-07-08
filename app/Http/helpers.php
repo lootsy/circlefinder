@@ -131,10 +131,40 @@ if (!function_exists('list_of_countries')) {
     {
         $fullList = [];
 
-        $countries = \App\Country::orderBy('name_common')->get();
+        $countries = \App\Country::orderBy('name')->get();
 
         foreach ($countries as $country) {
-            $fullList[$country->id] = $country->name_common;
+            $fullList[$country->id] = (string) $country;
+        }
+
+        return $fullList;
+    }
+}
+
+if (!function_exists('list_of_states')) {
+    function list_of_states($country)
+    {
+        $fullList = [];
+
+        $states = $country->states()->orderBy('name')->get();
+
+        foreach ($states as $state) {
+            $fullList[$state->id] = (string) $state;
+        }
+
+        return $fullList;
+    }
+}
+
+if (!function_exists('list_of_cities')) {
+    function list_of_cities($state)
+    {
+        $fullList = [];
+
+        $cities = $state->cities()->orderBy('name')->get();
+
+        foreach ($cities as $city) {
+            $fullList[$city->id] = (string) $city;
         }
 
         return $fullList;

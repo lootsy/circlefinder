@@ -27,7 +27,7 @@ class CreateTimesTable extends Migration
         });
 
         foreach (\App\Membership::all() as $membership) {
-            \App\TimeTable::findForMembership($membership);
+            \App\TimeTable::createSlotForMembership($membership);
         }
     }
 

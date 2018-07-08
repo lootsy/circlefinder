@@ -15,21 +15,24 @@ class CreateCountriesAndCities extends Migration
     {
         Schema::create('countries', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('iso')->unique();
+            $table->string('sortname')->unique();
             $table->string('name');
-            $table->string('name_common');
-            $table->string('timezone');
-            $table->timestamps();
+            $table->integer('phonecode')->unsigned();
+        });
+
+        Schema::create('states', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->integer('country_id')->unsigned();
         });
 
         Schema::create('cities', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('country_id')->unsigned();
+            $table->integer('state_id')->unsigned();
             $table->string('name');
             $table->string('timezone');
-            $table->double('latitude');
-            $table->double('longitude');
-            $table->timestamps();
+            $table->double('latitude')->nullable();
+            $table->double('longitude')->nullable();
         });
     }
 
@@ -41,6 +44,7 @@ class CreateCountriesAndCities extends Migration
     public function down()
     {
         Schema::dropIfExists('cities');
+        Schema::dropIfExists('states');
         Schema::dropIfExists('countries');
     }
 }

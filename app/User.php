@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use \App\Traits\RandomId;
+use \App\Traits\NeedsValidation;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
     use RandomId;
+    use NeedsValidation;
 
     protected $dates = ['deleted_at'];
 
@@ -31,7 +33,8 @@ class User extends Authenticatable
         'twitter_profile_url',
         'linkedin_profile_url',
         'yammer_profile_url',
-        'provider_id'
+        'provider_id',
+        'time_offset'
     ];
 
     /**
@@ -53,6 +56,7 @@ class User extends Authenticatable
             'twitter_profile_url' => 'nullable|url',
             'linkedin_profile_url' => 'nullable|url',
             'yammer_profile_url' => 'nullable|url',
+            'time_offset' => 'required'
         ];
 
         if ($except) {

@@ -8,34 +8,19 @@ class City extends Model
 {
     protected $fillable = [
         'name',
+        'code',
         'timezone',
         'latitude',
         'longitude',
     ];
-
-    public static function validationRules($except = null)
-    {
-        $rules = [
-            'name' => 'required',
-            'timezone' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
-        ];
-
-        if ($except) {
-            $rules = array_except($rules, $except);
-        }
-
-        return $rules;
-    }
 
     public function __toString()
     {
         return sprintf('%s', $this->name);
     }
 
-    public function country()
+    public function state()
     {
-        return $this->belongsTo(\App\Country::class);
+        return $this->belongsTo(\App\State::class);
     }
 }

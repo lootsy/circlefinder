@@ -3,9 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use \App\Traits\NeedsValidation;
 
 class TimeSlot extends Model
 {
+    use NeedsValidation;
+
+    private $current_user = null;
+    private $time_offset = 0;
+
     public function membership()
     {
         return $this->belongsTo(\App\Membership::class);
@@ -54,5 +60,57 @@ class TimeSlot extends Model
         }
 
         return false;
+    }
+
+    public function setTimeOffset($offset)
+    {
+        $this->time_offset = $offset;
+    }
+
+    private function setAsUtc($attribute_name, $value)
+    {
+        if (is_array($value)) {
+            $value = array_map(function ($t) {
+                return $t - $this->time_offset;
+            }, $value);
+    
+            $this->attributes[$attribute_name] = json_encode($value);
+        } else {
+            $this->attributes[$attribute_name] = 0;
+        }
+    }
+
+    private function getFromUtc($attribute_name)
+    {
+        $value  = json_decode($this->attributes[$attribute_name]);
+
+        if (is_array($value)) {
+            $value = array_map(function ($t) {
+                return $t + $this->time_offset;
+            }, $value);
+        } else {
+            $value = 0;
+        }
+
+        return $value;
+    }
+
+    public function __set($key, $value)
+    {
+        if (key_exists($key, $this->casts)) {
+            $this->setAsUtc($key, $value);
+            return;
+        }
+
+        return parent::__set($key, $value);
+    }
+
+    public function __get($key)
+    {
+        if (key_exists($key, $this->casts)) {
+            return $this->getFromUtc($key);
+        }
+
+        return parent::__get($key);
     }
 }

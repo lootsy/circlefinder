@@ -13,15 +13,15 @@ class AddLocationToModels extends Migration
      */
     public function up()
     {
-        if (Schema::hasColumn('users', 'city_id') == false) {
+        if (Schema::hasColumn('users', 'city_code') == false) {
             Schema::table('users', function ($table) {
-                $table->integer('city_id')->after('email')->unsigned()->nullable();
+                $table->string('city_code')->after('email')->nullable();
             });
         }
 
-        if (Schema::hasColumn('circles', 'city_id') == false) {
+        if (Schema::hasColumn('circles', 'city_code') == false) {
             Schema::table('circles', function ($table) {
-                $table->integer('city_id')->after('begin')->unsigned()->nullable();
+                $table->string('city_code')->after('begin')->nullable();
             });
         }
     }
@@ -35,13 +35,13 @@ class AddLocationToModels extends Migration
     {
         Schema::table('users', function ($table) {
             $table->dropColumn([
-                'city_id',
+                'city_code',
             ]);
         });
 
         Schema::table('circles', function ($table) {
             $table->dropColumn([
-                'city_id',
+                'city_code',
             ]);
         });        
     }

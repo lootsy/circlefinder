@@ -4,10 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use \App\Traits\RandomId;
+use \App\Traits\NeedsValidation;
 
 class Circle extends Model
 {
     use RandomId;
+    use NeedsValidation;
 
     protected $dates = ['begin'];
 
@@ -149,7 +151,7 @@ class Circle extends Model
             $this->complete();
         }
 
-        \App\TimeTable::findForMembership($membership);
+        \App\TimeTable::createSlotForMembership($membership);
 
         return $membership;
     }

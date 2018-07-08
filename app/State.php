@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Country extends Model
+class State extends Model
 {
     protected $fillable = [
         'name',
@@ -20,13 +20,13 @@ class Country extends Model
     {
         parent::boot();
 
-        static::deleting(function ($country) {
-            $country->states()->delete();
+        static::deleting(function ($state) {
+            $state->cities()->delete();
         });
     }
 
-    public function states()
+    public function cities()
     {
-        return $this->hasMany(\App\State::class);
+        return $this->hasMany(\App\City::class);
     }
 }
