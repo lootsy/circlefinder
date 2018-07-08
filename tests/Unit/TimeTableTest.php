@@ -39,6 +39,8 @@ class TimeTableTest extends TestCase
 
     private function fetchTimeTable($membership)
     {
+        $user = $this->fetchUser();
+
         $timeTable = \App\TimeTable::updateOrCreateForMembership($membership, [
             'monday' => [1,2,3],
             'tuesday' => 0,
@@ -47,7 +49,7 @@ class TimeTableTest extends TestCase
             'friday' => 0,
             'saturday' => 0,
             'sunday' => [],
-        ]);
+        ], $user);
 
         return $timeTable;
     }
@@ -58,10 +60,6 @@ class TimeTableTest extends TestCase
         $faker = $this->fetchFaker();
 
         $membership = $this->fetchMembership($user);
-
-        \App\TimeTable::createSlotForMembership($membership);
-
-        $membership = $membership->refresh();
 
         $this->assertFalse(is_null($membership->timeSlot));
     }

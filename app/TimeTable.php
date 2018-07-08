@@ -71,11 +71,6 @@ class TimeTable
         return $timeSlot;
     }
 
-    public static function createSlotForMembership($membership)
-    {
-        $timeTable->timeSlotForMembership($membership);
-    }
-
     public static function updateOrCreateForMembership($membership, $request_data, $current_user)
     {
         $timeTable = new \App\TimeTable;

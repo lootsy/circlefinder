@@ -15,7 +15,7 @@ class AddTimeOffsetToUser extends Migration
     {
         if (Schema::hasColumn('users', 'time_offset') == false) {
             Schema::table('users', function ($table) {
-                $table->integer('time_offset')->after('email')->default(0);
+                $table->string('time_zone')->after('email')->default(0);
             });
         }
     }
@@ -29,7 +29,7 @@ class AddTimeOffsetToUser extends Migration
     {
         Schema::table('users', function ($table) {
             $table->dropColumn([
-                'time_offset',
+                'time_zone',
             ]);
         });
     }

@@ -16,18 +16,18 @@ class CreateTimesTable extends Migration
         Schema::create('time_slots', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('membership_id')->unsigned();
-            $table->string('monday');
-            $table->string('tuesday');
-            $table->string('wednesday');
-            $table->string('thursday');
-            $table->string('friday');
-            $table->string('saturday');
-            $table->string('sunday');
+            $table->string('monday')->nullable();
+            $table->string('tuesday')->nullable();
+            $table->string('wednesday')->nullable();
+            $table->string('thursday')->nullable();
+            $table->string('friday')->nullable();
+            $table->string('saturday')->nullable();
+            $table->string('sunday')->nullable();
             $table->timestamps();
         });
 
         foreach (\App\Membership::all() as $membership) {
-            \App\TimeTable::createSlotForMembership($membership);
+            $membership->timeSlot()->create();
         }
     }
 

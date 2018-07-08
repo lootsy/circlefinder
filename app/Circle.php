@@ -151,8 +151,6 @@ class Circle extends Model
             $this->complete();
         }
 
-        \App\TimeTable::createSlotForMembership($membership);
-
         return $membership;
     }
 

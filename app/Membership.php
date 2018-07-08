@@ -44,6 +44,10 @@ class Membership extends Model
     {
         parent::boot();
 
+        static::created(function ($membership) {
+            $membership->timeSlot()->create();
+        });
+
         static::deleting(function ($membership) {
             $membership->languages()->detach();
             $membership->timeSlot()->delete();

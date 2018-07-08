@@ -33,8 +33,7 @@ class User extends Authenticatable
         'twitter_profile_url',
         'linkedin_profile_url',
         'yammer_profile_url',
-        'provider_id',
-        'time_offset'
+        'provider_id'
     ];
 
     /**
@@ -56,7 +55,6 @@ class User extends Authenticatable
             'twitter_profile_url' => 'nullable|url',
             'linkedin_profile_url' => 'nullable|url',
             'yammer_profile_url' => 'nullable|url',
-            'time_offset' => 'required'
         ];
 
         if ($except) {
@@ -157,5 +155,10 @@ class User extends Authenticatable
         $link = sprintf('<a href="%s">%s</a>', route('profile.show', ['uuid' => $this->uuid]), $link_title);
 
         return $link;
+    }
+
+    public function getTimeOffsetAttribute()
+    {
+        return 0;
     }
 }
