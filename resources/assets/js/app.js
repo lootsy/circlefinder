@@ -6,6 +6,7 @@
  */
 
 require('./bootstrap');
+const Swal = require('sweetalert2');
 
 window.Vue = require('vue');
 
@@ -47,6 +48,26 @@ $(function() {
             parent.removeClass('checked');
         }
     });
+
+
+
+    $('input.confirm').click(function(event) {
+        var form = $(this).parent('form');
+        event.preventDefault();
+
+        Swal({
+            animation: false,
+            title: 'Are you sure?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.value) {
+                form.submit();
+            }
+        })        
+    });
     
     var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     
@@ -55,4 +76,5 @@ $(function() {
     if(tzElement.val() == 'GMT') {
         tzElement.val(timeZone);
     }
+
 });

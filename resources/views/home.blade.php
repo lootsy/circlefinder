@@ -16,7 +16,32 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    <h1>Hello, {{ $user->name }}</h1>
+                    <p>Welcome to your Dashboard!</p>
+
+                    <p>You can edit your profile <a href="{{ route('profile.index') }}">here</a></p>
+
+                    <h2>My circles</h2>
+                    @if(count($items))
+                        <ul>
+                        @foreach($items as $circle)
+                            <li>{!! $circle->link() !!}</li>
+                        @endforeach
+                        </ul>
+                    @else
+                        <p>You have no circles. You can <a href="{{ route('circles.create') }}">create one here</a>!</p>
+                    @endif
+
+                    <h2>Circles I'm in</h2>
+                    @if(count($memberships))
+                        <ul>
+                        @foreach($memberships as $membership)
+                            <li>{!! $membership->circle->link() !!}</li>
+                        @endforeach
+                        </ul>
+                    @else
+                        <p>Looks like you are not in a circle. You can <a href="{{ route('circles.index') }}">find one here</a>!</p>
+                    @endif
                 </div>
             </div>
         </div>

@@ -115,4 +115,5 @@ return [
         ],
     ],
 
+    'login_redirect' => '/home',
 ];
