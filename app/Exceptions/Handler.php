@@ -42,9 +42,13 @@ class Handler extends ExceptionHandler
     {
         if (App::environment('staging') || App::environment('production')) {
             $fields = Request::all();
-        
+            
             if (key_exists('password', $fields)) {
                 $fields['password'] = '********';
+            }
+            
+            if (key_exists('password_confirmation', $fields)) {
+                $fields['password_confirmation'] = '********';
             }
 
             Log::emergency($exception->getMessage(), [
