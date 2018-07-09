@@ -1,0 +1,191 @@
+http://ip-api.com/docs/
+https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API
+
+
+50.7229
+7.14271
+80.187.80.149
+MobileDaten Telekom Bonn-Beuel
+
+
+IP	217.251.5.1
+Country	Germany
+Country code	DE
+Region	North Rhine-Westphalia
+Region code	NW
+City	Warburg
+Zip Code	34414
+Latitude	51.4901
+Longitude	9.1464
+Timezone	Europe/Berlin
+ISP	Deutsche Telekom AG
+Organization	Deutsche Telekom AG
+AS number/name	AS3320 Deutsche Telekom AG
+Internal IP	192.168.178.35
+DNS server	217.237.149.161 (Germany - Deutsche Telekom AG)
+TCP/IP fingerprint	1492 MTU, PPPoE, Linux (3.11 and newer), Firefox (10.x or newer)
+User-Agent	Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0
+
+
+
+
+https://msdn.microsoft.com/en-us/library/ff701702.aspx
+bing
+125.000 pro Jahr
+https://msdn.microsoft.com/library/dd877180.aspx
+
+
+Latitude	51.4901
+Longitude	9.1464
+https://nominatim.openstreetmap.org/reverse.php?format=html&lat=51.4901&lon=9.1464&zoom=13
+https://nominatim.openstreetmap.org/details.php?place_id=178414142
+
+
+http://nominatim.org/release-docs/latest/admin/Installation/#prerequisites
+Mit Proxy direkt switchen können
+
+
+
+
+
+Paid APIs with no restrictions (LatLon.io, Geocodio, Texas A&M)
+
+
+
+
+https://developer.mapquest.com/documentation/open/geocoding-api/
+https://developer.mapquest.com/documentation/open/nominatim-search/
+15T pro Monat
+
+openCage
+mapquest
+locationIQ
+
+Photon
+nominatim
+
+bing
+google
+
+https://www.openstreetmap.org/#map=10/51.4763/8.9587
+https://www.openstreetmap.de/karte.html?zoom=15&lat=52.51517&lon=13.37767&layers=B000
+
+
+
+https://wiki.openstreetmap.org/wiki/Search_engines
+
+Search engine services
+
+These options are available as services you can call:
+
+    Nominatim is deployed on OpenStreetMap servers, and powers the search on the front page as well as offering an API.
+    LocationIQ.org runs nominatim with OSM data
+    MapQuest also run nominatim with OSM data as part of their open initiative
+    YaCy - a P2P open source search engine
+    OpenCage hosted by Opencage Data Ltd - searches across OpenStreetMap, geonames, geoplanet among other sources.
+    Photon hosted by Komoot.de
+    GeoCheck hosted by IdeesLibres.org - searches across Nominatim OSM, Google, Photon OSM, ideeslibres.org BANO, IGN, Etalab BANO
+    Osmocoder hosted by 123map.de, able to do batch geocoding, so far for area of Germany, and in German language.
+    OSMNames maintained by KlokanTech.com and HSR - provides basic search in place names with autocomplete for demo purposes. The project mainly aims to deliver gazetteer data from OSM.
+    Mapzen Search (shutting down by 31st January 2018) provides the Pelias geocoder as a web service to search across OSM, OpenAddresses, Geonames and Who's on First including a free tier.
+    WhatIsWhere Free, powerful map based search. Support
+
+
+
+
+{
+  "type": "FeatureCollection",
+  "properties": {
+    "apiVersion": "0.5.1",
+    "source": "geoparser.io",
+    "id": "g87rEaTe8DWs6kByE9KQ"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "country": "DE",
+        "references": [
+          [
+            48,
+            54
+          ]
+        ],
+        "confidence": 1,
+        "name": "Kassel",
+        "admin1": "05",
+        "type": "seat of a second-order administrative division"
+      },
+      "id": 2892518,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.5,
+          51.31667
+        ]
+      }
+    }
+  ]
+}
+
+{
+  "type": "FeatureCollection",
+  "properties": {
+    "apiVersion": "0.5.1",
+    "source": "geoparser.io",
+    "id": "V8aZObTZ73NiVZdApapq"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "country": "DE",
+        "references": [
+          [
+            43,
+            49
+          ]
+        ],
+        "confidence": 1,
+        "name": "Kassel",
+        "admin1": "05",
+        "type": "seat of a second-order administrative division"
+      },
+      "id": 2892518,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.5,
+          51.31667
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "country": "DE",
+        "references": [
+          [
+            11,
+            18
+          ]
+        ],
+        "confidence": 1,
+        "name": "Hamburg",
+        "admin1": "04",
+        "type": "seat of a first-order administrative division"
+      },
+      "id": 2911298,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.01534,
+          53.57532
+        ]
+      }
+    }
+  ]
+}
+
+https://geoparser.io/
+1000 pro Monat
