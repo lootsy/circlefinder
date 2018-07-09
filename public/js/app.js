@@ -47328,6 +47328,11 @@ $(function () {
         }
     });
 
+    $('input.confirm').click(function (event) {
+
+        //event.preventDefault();
+    });
+
     var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     var tzElement = $('select[name=timezone]');

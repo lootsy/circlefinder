@@ -24,6 +24,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $user = auth()->user();
+
+        $items = $user->circles()->paginate(10);
+
+        return view('home')->with([
+            'user' => $user,
+            'items' => $items,
+            'memberships' => $user->memberships,
+        ]);
     }
 }

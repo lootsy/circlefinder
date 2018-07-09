@@ -47,6 +47,11 @@ $(function() {
             parent.removeClass('checked');
         }
     });
+
+    $('input.confirm').click(function(event) {
+        
+        //event.preventDefault();
+    });
     
     var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     

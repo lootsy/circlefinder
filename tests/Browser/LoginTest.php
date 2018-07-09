@@ -12,8 +12,6 @@ class LoginTest extends DuskTestCase
     use DatabaseMigrations;
     use CleanCookies;
 
-    private $homePath = '/home';
-
     public function testUserCanRegister()
     {
         $user_data = [
@@ -30,7 +28,7 @@ class LoginTest extends DuskTestCase
                 ->type('password', $user_data['password'])
                 ->type('password_confirmation', $user_data['password_confirmation'])
                 ->press('Register')
-                ->assertPathIs($this->homePath);
+                ->assertPathIs(config('auth.login_redirect'));
 
             $this->assertDatabaseHas('users', [
                 'email' => $user_data['email'],
@@ -51,7 +49,7 @@ class LoginTest extends DuskTestCase
                 ->type('email', $user->email)
                 ->type('password', 'secret')
                 ->press('Login')
-                ->assertPathIs($this->homePath);
+                ->assertPathIs(config('auth.login_redirect'));
         });
     }
 }
