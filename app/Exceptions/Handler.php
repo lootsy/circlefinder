@@ -41,9 +41,15 @@ class Handler extends ExceptionHandler
     public function report(Exception $exception)
     {
         if (App::environment('staging') || App::environment('production')) {
+            $fields = Request::all();
+        
+            if (key_exists('password', $fields)) {
+                $fields['password'] = '********';
+            }
+
             Log::emergency($exception->getMessage(), [
                 'url' => Request::url(),
-                'input' => Request::all()
+                'input' => $fields,
             ]);
         }
 
