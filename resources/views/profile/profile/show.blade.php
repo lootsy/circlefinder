@@ -10,21 +10,24 @@
         <h5 class="card-header">{{ $item->name }}</h5>
         
         @if(auth()->user()->id == $item->id)
-            <div class="card-body">    
-                <a href="{{ route('profile.edit') }}" class="btn btn-primary">Edit profile</a>
-                <a href="{{ route('profile.avatar.edit') }}" class="btn btn-primary">Change avatar</a>
-                @if($item->no_password == false)
-                <a href="{{ route('profile.password.edit') }}" class="btn btn-primary">Change password</a>
-                @endif
+            <div class="card-body  text-center">
+                <div class="btn-group">
+                    <a href="{{ route('profile.edit') }}" class="btn btn-secondary">Edit profile</a>
+                    <a href="{{ route('profile.avatar.edit') }}" class="btn btn-secondary">Change avatar</a>
+                    @if($item->no_password == false)
+                    <a href="{{ route('profile.password.edit') }}" class="btn btn-secondary">Change password</a>
+                    @endif
+                </div>
             </div>
         @endif
 
         <div class="card-body row">
-            <div class="col-4">
-                <div class="card">
+            <div class="col-12 col-lg-4">
+                <div class="card mb-4">
                     <div class="card-body text-center">
                         <div class="mb-4">
-                            {!! user_avatar($item) !!}
+                            <span class="avatar">{!! user_avatar($item) !!}</span>
+                            <h3 class="mt-3">{{ $item->name }}</h3>
                         </div>
 
                         @if(count($profiles))
@@ -39,7 +42,7 @@
                 </div>
             </div>
 
-            <div class="col-8">
+            <div class="col-12 col-lg-8">
                 @if($item->about)
                 <div class="mb-4">
                     <h5 class="card-title">About</h5>
