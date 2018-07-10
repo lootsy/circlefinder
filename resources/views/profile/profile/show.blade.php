@@ -20,42 +20,33 @@
         @endif
 
         <div class="card-body row">
-
-            <div class="col-8">
-                <h5 class="card-title">About</h5>
-                <p class="card-text">{{ $item->about }}</p>
-            </div>
-
             <div class="col-4">
-                <div class="mb-4">
-                    <a href="{{ route('profile.avatar.edit') }}">{!! user_avatar($item) !!}</a>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div class="mb-4">
+                            {!! user_avatar($item) !!}
+                        </div>
+
+                        @if(count($profiles))
+                        <ul class="profiles">
+                            <h5>Social profiles</h5>
+                            @foreach($profiles as $profile => $link)
+                            <li><a href="{{ $link }}"><i class="fa fa-{{ $profile }}-square"></i></a></li>
+                            @endforeach
+                        </ul>
+                        @endif
+                    </div>
                 </div>
-
-                <h5 class="card-title">Social profiles</h5>
-                <ul>
-                    @if($item->facebook_profile_url)
-                    <li><a href="{{ $item->facebook_profile_url }}">Facebook</a></li>
-                    @endif
-
-                    @if($item->twitter_profile_url)
-                    <li><a href="{{ $item->twitter_profile_url }}">Twitter</a></li>
-                    @endif
-
-                    @if($item->yammer_profile_url)
-                    <li><a href="{{ $item->yammer_profile_url }}">Yammer</a></li>
-                    @endif
-
-                    @if($item->linkedin_profile_url)
-                    <li><a href="{{ $item->linkedin_profile_url }}">LinkedIn</a></li>
-                    @endif
-                </ul>
             </div>
 
-        </div>
-
-        <div class="card-body row">
-
             <div class="col-8">
+                @if($item->about)
+                <div class="mb-4">
+                    <h5 class="card-title">About</h5>
+                    <p class="card-text">{{ $item->about }}</p>
+                </div>
+                @endif
+
                 <h5 class="card-title">Owned circles</h5>
                 
                 @if(count($item->circles))
@@ -67,9 +58,7 @@
                 @else
                     <p>No circles</p>
                 @endif
-            </div>
 
-            <div class="col-8">
                 <h5 class="card-title">Member of circles</h5>
                 
                 @if(count($item->memberships))
@@ -82,7 +71,6 @@
                     <p>No circles</p>
                 @endif
             </div>
-
         </div>
     </div>
 

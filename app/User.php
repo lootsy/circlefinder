@@ -30,10 +30,10 @@ class User extends Authenticatable
         'about',
         'language_id',
         'location',
-        'facebook_profile_url',
-        'twitter_profile_url',
-        'linkedin_profile_url',
-        'yammer_profile_url',
+        'facebook_profile',
+        'twitter_profile',
+        'linkedin_profile',
+        'xing_profile',
         'provider_id',
         'timezone',
     ];
@@ -47,16 +47,23 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    private $profiles = [
+        'twitter' => 'https://twitter.com/%s',
+        'facebook' => 'https://facebook.com/%s',
+        'linkedin' => '%s',
+        'xing' => '%s',
+    ];
+
     public static function validationRules($except = null)
     {
         $rules = [
             'name' => 'required',
             'email' => 'required|unique:users,email', # the id has to be added in controller
             'roles' => 'exists:roles,id',
-            'facebook_profile_url' => 'nullable|url',
-            'twitter_profile_url' => 'nullable|url',
-            'linkedin_profile_url' => 'nullable|url',
-            'yammer_profile_url' => 'nullable|url',
+            'facebook_profile' => 'nullable',
+            'twitter_profile' => 'nullable',
+            'linkedin_profile' => 'nullable|url',
+            'xing_profile' => 'nullable|url',
         ];
 
         if ($except) {
@@ -171,5 +178,25 @@ class User extends Authenticatable
         } else {
             return 0;
         }
+    }
+
+    public function setTwitterProfileAttribute($value)
+    {
+        $this->attributes['twitter_profile'] = str_replace('@', '', $value);
+    }
+
+    public function profiles()
+    {
+        $profiles = [];
+
+        foreach ($this->profiles as $profile => $link_template) {
+            $field_name = sprintf('%s_profile', $profile);
+            
+            if (strlen(trim($this->$field_name)) > 0) {
+                $profiles[$profile] = sprintf($link_template, $this->$field_name);
+            }
+        }
+
+        return $profiles;
     }
 }

@@ -25,20 +25,24 @@
     </div>
 
     <div class="form-group">
-        {{ Form::label('twitter_profile_url', 'Twitter') }}
-        {{ Form::text('twitter_profile_url', null, ['class' => 'form-control']) }}
+        {{ Form::label('twitter_profile', 'Twitter account') }}
+        {{ Form::text('twitter_profile', null, ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
-        {{ Form::label('facebook_profile_url', 'Facebook') }}
-        {{ Form::text('facebook_profile_url', null, ['class' => 'form-control']) }}
+        {{ Form::label('facebook_profile', 'Facebook account') }}
+        {{ Form::text('facebook_profile', null, ['class' => 'form-control']) }}
     </div>
 
     <div class="form-group">
-        {{ Form::label('yammer_profile_url', 'Yammer') }}
-        {{ Form::text('yammer_profile_url', null, ['class' => 'form-control']) }}
+        {{ Form::label('xing_profile', 'Xing URL') }}
+        {{ Form::text('xing_profile', null, ['class' => 'form-control']) }}
     </div>
 
+    <div class="form-group">
+        {{ Form::label('linkedin_profile', 'Linkedin URL') }}
+        {{ Form::text('linkedin_profile', null, ['class' => 'form-control']) }}
+    </div>
 
     <div class="form-group">
         {{ Form::label('password', 'Password') }}

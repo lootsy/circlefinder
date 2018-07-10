@@ -12,45 +12,50 @@
         
             {!! Form::model($item, ['route' => ['profile.update'], 'method' => 'put']) !!}
 
+            <div class="row">
+                <div class="col-12 col-lg-6">
+                    <div class="form-group">
+                        {{ Form::label('name', 'Name', ['class' => 'required']) }}
+                        {{ Form::text('name', null, ['class' => 'form-control']) }}
+                    </div>
 
-            <div class="form-group">
-                {{ Form::label('name', 'Name', ['class' => 'required']) }}
-                {{ Form::text('name', null, ['class' => 'form-control']) }}
-            </div>
+                    <div class="form-group">
+                        {{ Form::label('email', 'E-Mail', ['class' => 'required']) }}
+                        {{ Form::email('email', null, ['class' => 'form-control']) }}
+                    </div>
 
-            <div class="form-group">
-                {{ Form::label('email', 'E-Mail', ['class' => 'required']) }}
-                {{ Form::email('email', null, ['class' => 'form-control']) }}
-            </div>
+                    <div class="form-group">
+                        {{ Form::label('timezone', 'Timezone', ['class' => 'required']) }}
+                        {!! Timezonelist::create('timezone', old('timezone', $item->timezone), ['class'=>'form-control']) !!}
+                    </div>
 
-            <div class="form-group">
-                {{ Form::label('timezone', 'Timezone', ['class' => 'required']) }}
-                {!! Timezonelist::create('timezone', old('timezone', $item->timezone), ['class'=>'form-control']) !!}
-            </div>
+                    <div class="form-group">
+                        {{ Form::label('about', 'About') }}
+                        {{ Form::textarea('about', null, ['class' => 'form-control']) }}
+                    </div>
+                </div>
+            
+                <div class="col-12 col-lg-6">
+                    <div class="form-group">
+                        {{ Form::label('twitter_profile', 'Twitter Username') }}
+                        {{ Form::text('twitter_profile', null, ['class' => 'form-control', 'placeholder' => '@@your_username']) }}
+                    </div>
 
-            <div class="form-group">
-                {{ Form::label('about', 'About') }}
-                {{ Form::textarea('about', null, ['class' => 'form-control']) }}
-            </div>
+                    <div class="form-group">
+                        {{ Form::label('facebook_profile', 'Facebook Account') }}
+                        {{ Form::text('facebook_profile', null, ['class' => 'form-control']) }}
+                    </div>
 
-            <div class="form-group">
-                {{ Form::label('twitter_profile_url', 'Twitter') }}
-                {{ Form::text('twitter_profile_url', null, ['class' => 'form-control']) }}
-            </div>
+                    <div class="form-group">
+                        {{ Form::label('xing_profile', 'Xing URL') }}
+                        {{ Form::text('xing_profile', null, ['class' => 'form-control']) }}
+                    </div>
 
-            <div class="form-group">
-                {{ Form::label('facebook_profile_url', 'Facebook') }}
-                {{ Form::text('facebook_profile_url', null, ['class' => 'form-control']) }}
-            </div>
-
-            <div class="form-group">
-                {{ Form::label('yammer_profile_url', 'Yammer') }}
-                {{ Form::text('yammer_profile_url', null, ['class' => 'form-control']) }}
-            </div>
-
-            <div class="form-group">
-                {{ Form::label('linkedin_profile_url', 'LinkedIn') }}
-                {{ Form::text('linkedin_profile_url', null, ['class' => 'form-control']) }}
+                    <div class="form-group">
+                        {{ Form::label('linkedin_profile', 'LinkedIn URL') }}
+                        {{ Form::text('linkedin_profile', null, ['class' => 'form-control']) }}
+                    </div>
+                </div>
             </div>
 
             {{ Form::submit('Update', ['class' => 'btn btn-primary']) }}
