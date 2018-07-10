@@ -15,9 +15,10 @@ class ProfileController extends Controller
     public function show($uuid)
     {
         $user = \App\User::withUuid($uuid)->firstOrFail();
-        
+
         return view('profile.profile.show')->with([
-            'item' => $user
+            'item' => $user,
+            'profiles' => $user->profiles(),
         ]);
     }
 

@@ -72,4 +72,23 @@ class UserTest extends TestCase
         $link = sprintf('<a href="%s">%s</a>', route('profile.show', ['uuid' => $user->uuid]), 'Test');
         $this->assertEquals($link, $user->link('Test'));
     }
+
+    public function testUserProfiles()
+    {
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+
+        $profiles = $user->profiles();
+        
+        $this->assertTrue(count($profiles) > 0);
+        $this->assertEquals('https://facebook.com/'.$user->facebook_profile, $profiles['facebook']);
+        $this->assertEquals($user->xing_profile, $profiles['xing']);
+
+        $user->twitter_profile = '@username';
+        $user->xing_profile = '';
+        $user->save();
+
+        $this->assertFalse(key_exists('xing', $user->profiles()));
+        $this->assertEquals('username', $user->twitter_profile);
+    }
 }

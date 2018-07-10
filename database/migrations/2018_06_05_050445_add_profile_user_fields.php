@@ -33,8 +33,8 @@ class AddProfileUserFields extends Migration
         Schema::table('users', function ($table) {
             $table->dropColumn([
                 'about', 
-                'language_id', 
-                'facebook_profile_url', 
+                'language_id',
+                'facebook_profile_url',
                 'twitter_profile_url',
                 'linkedin_profile_url',
                 'yammer_profile_url',
