@@ -18,7 +18,7 @@
 
     <div class="row">
         <div class="col-12 col-lg-6">
-            <h2>Time schedule</h2>
+            <label>Time schedule</label>
 
             <table class="table table-sm table-striped table-bordered time-schedule">
                 <tr>
@@ -42,6 +42,11 @@
         </div>
 
         <div class="col-12 col-lg-6">
+            <div class="form-group">
+                {{ Form::label('comment', 'Comment') }}
+                {{ Form::text('comment', null, ['class' => 'form-control']) }}
+            </div>
+
             @include('inc.form-languages')
         </div>
     </div>

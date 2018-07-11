@@ -40,7 +40,13 @@ class CirclesController extends Controller
 
         $item = \App\Circle::createAndModify($user, $request);
 
-        return redirect()->route('circles.show', $item->uuid)->with([
+        $redirect_route = 'circles.show';
+
+        if ($user->moderator() == false) {
+            $redirect_route = 'circles.membership.edit';
+        }
+
+        return redirect()->route($redirect_route, $item->uuid)->with([
             'success' => sprintf('%s was created!', (string) $item),
         ]);
     }

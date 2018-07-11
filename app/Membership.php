@@ -14,6 +14,7 @@ class Membership extends Model
     protected $fillable = [
         'type',
         'begin',
+        'comment',
     ];
 
     public static function validationRules($except = null)

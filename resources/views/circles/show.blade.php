@@ -81,6 +81,7 @@
             @if(count($item->memberships))        
                 <table class="table table-striped table-bordered">
                     <tr>
+                        <th>&nbsp;</th>
                         <th>Name</th>
                         <th>Type (virtual/f2f)</th>
                         <th>Begin</th>
@@ -89,7 +90,15 @@
                     
                     @foreach($item->memberships as $memb)
                     <tr>
-                        <td class="align-middle"><span class="avatar">{!! $memb->user->link(user_avatar($memb->user, 40)) !!}</span> {!! $memb->user->link() !!}</td>
+                        <td class="align-middle text-center">                  
+                            <span class="avatar">{!! $memb->user->link(user_avatar($memb->user, 40)) !!}</span>
+                        </td>
+                        <td class="align-middle w-50">
+                            {!! $memb->user->link() !!}
+                            @if($memb->comment)
+                                <div>{{ $memb->comment }}</div>
+                            @endif
+                        </td>
                         <td class="align-middle">{{ translate_type($memb->type) }}</td>
                         <td class="align-middle">{{ format_date($memb->begin) }}</td>
                         <td class="align-middle">{{ list_languages($memb->languages) }}</td>
@@ -98,6 +107,7 @@
 
                     @for($i = 0; $i < $item->limit - count($item->memberships); $i++)
                         <tr>
+                            <td class="align-middle">&nbsp;</td>
                             <td class="align-middle">&nbsp;</td>
                             <td class="align-middle">&nbsp;</td>
                             <td class="align-middle">&nbsp;</td>
