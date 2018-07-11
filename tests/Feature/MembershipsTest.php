@@ -56,6 +56,8 @@ class MembershipsTest extends TestCase
 
         $membership = $circle->joinWithDefaults($user2);
 
+        $text = $faker->text;
+
         $response = $this->actingAs($user2)->put(route('circles.membership.update', ['uuid' => $circle->uuid]), [
             'type' => 'any',
             'begin' => today(),
@@ -63,7 +65,8 @@ class MembershipsTest extends TestCase
                 '0' => \App\Language::find(1)->code,
                 '1' => \App\Language::find(2)->code,
                 '2' => \App\Language::find(3)->code
-            ]
+            ],
+            'comment' => $text
         ]);
 
         $response->assertStatus(302);
@@ -72,5 +75,6 @@ class MembershipsTest extends TestCase
         $membership = $membership->refresh();
 
         $this->assertEquals(3, count($membership->languages));
+        $this->assertEquals($text, $membership->comment);
     }
 }
