@@ -27,7 +27,12 @@
                     <div class="card-body text-center">
                         <div class="mb-4">
                             <span class="avatar">{!! user_avatar($item) !!}</span>
+                            
                             <h3 class="mt-3">{{ $item->name }}</h3>
+                            
+                            @if($item->moderator())
+                            <span class="badge badge-success">Moderator</span>
+                            @endif
                         </div>
 
                         @if(count($profiles))
