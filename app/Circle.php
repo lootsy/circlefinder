@@ -57,6 +57,8 @@ class Circle extends Model
         static::deleting(function ($circle) {
             $circle->languages()->detach();
 
+            $circle->messages()->delete();
+
             $circle->memberships()->delete();
         });
     }
@@ -69,6 +71,11 @@ class Circle extends Model
     public function memberships()
     {
         return $this->hasMany(\App\Membership::class);
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(\App\Message::class);
     }
 
     public function membershipOf($user)
@@ -230,5 +237,28 @@ class Circle extends Model
         $link = sprintf('<a href="%s"%s>%s</a>', route('circles.show', ['uuid' => $this->uuid]), $class, $link_title);
 
         return $link;
+    }
+
+    public function createMessage($user, $body, $show_to_all)
+    {
+        if ($this->users()->count() < 1) {
+            return null;
+        }
+
+        $message = new \App\Message;
+        
+        $message->body = $body;
+
+        $message->recipients = $this->users->map(function ($r) {
+            return $r->id;
+        });
+
+        $message->user_id = $user ? $user->id : null;
+        $message->circle_id = $this->id;
+        $message->show_to_all = $show_to_all;
+        
+        $message->save();
+
+        return $message;
     }
 }

@@ -70,4 +70,25 @@ trait UsersAdmins
 
         return $owner->circles()->create($data);
     }
+
+    private function fetchMessage($circle, $user = null, $recipients = array())
+    {
+        $faker = $this->fetchFaker();
+
+        $message = new \App\Message;
+
+        $message->body = $faker->text;
+
+        $message->recipients = array_map(function ($r) {
+            return $r->id;
+        }, $recipients);
+
+        $message->user_id = $user ? $user->id : null;
+        $message->circle_id = $circle->id;
+        $message->show_to_all = false;
+        
+        $message->save();
+
+        return $message;
+    }
 }

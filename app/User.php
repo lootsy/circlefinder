@@ -87,6 +87,8 @@ class User extends Authenticatable
             }
 
             $user->deleteCirclesOrChangeOwnership();
+            
+            $user->messages()->delete();
 
             $user->memberships()->delete();
         });
@@ -129,6 +131,11 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(\App\Role::class);
+    }
+    
+    public function messages()
+    {
+        return $this->hasMany(\App\Message::class);
     }
 
     public function hasRole($role_name)
