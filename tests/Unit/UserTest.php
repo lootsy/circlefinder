@@ -82,7 +82,7 @@ class UserTest extends TestCase
         
         $this->assertTrue(count($profiles) > 0);
         $this->assertEquals('https://facebook.com/'.$user->facebook_profile, $profiles['facebook']);
-        $this->assertEquals($user->xing_profile, $profiles['xing']);
+        $this->assertEquals('https://www.xing.com/profile/'.$user->xing_profile, $profiles['xing']);
 
         $user->twitter_profile = '@username';
         $user->xing_profile = '';
