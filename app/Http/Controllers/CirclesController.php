@@ -114,6 +114,20 @@ class CirclesController extends Controller
         ]);
     }
 
+    public function remove($uuid, $user_uuid, Request $request)
+    {
+        $item = \App\Circle::withUuid($uuid)->firstOrFail();
+        $user = \App\User::withUuid($user_uuid)->firstOrFail();
+
+        $this->authorize('remove', $item);
+
+        $item->leave($user);
+
+        return redirect()->route('circles.show', $item->uuid)->with([
+            'success' => sprintf('User %s was removed from circle!', (string) $item),
+        ]);
+    }
+
     public function leave($uuid, Request $request)
     {
         $item = \App\Circle::withUuid($uuid)->firstOrFail();

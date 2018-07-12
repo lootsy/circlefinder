@@ -87,7 +87,7 @@ if (!function_exists('good_title')) {
 }
 
 if (!function_exists('user_picture')) {
-    function user_avatar($user, $size = null, $only_url = false)
+    function user_avatar($user, $size = null, $only_url = false, $with_link = false)
     {
         $placeholder = 'no_avatar.jpeg';
         $image_url = '';
@@ -122,11 +122,21 @@ if (!function_exists('user_picture')) {
             return $image_url;
         }
 
+        $pre = '';
+        $post = '';
+
+        if ($with_link) {
+            $pre = sprintf('<a href="%s">', route('profile.show', ['uuid' => $user->uuid]));
+            $post = '</a>';
+        }
+
         return sprintf(
-            '<img src="%s" srcset="%s 2x" alt="%s" />',
+            '%s<img src="%s" srcset="%s 2x" alt="%s" />%s',
+            $pre,
             $image_url,
             $retina_image_url,
-            htmlspecialchars($user->name)
+            htmlspecialchars($user->name),
+            $post
         );
     }
 }

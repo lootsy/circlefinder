@@ -91,7 +91,7 @@
                     @foreach($item->memberships as $memb)
                     <tr>
                         <td class="align-middle text-center">                  
-                            <span class="avatar">{!! $memb->user->link(user_avatar($memb->user, 40)) !!}</span>
+                            <span class="avatar">{!! user_avatar($memb->user, 40, false, true) !!}</span>
                         </td>
                         <td class="align-middle w-50">
                             {!! $memb->user->link() !!}
