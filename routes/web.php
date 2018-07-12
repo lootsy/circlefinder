@@ -73,7 +73,7 @@ Route::group(['prefix' => '/circles', 'as' => 'circles.', 'middleware' => 'auth'
     Route::post('/{uuid}/uncomplete', 'CirclesController@uncomplete')->name('uncomplete');
     Route::post('/{uuid}/join', 'CirclesController@join')->name('join');
     Route::post('/{uuid}/leave', 'CirclesController@leave')->name('leave');
-    Route::post('/{uuid}/remove/{user_uuid}', 'CirclesController@remove')->name('remove');
+    Route::delete('/{uuid}/remove/{user_uuid}', 'CirclesController@remove')->name('remove');
 });
 
 # Restricted Admin URLs

@@ -124,7 +124,7 @@ class CirclesController extends Controller
         $item->leave($user);
 
         return redirect()->route('circles.show', $item->uuid)->with([
-            'success' => sprintf('User %s was removed from circle!', (string) $item),
+            'success' => sprintf('%s was removed from %s!', (string) $user, (string) $item),
         ]);
     }
 

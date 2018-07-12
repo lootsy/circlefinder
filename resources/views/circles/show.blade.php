@@ -98,6 +98,12 @@
                             @if($memb->comment)
                                 <div>{{ $memb->comment }}</div>
                             @endif
+                            @if($user->moderator())
+                            {!! Form::open(['route' => ['circles.remove', 'uuid' => $item->uuid, 'user_uuid' => $memb->user->uuid]]) !!}
+                                {{ Form::hidden('_method', 'DELETE') }}
+                                {{ Form::submit('Remove', ['class' => 'delete btn btn-sm btn-danger confirm mt-2']) }}
+                            {!! Form::close() !!}
+                            @endif
                         </td>
                         <td class="align-middle">{{ translate_type($memb->type) }}</td>
                         <td class="align-middle">{{ format_date($memb->begin) }}</td>
