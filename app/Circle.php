@@ -234,7 +234,12 @@ class Circle extends Model
             $class = sprintf(' class="%s"', $class);
         }
 
-        $link = sprintf('<a href="%s"%s>%s</a>', route('circles.show', ['uuid' => $this->uuid]), $class, $link_title);
+        $link = sprintf(
+            '<a href="%s"%s>%s</a>',
+            route('circles.show', ['uuid' => $this->uuid]),
+            htmlspecialchars($class),
+            htmlspecialchars($link_title)
+        );
 
         return $link;
     }

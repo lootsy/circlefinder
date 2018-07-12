@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class MessageController extends Controller
+class MessagesController extends Controller
 {
     private function getMessage($message_uuid)
     {

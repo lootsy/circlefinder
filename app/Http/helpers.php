@@ -122,6 +122,11 @@ if (!function_exists('user_picture')) {
             return $image_url;
         }
 
-        return sprintf('<img src="%s" srcset="%s 2x" alt="%s" />', $image_url, $retina_image_url, $user->name);
+        return sprintf(
+            '<img src="%s" srcset="%s 2x" alt="%s" />',
+            $image_url,
+            $retina_image_url,
+            htmlspecialchars($user->name)
+        );
     }
 }

@@ -168,7 +168,11 @@ class User extends Authenticatable
     {
         $link_title = $title ? $title : (string) $this->name;
 
-        $link = sprintf('<a href="%s">%s</a>', route('profile.show', ['uuid' => $this->uuid]), $link_title);
+        $link = sprintf(
+            '<a href="%s">%s</a>',
+            route('profile.show', ['uuid' => $this->uuid]),
+            htmlspecialchars($link_title)
+        );
 
         return $link;
     }
