@@ -13558,3 +13558,19 @@ span.avatar img {
   line-height: 1em;
 }
 
+.form-control::-webkit-input-placeholder {
+  color: #cccccc;
+}
+
+.form-control:-ms-input-placeholder {
+  color: #cccccc;
+}
+
+.form-control::-ms-input-placeholder {
+  color: #cccccc;
+}
+
+.form-control::placeholder {
+  color: #cccccc;
+}
+

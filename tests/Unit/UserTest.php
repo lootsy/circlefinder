@@ -91,4 +91,30 @@ class UserTest extends TestCase
         $this->assertFalse(key_exists('xing', $user->profiles()));
         $this->assertEquals('username', $user->twitter_profile);
     }
+
+    public function testUserProfileUrls()
+    {
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+
+        $this->assertEquals(
+            'https://www.linkedin.com/in/your-username',
+            $user->sanitizeProfileField('linkedin', 'your-username')
+        );
+
+        $this->assertEquals(
+            'https://www.linkedin.com/in/your-username',
+            $user->sanitizeProfileField('linkedin', 'https://www.linkedin.com/in/your-username')
+        );
+
+        $this->assertEquals(
+            'https://www.xing.com/profile/your-username',
+            $user->sanitizeProfileField('xing', 'your-username')
+        );
+
+        $this->assertEquals(
+            'https://www.xing.com/profile/your-username',
+            $user->sanitizeProfileField('xing', 'https://www.xing.com/profile/your-username')
+        );
+    }
 }

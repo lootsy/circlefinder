@@ -104,3 +104,9 @@ span.avatar {
     line-height: 1em;
   }
 }
+
+.form-control {
+  &::placeholder {
+    color: #cccccc;
+  }
+}

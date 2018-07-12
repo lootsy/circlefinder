@@ -37,23 +37,23 @@
             
                 <div class="col-12 col-lg-6">
                     <div class="form-group">
-                        {{ Form::label('twitter_profile', 'Twitter Username') }}
+                        {{ Form::label('twitter_profile', 'Twitter') }}
                         {{ Form::text('twitter_profile', null, ['class' => 'form-control', 'placeholder' => '@@your_username']) }}
                     </div>
 
                     <div class="form-group">
-                        {{ Form::label('facebook_profile', 'Facebook Account') }}
-                        {{ Form::text('facebook_profile', null, ['class' => 'form-control']) }}
+                        {{ Form::label('facebook_profile', 'Facebook') }}
+                        {{ Form::text('facebook_profile', null, ['class' => 'form-control', 'placeholder' => 'https://www.facebook.com/your_username']) }}
                     </div>
 
                     <div class="form-group">
-                        {{ Form::label('xing_profile', 'Xing URL') }}
-                        {{ Form::text('xing_profile', null, ['class' => 'form-control']) }}
+                        {{ Form::label('xing_profile', 'Xing') }}
+                        {{ Form::text('xing_profile', null, ['class' => 'form-control', 'placeholder' => 'https://www.xing.com/profile/your_username']) }}
                     </div>
 
                     <div class="form-group">
-                        {{ Form::label('linkedin_profile', 'LinkedIn URL') }}
-                        {{ Form::text('linkedin_profile', null, ['class' => 'form-control']) }}
+                        {{ Form::label('linkedin_profile', 'LinkedIn') }}
+                        {{ Form::text('linkedin_profile', null, ['class' => 'form-control', 'placeholder' => 'https://www.linkedin.com/in/your_username']) }}
                     </div>
                 </div>
             </div>

@@ -48,10 +48,10 @@ class User extends Authenticatable
     ];
 
     private $profiles = [
-        'twitter' => 'https://twitter.com/%s',
-        'facebook' => 'https://facebook.com/%s',
-        'linkedin' => '%s',
-        'xing' => '%s',
+        'twitter' => 'https://twitter.com/',
+        'facebook' => 'https://facebook.com/',
+        'linkedin' => 'https://www.linkedin.com/in/',
+        'xing' => 'https://www.xing.com/profile/',
     ];
 
     public static function validationRules($except = null)
@@ -62,8 +62,8 @@ class User extends Authenticatable
             'roles' => 'exists:roles,id',
             'facebook_profile' => 'nullable',
             'twitter_profile' => 'nullable',
-            'linkedin_profile' => 'nullable|url',
-            'xing_profile' => 'nullable|url',
+            'linkedin_profile' => 'nullable',
+            'xing_profile' => 'nullable',
         ];
 
         if ($except) {
@@ -200,10 +200,21 @@ class User extends Authenticatable
             $field_name = sprintf('%s_profile', $profile);
             
             if (strlen(trim($this->$field_name)) > 0) {
-                $profiles[$profile] = sprintf($link_template, $this->$field_name);
+                $profiles[$profile] = $this->sanitizeProfileField($profile, $this->$field_name);
             }
         }
 
         return $profiles;
+    }
+
+    public function sanitizeProfileField($profile, $field)
+    {
+        $template = $this->profiles[$profile];
+
+        if (strpos($field, $template) === false) {
+            return $template.$field;
+        } else {
+            return $field;
+        }
     }
 }
