@@ -36,7 +36,7 @@
             
                 {{ Form::submit('Post comment', ['class' => 'btn btn-success']) }}
 
-                <div class="text-info mt-3"><span class="fa fa-eye"></span> New members will see the comment only if "Show all members" is checked.</div>
+                <div class="text-info mt-3"><span class="fa fa-eye"></span> New members will see the comment only if "Show to all members" is checked.</div>
             {!! Form::close() !!}
         </div>
         @else
