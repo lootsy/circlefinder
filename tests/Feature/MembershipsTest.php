@@ -76,5 +76,14 @@ class MembershipsTest extends TestCase
 
         $this->assertEquals(3, count($membership->languages));
         $this->assertEquals($text, $membership->comment);
+
+        $response = $this->actingAs($user2)->put(route('circles.membership.update', ['uuid' => $circle->uuid]), [
+            'type' => 'any',
+            'begin' => today()
+        ]);
+
+        $membership = $membership->refresh();
+
+        $this->assertEquals(0, count($membership->languages));
     }
 }

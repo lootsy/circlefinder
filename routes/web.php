@@ -53,6 +53,12 @@ Route::group(['prefix' => '/circles', 'as' => 'circles.', 'middleware' => 'auth'
         Route::get('/edit', 'MembershipController@edit')->name('edit');
         Route::put('/update', 'MembershipController@update')->name('update');
     });
+    
+    Route::group(['prefix' => '{circle_uuid}/messages', 'as' => 'messages.'], function ($circle_uuid) {
+        Route::post('/', 'MessagesController@store')->name('store');
+        Route::post('/{uuid}/update', 'MessagesController@update')->name('update');
+        Route::delete('/{uuid}/destroy', 'MessagesController@destroy')->name('destroy');
+    });
 
     Route::get('/', 'CirclesController@index')->name('index');
     Route::get('/search', 'CirclesController@search')->name('search');
@@ -67,6 +73,7 @@ Route::group(['prefix' => '/circles', 'as' => 'circles.', 'middleware' => 'auth'
     Route::post('/{uuid}/uncomplete', 'CirclesController@uncomplete')->name('uncomplete');
     Route::post('/{uuid}/join', 'CirclesController@join')->name('join');
     Route::post('/{uuid}/leave', 'CirclesController@leave')->name('leave');
+    Route::delete('/{uuid}/remove/{user_uuid}', 'CirclesController@remove')->name('remove');
 });
 
 # Restricted Admin URLs

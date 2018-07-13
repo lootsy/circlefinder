@@ -61,4 +61,9 @@ class CirclePolicy
     {
         return $circle->ownedBy($user) || $user->moderator();
     }
+
+    public function remove(User $user, Circle $circle)
+    {
+        return $user->moderator();
+    }
 }

@@ -71,7 +71,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if (App::environment('local') == false) {
+        if (App::environment('local') == false && App::environment('testing') == false) {
             if ($exception instanceof AuthorizationException) {
                 return redirect(route('index'))
                     ->withErrors($exception->getMessage());

@@ -78,8 +78,7 @@ class CirclesTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('circles.update', ['uuid' => $faker->uuid]));
         
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors();
+        $response->assertStatus(405);
     }
 
     public function testUserCanCreateCircle()
@@ -144,8 +143,8 @@ class CirclesTest extends TestCase
         $circle = $this->fetchCircle($user);
 
         $response = $this->actingAs($user2)->get(route('circles.edit', ['uuid' => $circle->uuid]));
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors();
+
+        $response->assertStatus(403);
     }
 
     public function testModeratorCanEditCircle()
@@ -231,8 +230,7 @@ class CirclesTest extends TestCase
 
         $response = $this->actingAs($user2)->post(route('circles.complete', ['uuid' => $circle->uuid]));
 
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors();
+        $response->assertStatus(403);
 
         $this->assertFalse($circle->refresh()->completed);
     }
@@ -245,12 +243,12 @@ class CirclesTest extends TestCase
 
         $circle->complete();
 
-        $response = $this->actingAs($user2)->post(route('circles.uncomplete', ['uuid' => $circle->uuid]));
+        $response = $this->actingAs($user)->post(route('circles.uncomplete', ['uuid' => $circle->uuid]));
 
         $response->assertStatus(302);
-        $response->assertSessionHasErrors();
+        $response->assertSessionHas('success');
 
-        $this->assertTrue($circle->refresh()->completed);
+        $this->assertFalse($circle->refresh()->completed);
     }
 
     public function testUserCannotJoinFullCircle()
@@ -333,8 +331,7 @@ class CirclesTest extends TestCase
 
         $response = $this->actingAs($user2)->delete(route('circles.destroy', ['uuid' => $circle->uuid]));
 
-        $response->assertStatus(302);
-        $response->assertSessionHasErrors();
+        $response->assertStatus(403);
 
         $this->assertDatabaseHas('circles', [
             'id' => $circle->id
@@ -356,7 +353,6 @@ class CirclesTest extends TestCase
         $response = $this->actingAs($user)->delete(route('circles.destroy', ['uuid' => $circle->uuid]));
 
         $response->assertStatus(302);
-        $response->assertSessionHasErrors();
 
         $circle->leave($user2);
 
@@ -364,5 +360,32 @@ class CirclesTest extends TestCase
 
         $response->assertStatus(302);
         $response->assertSessionHas('success');
+    }
+
+    public function testModeratorCanRemoveUsersFromCircle()
+    {
+        $user = $this->fetchUser();
+        $user2 = $this->fetchUser();
+        $moderator = $this->fetchModerator();
+        $faker = $this->fetchFaker();
+        $circle = $this->fetchCircle($user);
+
+        $circle->joinWithDefaults($user2);
+
+        $response = $this->actingAs($user)
+                ->delete(route('circles.remove', ['uuid' => $circle->uuid, 'user_uuid' => $user2->uuid]));
+
+        $response->assertStatus(403);
+
+        $response = $this->actingAs($moderator)
+        ->delete(route('circles.remove', ['uuid' => $circle->uuid, 'user_uuid' => $user2->uuid]));
+
+        $response->assertStatus(302);
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseMissing('memberships', [
+            'circle_id' => $circle->id,
+            'user_id' => $user2->id
+        ]);
     }
 }

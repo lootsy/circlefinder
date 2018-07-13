@@ -82,7 +82,7 @@ class UserTest extends TestCase
         
         $this->assertTrue(count($profiles) > 0);
         $this->assertEquals('https://facebook.com/'.$user->facebook_profile, $profiles['facebook']);
-        $this->assertEquals($user->xing_profile, $profiles['xing']);
+        $this->assertEquals('https://www.xing.com/profile/'.$user->xing_profile, $profiles['xing']);
 
         $user->twitter_profile = '@username';
         $user->xing_profile = '';
@@ -90,5 +90,31 @@ class UserTest extends TestCase
 
         $this->assertFalse(key_exists('xing', $user->profiles()));
         $this->assertEquals('username', $user->twitter_profile);
+    }
+
+    public function testUserProfileUrls()
+    {
+        $user = $this->fetchUser();
+        $faker = $this->fetchFaker();
+
+        $this->assertEquals(
+            'https://www.linkedin.com/in/your-username',
+            $user->sanitizeProfileField('linkedin', 'your-username')
+        );
+
+        $this->assertEquals(
+            'https://www.linkedin.com/in/your-username',
+            $user->sanitizeProfileField('linkedin', 'https://www.linkedin.com/in/your-username')
+        );
+
+        $this->assertEquals(
+            'https://www.xing.com/profile/your-username',
+            $user->sanitizeProfileField('xing', 'your-username')
+        );
+
+        $this->assertEquals(
+            'https://www.xing.com/profile/your-username',
+            $user->sanitizeProfileField('xing', 'https://www.xing.com/profile/your-username')
+        );
     }
 }

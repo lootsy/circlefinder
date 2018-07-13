@@ -61,11 +61,14 @@ class CirclesController extends Controller
 
         $timeTable = \App\TimeTable::forCircle($item, $user);
 
+        $messages = $item->visibleMessages($user);
+
         return view('circles.show')->with([
             'item' => $item,
             'user' => $user,
             'membership' => $item->membershipOf($user),
             'timeTable' => $timeTable,
+            'messages' => $messages
         ]);
     }
 
@@ -111,6 +114,20 @@ class CirclesController extends Controller
 
         return redirect()->route('circles.membership.edit', $item->uuid)->with([
             'success' => sprintf('You have joined %s!', (string) $item),
+        ]);
+    }
+
+    public function remove($uuid, $user_uuid, Request $request)
+    {
+        $item = \App\Circle::withUuid($uuid)->firstOrFail();
+        $user = \App\User::withUuid($user_uuid)->firstOrFail();
+
+        $this->authorize('remove', $item);
+
+        $item->leave($user);
+
+        return redirect()->route('circles.show', $item->uuid)->with([
+            'success' => sprintf('%s was removed from %s!', (string) $user, (string) $item),
         ]);
     }
 

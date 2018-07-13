@@ -57,7 +57,13 @@ class Circle extends Model
         static::deleting(function ($circle) {
             $circle->languages()->detach();
 
-            $circle->memberships()->delete();
+            $circle->messages()->each(function ($model) {
+                $model->delete();
+            });
+
+            $circle->memberships()->each(function ($model) {
+                $model->delete();
+            });
         });
     }
 
@@ -69,6 +75,11 @@ class Circle extends Model
     public function memberships()
     {
         return $this->hasMany(\App\Membership::class);
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(\App\Message::class);
     }
 
     public function membershipOf($user)
@@ -224,11 +235,52 @@ class Circle extends Model
         $link_title = $title ? $title : (string) $this;
 
         if ($class) {
-            $class = sprintf(' class="%s"', $class);
+            $class = sprintf(' class="%s"', htmlspecialchars($class));
         }
 
-        $link = sprintf('<a href="%s"%s>%s</a>', route('circles.show', ['uuid' => $this->uuid]), $class, $link_title);
+        $link = sprintf(
+            '<a href="%s"%s>%s</a>',
+            route('circles.show', ['uuid' => $this->uuid]),
+            $class,
+            htmlspecialchars($link_title)
+        );
 
         return $link;
+    }
+
+    public function storeMessage($user, $body, $show_to_all)
+    {
+        if ($this->users()->count() < 1) {
+            return null;
+        }
+
+        $message = new \App\Message;
+        
+        $message->body = $body;
+
+        $message->recipients = $this->users->map(function ($r) {
+            return $r->id;
+        });
+
+        $message->user_id = $user ? $user->id : null;
+        $message->circle_id = $this->id;
+        $message->show_to_all = $show_to_all;
+        
+        $message->save();
+
+        return $message;
+    }
+
+    public function visibleMessages($user)
+    {
+        $messages = \App\Message::where([
+            'circle_id' => $this->id
+        ])->with('user')->get();
+
+        $messages = $messages->filter(function ($m) use ($user) {
+            return $m->visibleBy($user);
+        });
+
+        return $messages;
     }
 }

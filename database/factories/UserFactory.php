@@ -22,8 +22,8 @@ $factory->define(App\User::class, function (Faker $faker) {
         'about' => $faker->text,
         'twitter_profile' => $faker->userName,
         'facebook_profile' => $faker->userName,
-        'xing_profile' => $faker->url,
-        'linkedin_profile' => $faker->url,
+        'xing_profile' => $faker->userName,
+        'linkedin_profile' => $faker->userName,
         'timezone' => $faker->timezone,
     ];
 });
