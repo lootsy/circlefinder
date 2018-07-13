@@ -97,8 +97,16 @@ class MessageTest extends TestCase
             'circle_id' => $circle->id,
         ]);
 
+        $circle->joinWithDefaults($user4);
+
         $this->assertTrue($message->visibleBy($user2));
         $this->assertTrue($message->visibleBy($user3));
         $this->assertFalse($message->visibleBy($user4));
+
+        $vis_messages = $circle->visibleMessages($user);
+        $this->assertEquals(1, count($vis_messages));
+
+        $vis_messages = $circle->visibleMessages($user4);
+        $this->assertEquals(0, count($vis_messages));
     }
 }

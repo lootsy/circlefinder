@@ -51,7 +51,7 @@ class Membership extends Model
 
         static::deleting(function ($membership) {
             $membership->languages()->detach();
-            $membership->timeSlot()->delete();
+            $membership->timeSlot->delete();
         });
     }
 

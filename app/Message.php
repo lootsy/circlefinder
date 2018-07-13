@@ -30,6 +30,7 @@ class Message extends Model
     {
         $rules = [
             'body' => 'required',
+            'show_to_all' => 'boolean',
         ];
 
         if ($except) {
@@ -69,7 +70,7 @@ class Message extends Model
             return true;
         }
 
-        if (in_array($user->id, $this->recipients)) {
+        if (in_array($user->id, $this->recipients) || $this->circle->ownedBy($user)) {
             return true;
         } else {
             return false;

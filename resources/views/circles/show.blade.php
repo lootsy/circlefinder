@@ -73,7 +73,7 @@
     </div>
 
     <div class="row mt-4">
-        <div class="col-12 col-lg-8">
+        <div class="col-12 col-lg-7">
             <div class="card">
                 <h5 class="card-header">Members</h5>
             
@@ -128,7 +128,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-4">
+        <div class="col-12 col-lg-5 mt-4 mt-lg-0">
             @include('circles.comments')
         </div>
     </div>

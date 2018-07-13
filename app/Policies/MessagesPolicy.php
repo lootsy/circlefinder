@@ -31,7 +31,7 @@ class MessagesPolicy
      */
     public function create(User $user, Circle $circle)
     {
-        return $circle->joined($user);
+        return $circle->joined($user) || $user->moderator();
     }
 
     /**

@@ -57,9 +57,13 @@ class Circle extends Model
         static::deleting(function ($circle) {
             $circle->languages()->detach();
 
-            $circle->messages()->delete();
+            $circle->messages()->each(function ($model) {
+                $model->delete();
+            });
 
-            $circle->memberships()->delete();
+            $circle->memberships()->each(function ($model) {
+                $model->delete();
+            });
         });
     }
 
@@ -271,7 +275,11 @@ class Circle extends Model
     {
         $messages = \App\Message::where([
             'circle_id' => $this->id
-        ])->get();
+        ])->with('user')->get();
+
+        $messages = $messages->filter(function ($m) use ($user) {
+            return $m->visibleBy($user);
+        });
 
         return $messages;
     }

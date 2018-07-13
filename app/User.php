@@ -88,9 +88,13 @@ class User extends Authenticatable
 
             $user->deleteCirclesOrChangeOwnership();
             
-            $user->messages()->delete();
+            $user->messages()->each(function ($model) {
+                $model->delete();
+            });
 
-            $user->memberships()->delete();
+            $user->memberships()->each(function ($model) {
+                $model->delete();
+            });
         });
     }
 

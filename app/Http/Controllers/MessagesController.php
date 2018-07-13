@@ -16,7 +16,7 @@ class MessagesController extends Controller
 
         $this->validate($request, \App\Message::validationRules());
 
-        $message = $circle->storeMessage($user, $request->body, $request->show_to_all);
+        $message = $circle->storeMessage($user, $request->body, $request->get('show_to_all', false));
 
         if ($message) {
             return redirect()->route('circles.show', $circle->uuid)->with([

@@ -87,6 +87,7 @@ class CircleTest extends TestCase
 
         $this->assertDatabaseMissing('memberships', [
             'circle_id' => $circle->id,
+            'user_id' => $user->id,
         ]);
     }
 
