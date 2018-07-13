@@ -4,14 +4,18 @@
     <div class="card-body">
         @if($membership || $user->moderator())
             @if(count($messages))
-            <div class="list-group list-group-flush mb-4">
+                <div class="mb-3">
                 @foreach($messages as $message)
-                    <div class="list-group-item">
-                        <strong>{{ $message->user->name }}</strong>
-                        <div>{{ $message->body }}</div>
+                    <div class="media">
+                        <span class="avatar mr-2">{!! user_avatar($message->user, 30, false, true) !!}</span>
+
+                        <div class="media-body mb-2">
+                            <h5 class="mt-0">{!! $message->user->link() !!}</h5>
+                            <div>{{ $message->body }}</div>
+                        </div>
                     </div>
                 @endforeach
-            </div>
+                </div>
             @else
             <p>No visible comments yet</p>
             @endif

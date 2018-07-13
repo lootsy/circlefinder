@@ -12,18 +12,6 @@ class MessagesPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view the message.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Message  $message
-     * @return mixed
-     */
-    public function view(User $user, Message $message)
-    {
-        return $message->visibleBy($user);
-    }
-
-    /**
      * Determine whether the user can create messages.
      *
      * @param  \App\User  $user

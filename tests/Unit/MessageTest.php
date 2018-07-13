@@ -106,7 +106,21 @@ class MessageTest extends TestCase
         $vis_messages = $circle->visibleMessages($user);
         $this->assertEquals(1, count($vis_messages));
 
+        $this->assertEquals($user->id, $vis_messages[0]->user->id);
+
         $vis_messages = $circle->visibleMessages($user4);
         $this->assertEquals(0, count($vis_messages));
+    }
+
+    public function testValidationRules()
+    {
+        $rules = \App\Message::validationRules();
+        $rules2 = \App\Message::validationRules(['body']);
+
+        $this->assertTrue(count($rules) > 0);
+
+        $this->assertTrue(key_exists('body', $rules));
+
+        $this->assertFalse(key_exists('body', $rules2));
     }
 }

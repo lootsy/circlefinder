@@ -39,12 +39,7 @@ class Message extends Model
 
         return $rules;
     }
-
-    public function __toString()
-    {
-        return sprintf('%s', $this->body);
-    }
-
+    
     protected static function boot()
     {
         parent::boot();
