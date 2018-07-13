@@ -14,7 +14,7 @@ class MessageTest extends TestCase
     use DatabaseMigrations;
     use UsersAdmins;
 
-    public function testCanCreateMessage()
+    public function testCanstoreMessage()
     {
         $user = $this->fetchUser();
         $user2 = $this->fetchUser();
@@ -78,7 +78,7 @@ class MessageTest extends TestCase
         $body = $faker->text;
         $show_to_all = false;
 
-        $message = $circle->createMessage($user, $body, $show_to_all);
+        $message = $circle->storeMessage($user, $body, $show_to_all);
 
         $this->assertTrue(is_null($message));
 
@@ -87,7 +87,7 @@ class MessageTest extends TestCase
 
         $circle = $circle->refresh();
 
-        $message = $circle->createMessage($user, $body, $show_to_all);
+        $message = $circle->storeMessage($user, $body, $show_to_all);
 
         $this->assertFalse(is_null($message));
 

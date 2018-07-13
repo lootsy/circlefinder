@@ -6,27 +6,59 @@ use Illuminate\Http\Request;
 
 class MessagesController extends Controller
 {
-    private function getMessage($message_uuid)
+    public function store($circle_uuid, Request $request)
     {
-        $circle = \App\Message::withUuid($circle_uuid)->firstOrFail();
+        $circle = \App\Circle::withUuid($circle_uuid)->firstOrFail();
 
         $user = auth()->user();
 
-        $item = \App\Membership::where([
-            'circle_id' => $circle->id,
-            'user_id' => $user->id
-        ])->firstOrFail();
+        $this->authorize('create', [\App\Message::class, $circle]);
 
-        return [$user, $item, $circle];
-    }
+        $message = $circle->storeMessage($user, $request->body, $request->show_to_all);
 
-    public function store($circle_uuid, Request $request)
-    {
-        return sprintf('%s %s', $circle_uuid, $uuid);
+        if ($message) {
+            return redirect()->route('circles.show', $circle->uuid)->with([
+                'success' => sprintf('Comment was posted!'),
+            ]);
+        } else {
+            return redirect()->route('circles.show', $circle->uuid)->withErrors(
+                sprintf('Comment could not be posted!')
+            );
+        }
     }
 
     public function update($circle_uuid, $uuid, Request $request)
     {
-        return sprintf('%s %s', $circle_uuid, $uuid);
+        $message = \App\Message::withUuid($uuid)->firstOrFail();
+
+        $circle = $message->circle;
+
+        $user = auth()->user();
+
+        $this->authorize('update', $message);
+
+        $message->body = $request->body;
+        $message->show_to_all = $request->show_to_all;
+        
+        $message->save();
+
+        return redirect()->route('circles.show', $circle->uuid)->with([
+            'success' => sprintf('Comment was updated!'),
+        ]);
+    }
+
+    public function destroy($circle_uuid, $uuid, Request $request)
+    {
+        $message = \App\Message::withUuid($uuid)->firstOrFail();
+
+        $circle = $message->circle;
+
+        $this->authorize('delete', $message);
+        
+        $message->delete();
+
+        return redirect()->route('circles.show', $circle->uuid)->with([
+            'success' => sprintf('Comment was deleted!'),
+        ]);
     }
 }

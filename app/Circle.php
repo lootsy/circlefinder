@@ -231,20 +231,20 @@ class Circle extends Model
         $link_title = $title ? $title : (string) $this;
 
         if ($class) {
-            $class = sprintf(' class="%s"', $class);
+            $class = sprintf(' class="%s"', htmlspecialchars($class));
         }
 
         $link = sprintf(
             '<a href="%s"%s>%s</a>',
             route('circles.show', ['uuid' => $this->uuid]),
-            htmlspecialchars($class),
+            $class,
             htmlspecialchars($link_title)
         );
 
         return $link;
     }
 
-    public function createMessage($user, $body, $show_to_all)
+    public function storeMessage($user, $body, $show_to_all)
     {
         if ($this->users()->count() < 1) {
             return null;
