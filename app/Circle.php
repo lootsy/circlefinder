@@ -266,4 +266,13 @@ class Circle extends Model
 
         return $message;
     }
+
+    public function visibleMessages($user)
+    {
+        $messages = \App\Message::where([
+            'circle_id' => $this->id
+        ])->get();
+
+        return $messages;
+    }
 }

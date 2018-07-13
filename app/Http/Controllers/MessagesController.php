@@ -14,6 +14,8 @@ class MessagesController extends Controller
 
         $this->authorize('create', [\App\Message::class, $circle]);
 
+        $this->validate($request, \App\Message::validationRules());
+
         $message = $circle->storeMessage($user, $request->body, $request->show_to_all);
 
         if ($message) {
@@ -36,6 +38,8 @@ class MessagesController extends Controller
         $user = auth()->user();
 
         $this->authorize('update', $message);
+
+        $this->validate($request, \App\Message::validationRules());
 
         $message->body = $request->body;
         $message->show_to_all = $request->show_to_all;
